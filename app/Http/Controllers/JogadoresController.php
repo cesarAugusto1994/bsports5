@@ -7,6 +7,7 @@ use App\Models\Pessoa\Jogador;
 use App\Models\Pessoa;
 use App\Models\Jogador\Mensalidade;
 use Auth;
+use jeremykenedy\LaravelRoles\Models\Role;
 
 class JogadoresController extends Controller
 {
@@ -75,6 +76,8 @@ class JogadoresController extends Controller
     {
         $data = $request->request->all();
 
+        $userRole = Role::where('name', '=', 'User')->first();
+
         $user = new \App\User();
         $user->name = $data['nome'];
         $user->email = $data['email'];
@@ -84,6 +87,7 @@ class JogadoresController extends Controller
         }
 
         $user->save();
+        $user->attachRole($userRole);
 
         $data['ativo'] = $request->has('ativo') ? true : false;
 
