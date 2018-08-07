@@ -9,7 +9,7 @@
 
                   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                   <ul class="nav navbar-nav">
-                    @foreach(\App\Models\MenuCategorias::all() as $item)
+                    @foreach(\App\Models\MenuCategorias::orderBy('categoria_id')->get() as $item)
                         <li class="active"><a href="?category={{ $item->categoria->id }}">{{ $item->categoria->nome }}</a></li>
                     @endforeach
 

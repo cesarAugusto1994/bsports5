@@ -13,9 +13,9 @@ class ResultadosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $resultados = Partida::has('resultado')->orderByDesc('id')->take(5)->paginate();
+        $resultados = Partida::has('resultado')->orderByDesc('id')->paginate(5);
 
         return view('pages.resultados', compact('resultados'));
     }

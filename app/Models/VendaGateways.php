@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Config extends Model
+class VendaGateways extends Model
 {
-    protected $fillable = ['key', 'value'];
+    protected $table = 'gateway';
 }

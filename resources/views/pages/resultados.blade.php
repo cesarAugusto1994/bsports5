@@ -31,7 +31,7 @@
     <div class="blog-list">
         <div class="container">
             <div class="row">
-                <div class="col-md-9">
+                <div class="col-md-12">
                     <div class="events-posts">
                       @foreach($resultados as $resultado)
 
@@ -46,7 +46,7 @@
                             <div class="event-content">
                                 <div class="event-txt-wrap">
                                     <div class="event-txt">
-                                        <h4><a>{{ $resultado->resultado->first()->jogador->pessoa->nome }} vs {{ $resultado->resultado->last()->jogador->pessoa->nome }}</a></h4>
+                                        <h4><a href="{{route('players.show', $resultado->resultado->first()->jogador->uuid)}}">{{ $resultado->resultado->first()->jogador->pessoa->nome }}</a> vs <a href="{{route('players.show', $resultado->resultado->last()->jogador->uuid)}}">{{ $resultado->resultado->last()->jogador->pessoa->nome }}</a></h4>
                                         <p class="loc"><i class="fa fa-map-marker"></i> {{ $resultado->quadra->nome }}</p>
                                         <div class="event-box-footer">
 
@@ -102,15 +102,17 @@
                     </div>
                 </div>
 
-                <div class="col-md-3">
+                <!--<div class="col-md-3">
                     <div class="sidebar-search-widget">
+
                         <div class="side-title">
                             <h3>Pesquisar</h3>
                         </div>
+                        <form method="get" action="?">
                         <ul class="search-form">
                             <li>
                                 <div class="input-group">
-                                    <select>
+                                    <select name="categoria">
                                         <option value="">Categoria</option>
                                         @foreach(\App\Models\Categoria::where('tipo', 'Simples')->orderBy('tipo')->get() as $categoria)
                                             <option value="{{ $categoria->id }}">{{ $categoria->nome }}</option>
@@ -122,24 +124,26 @@
 
                             <li>
                                 <div class="input-group">
-                                  <input class="form-control" type="text" placeholder="Jogador"/>
+                                  <input class="form-control" type="text" name="jogador" placeholder="Jogador"/>
                                   <i class="fa fa-angle-down"></i>
                                 </div>
                             </li>
 
                             <li>
                                 <div class="input-group">
-                                    <input class="form-control" type="text" placeholder="Data"/>
+                                    <input class="form-control date" type="text" name="data" placeholder="Data"/>
                                     <i class="fa fa-angle-down"></i> </div>
                             </li>
 
                             <li>
-                                <input type="submit" class="submit" value="Search">
+                                <input type="submit" class="submit" value="Pesquisar">
                             </li>
 
                         </ul>
+                        </form>
                     </div>
                 </div>
+              -->
             </div>
         </div>
     </div>
@@ -149,4 +153,7 @@
 
 @section('js')
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+    <script>
+        $('.date').mask("00/00/0000", {placeholder: "__/__/____"});
+    </script>
 @stop

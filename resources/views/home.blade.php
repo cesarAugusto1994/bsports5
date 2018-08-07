@@ -47,7 +47,7 @@
                                   </div>
                                   <div class="player-ranking-links">
                                     <a href="{{route('classificacao')}}">Rankings</a>
-                                    <a href="{{route('jogador', ['slug'=> str_slug($item['primeiro_nome']), 'id' => $item['id']])}}">Informações</a>
+                                    <a href="{{route('players.show', $item['uuid'])}}">Informações</a>
                                     <!--<a>Video</a>-->
                                   </div>
                                 </div>
@@ -144,65 +144,23 @@
                       @foreach(\App\Models\MenuCategorias::all() as $key => $item)
                         <div role="tabpanel" class="tab-pane {{ $loop->index == 0 ? 'active' : '' }}" id="news-tab-{{ $item->categoria->id }}">
 
-                            <!--New Box Start-->
-                            <div class="col-md-3 col-sm-6">
-                                <div class="news-block">
-                                    <div class="news-thumb"> <a href="http://vimeo.com/7874398&width=700" data-rel="prettyPhoto" title="Vimeo video"><i class="fa fa-play"></i></a> <span class="vtime"><i class="fa fa-clock-o"></i> 1:05</span> <img src="./images/vtimg1.jpg" alt="" /> </div>
-                                    <div class="news-txt">
-                                        <ul class="meta-info">
-                                            <li>By <a href="#">Dylan Carter</a></li>
-                                            <li>Mar. 15, 2017</li>
-                                        </ul>
-                                        <h6> <a href="#">Minnesota United may have come out as the winners</a> </h6>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--New Box End-->
+                          <div class="col-md-12">
+                              <div id="ls-slider" class="owl-carousel owl-theme">
 
-                            <!--New Box Start-->
-                            <div class="col-md-3 col-sm-6">
-                                <div class="news-block ">
-                                    <div class="news-thumb"> <a href="https://www.youtube.com/watch?v=DfZIv2FKWj4" data-rel="prettyPhoto"><i class="fa fa-play"></i></a> <span class="vtime"><i class="fa fa-clock-o"></i> 1:05</span> <img src="./images/vtimg2.jpg" alt="" /> </div>
-                                    <div class="news-txt">
-                                        <ul class="meta-info">
-                                            <li>By <a href="#">Dylan Carter</a></li>
-                                            <li>Mar. 15, 2017</li>
-                                        </ul>
-                                        <h6> <a href="#">Jeff Hardy denies he and Broken Matt are on their</a> </h6>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--New Box End-->
 
-                            <!--New Box Start-->
-                            <div class="col-md-3 col-sm-6">
-                                <div class="news-block ">
-                                    <div class="news-thumb"> <a href="https://www.youtube.com/watch?v=DfZIv2FKWj4" data-rel="prettyPhoto[gallery1]"><i class="fa fa-play"></i></a> <span class="vtime"><i class="fa fa-clock-o"></i> 1:05</span> <img src="./images/vtimg3.jpg" alt="" /> </div>
-                                    <div class="news-txt">
-                                        <ul class="meta-info">
-                                            <li>By <a href="#">Dylan Carter</a></li>
-                                            <li>Mar. 15, 2017</li>
-                                        </ul>
-                                        <h6> <a href="#">Joe Gibbs Racing dry spell could come to an end at Martinsville</a> </h6>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--New Box End-->
+                                  <!--LS Box Start-->
+                                  <div class="item">
+                                      <div class="schedule-box">
+                                          <div class="sdate"> <strong>24</strong> Mar </div>
+                                          <div class="steams">
+                                              <div class="matches"> <strong class="count">1-7</strong> <strong class="win">Win</strong> </div>
+                                              <div class="teams-vs"> <strong class="t1"><img src="./images/tlogos/tl1.png" alt="" /> Blu</strong> <strong class="vs">vs</strong> <strong class="t2">Eag <img src="./images/tlogos/tl2.png" alt="" /></strong> </div>
+                                          </div>
+                                      </div>
+                                  </div>
 
-                            <!--New Box Start-->
-                            <div class="col-md-3 col-sm-6">
-                                <div class="news-block ">
-                                    <div class="news-thumb"> <a href="https://www.youtube.com/watch?v=DfZIv2FKWj4" data-rel="prettyPhoto[gallery1]"><i class="fa fa-play"></i></a> <span class="vtime"><i class="fa fa-clock-o"></i> 1:05</span> <img src="./images/vtimg4.jpg" alt="" /> </div>
-                                    <div class="news-txt">
-                                        <ul class="meta-info">
-                                            <li>By <a href="#">Dylan Carter</a></li>
-                                            <li>Mar. 15, 2017</li>
-                                        </ul>
-                                        <h6> <a href="#">Oscar Robertson is rooting for Russell Westbrook</a> </h6>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--New Box End-->
+                              </div>
+                          </div>
 
                         </div>
                       @endforeach

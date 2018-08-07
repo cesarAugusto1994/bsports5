@@ -10,6 +10,7 @@
 define('LARAVEL_START', microtime(true));
 
 ini_set('max_execution_time', 240);
+header("access-control-allow-origin: https://sandbox.pagseguro.uol.com.br");
 
 /*
 |--------------------------------------------------------------------------

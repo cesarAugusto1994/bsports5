@@ -81,10 +81,10 @@
                                   <div class="player-name">
                                       <p>{{ $posicao['categoria_nome'] }}
                                           <br>
-                                          <strong class="name">{{ $posicao['primeiro_nome'] }}</strong>
+                                          <strong class="name"><a href="{{route('players.show', $posicao['uuid'])}}">{{ $posicao['primeiro_nome'] }}</a></strong>
                                           <br> {{ $posicao['pontos'] }} </p>
                                       <strong class="player-number">#{{ $posicao['posicao'] }}</strong> </div>
-                                  <a href="{{route('jogador', ['slug'=> str_slug($posicao['nome']), 'id' => $posicao['id']])}}" class="readmore">+</a> </div>
+                                  <a href="{{route('players.show', $posicao['uuid'])}}" class="readmore">+</a> </div>
                           </div>
                           <!--Team Box End-->
                         @endforeach

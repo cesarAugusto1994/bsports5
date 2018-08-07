@@ -43,7 +43,9 @@ Route::middleware('loadCache')->group(function() {
         Route::group(['prefix' => 'player'], function () {
             Route::get('/dashboard', 'PlayerController@index')->name('player_dashboard');
             Route::get('/', 'PlayerController@index')->name('player_index');
-            Route::get('/profile', 'PlayerController@show')->name('player');
+            Route::get('/profile/details', 'PlayerController@show')->name('player_details');
+            //Route::get('/profile', 'PlayerController@show')->name('player');
+            Route::resource('profile', 'PlayerController');
 
             Route::get('/appointment', 'PartidasController@agendamento')->name('player_agendar_partida');
             Route::get('/appointment/create', 'PartidasController@create')->name('player_create_partida');
@@ -69,7 +71,10 @@ Route::middleware('loadCache')->group(function() {
               Route::get('/appointment/create', 'PartidasController@create')->name('create_partida');
               //Route::resource('perfil', 'PerfilController');
               Route::get('/mensalidade', 'JogadoresController@mensalidade')->name('mensalidade');
+              Route::get('/players/{id}/profile', 'JogadoresController@view')->name('player_profile');
+              Route::resource('configs', 'ConfigsController');
               Route::resource('partida', 'PartidasController');
+              Route::resource('players', 'JogadoresController');
               Route::resource('mensalidades', 'JogadorMensalidadesController');
               Route::resource('categorias', 'CategoriasController');
               Route::resource('torneios', 'TorneiosController');
@@ -83,11 +88,12 @@ Route::middleware('loadCache')->group(function() {
 
   });
 
-  Route::post('/pagseguro/notification', [
-    'uses' => '\laravel\pagseguro\Platform\Laravel5\NotificationController@notification',
-    'as' => 'pagseguro.notification',
-  ]);
 
   Route::get('/pagseguro/redirect', 'CheckoutController@redirect')->name('pagseguro.redirect');
 
 });
+
+Route::post('/pagseguro/notification', [
+  'uses' => '\laravel\pagseguro\Platform\Laravel5\NotificationController@notification',
+  'as' => 'pagseguro.notification',
+]);

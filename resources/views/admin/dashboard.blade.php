@@ -129,7 +129,6 @@
                   <td><a href="#"></a></td>
                   <td>{{ $partida->data->format('d/m/Y') }} : {{ $partida->horario }}</td>
                   <td>{{ $partida->resultado->first()->jogador->pessoa->nome ?? 'A definir' }} x
-
                     {{ $partida->resultado->count() == 2 && $partida->resultado->last()->jogador->pessoa->nome ?? 'A definir' }}</td>
                   <td>
                     {{ $partida->resultado->first()->resultado_final ?? 0 }} x {{ $partida->resultado->last()->resultado_final ?? 0 }}

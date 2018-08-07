@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Configurações')
 
 @section('content_header')
-    <h1>Jogadores</h1>
+    <h1>Configurações</h1>
 @stop
 
 @section('content')
@@ -16,7 +16,7 @@
   <div class="col-md-12">
     <div class="box box-info">
       <div class="box-header with-border">
-        <h3 class="box-title">Jogadores</h3>
+        <h3 class="box-title">Configurações</h3>
 
         <div class="box-tools pull-right">
           <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -30,26 +30,23 @@
           <table class="table no-margin">
             <thead>
             <tr>
-              <th>ID</th>
-              <th>Nome</th>
-              <th>Email</th>
-              <th>Pontos</th>
-              <th>Ativo</th>
+              <th>Chave</th>
+              <th>Valor</th>
               <th>Opções</th>
             </tr>
             </thead>
             <tbody>
-              @foreach($jogadores as $jogador)
+              @foreach($configs as $config)
                 <tr>
-                  <td><a href="#">{{ $jogador->id }}</a></td>
-                  <td><a href="{{ route('player_profile', $jogador->uuid) }}">{{ $jogador->pessoa->nome }}</a></td>
-                  <td>{{ $jogador->pessoa->email }}</td>
-                  <td>{{ $jogador->resultados->sum('pontos') - $jogador->resultados->sum('bonus') }}</td>
+                  <td>{{ $config->key }}</td>
+                  <td>{{ $config->value }}</td>
                   <td>
-                    {{ $jogador->ativo ? 'Ativo' : 'Inativo' }}
-                  </td>
-                  <td>
-                    <a href="{{ route('player_profile', $jogador->uuid) }}" class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Editar</a>
+                    <a href="{{ route('configs.edit', $config->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Editar</a>
+                    <form style="display:inline-block" method="post" action="{{ route('configs.destroy', ['id' => $config->id]) }}">
+                        {{ method_field('DELETE') }}
+                        {{ csrf_field() }}
+                        <button class="btn btn-xs btn-danger"><i class="fa fa-trash"></i> Remover</button>
+                    </form>
                   </td>
                 </tr>
               @endforeach
@@ -61,8 +58,8 @@
       </div>
       <!-- /.box-body -->
       <div class="box-footer clearfix">
-        <a href="{{ route('players.create') }}" class="btn btn-sm btn-info btn-flat pull-left">Novo Jogador</a>
-        <span class="pull-right">{{ $jogadores->links() }}</span>
+        <a href="{{ route('configs.create') }}" class="btn btn-sm btn-info btn-flat pull-left">Novo Torneio</a>
+        <span class="pull-right">{{ $configs->links() }}</span>
       </div>
       <!-- /.box-footer -->
     </div>

@@ -3,13 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Auth;
-use App\User;
-use App\Models\Pessoa;
-use App\Models\Pessoa\Jogador;
-use TCG\Voyager\Facades\Voyager;
+use App\Models\Config;
 
-class PerfilController extends Controller
+class ConfigsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,21 +14,9 @@ class PerfilController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
+        $configs = Config::paginate();
 
-        $pessoa = Pessoa::where('email', $user->email)->get()->first();
-        $jagador = [];
-
-        if($pessoa) {
-          $jagador = Jogador::where('pessoa_id', $pessoa->id)->get()->first();
-        }
-
-        return view('jogador.index')->with('jogador', $jagador);
-    }
-
-    public function perfil()
-    {
-
+        return view('admin.config.index', compact('configs'));
     }
 
     /**
@@ -42,7 +26,7 @@ class PerfilController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.config.create');
     }
 
     /**
@@ -53,7 +37,13 @@ class PerfilController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->request->all();
+
+        Config::create($data);
+
+        flash('Configuração adicionada com sucesso.')->success()->important();
+
+        return redirect()->route('configs.index');
     }
 
     /**
@@ -75,7 +65,9 @@ class PerfilController extends Controller
      */
     public function edit($id)
     {
-        return view('jogador.edit');
+        $config = Config::findOrFail($id);
+
+        return view('admin.config.edit', compact('config'));
     }
 
     /**
@@ -87,7 +79,14 @@ class PerfilController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+        $data = $request->request->all();
+
+        $config = Config::findOrFail($id);
+        $config->update($data);
+
+        flash('Configuração atualizada com sucesso.')->success()->important();
+
+        return redirect()->route('configs.index');
     }
 
     /**
@@ -98,6 +97,10 @@ class PerfilController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $config = Config::findOrFail($id);
+        $config->delete();
+
+        flash('Configuração removida com sucesso.')->success()->important();
+        return redirect()->route('configs.index');
     }
 }

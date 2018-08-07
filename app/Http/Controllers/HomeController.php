@@ -57,6 +57,7 @@ class HomeController extends Controller
 
         $sql = "select
                 jg.id,
+                jg.uuid,
                 pe.nome,
                 categoria_simples_id categoria,
                 sum(pontos) - SUM(bonus) as pontos,
@@ -83,6 +84,7 @@ class HomeController extends Controller
 
           $ranking[] = [
             "id" => $item->id,
+            "uuid" => $item->uuid,
             "primeiro_nome" => $primeiroNome,
             "ultimo_nome" => $ultimoNome,
             "categoria" => $item->categoria,
@@ -97,6 +99,8 @@ class HomeController extends Controller
               return $query2->with('partida.data', '>=', now());
             });
         })->get();
+
+        //$proximasPartidas = Partida::where('data', '>', now())->get();
 
         #dd($categorias->first()->jogadores->first()->resultados);
 
@@ -123,6 +127,7 @@ class HomeController extends Controller
 
         $sql = "select
                 jg.id,
+                jg.uuid,
                 pe.nome,
                 categoria_simples_id categoria,
                 ca.nome categoria_nome,
@@ -158,6 +163,7 @@ class HomeController extends Controller
 
           $ranking[$key] = [
             "id" => $item->id,
+            "uuid" => $item->uuid,
             "nome" => $item->nome,
             "primeiro_nome" => $primeiroNome,
             "ultimo_nome" => $ultimoNome,

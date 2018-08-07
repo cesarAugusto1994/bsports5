@@ -3,7 +3,7 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>Perfil do Jogador</h1>
+    <h1>Jogador</h1>
 @stop
 
 @section('content')
@@ -96,7 +96,7 @@
             <!-- The timeline -->
             <ul class="timeline timeline-inverse">
               <!-- timeline time label -->
-              @foreach($jogador->resultados->take(10) as $resultado)
+              @forelse($jogador->resultados->take(10) as $resultado)
               <li class="time-label">
                     <span class="bg-blue">
                       {{ $resultado->partida->data->format('d/m/Y') }}
@@ -135,19 +135,34 @@
                   </div>
                 </div>
               </li>
-              @endforeach
+              @empty
+                <div class="alert alert-info">Nenhuma Partida jogada até o momento.</div>
+              @endforelse
               <!-- END timeline item -->
 
               <!-- END timeline item -->
+              @if($jogador->resultados->isNotEmpty())
               <li>
                 <i class="fa fa-clock-o bg-gray"></i>
               </li>
+              @endif
             </ul>
           </div>
           <!-- /.tab-pane -->
 
           <div class="tab-pane" id="settings">
-            <form class="form-horizontal" method="post" action="{{ route('profile.update', $jogador->pessoa->id) }}">
+
+            @php
+
+                $route = route('profile.update', $jogador->pessoa->id);
+
+                if(\Auth::user()->isAdmin()) {
+                  $route = route('players.update', $jogador->pessoa->id);
+                }
+
+            @endphp
+
+            <form class="form-horizontal" method="post" action="{{ $route }}">
               {{ csrf_field() }}
               {{ method_field('PUT') }}
               <div class="form-group">
@@ -188,6 +203,16 @@
                 <label for="lateralidade" class="col-sm-2 control-label">Lateralidade</label>
                 <div class="col-sm-10">
                   <input type="text" class="form-control" name="lateralidade" value="{{ $jogador->lateralidade }}" id="lateralidade" placeholder="Lateralidade">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" value="1" {{ $jogador->ativo ? 'checked' : '' }} name="ativo"/> Ativo
+                    </label>
+                  </div>
                 </div>
               </div>
 

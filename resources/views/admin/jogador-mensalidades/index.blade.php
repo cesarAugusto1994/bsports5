@@ -75,7 +75,6 @@
               @endforeach
 
           </table>
-
           <div class="text-center">{{ $mensalidades->links() }}</div>
         </div>
         <!-- /.table-responsive -->
@@ -83,7 +82,7 @@
       <!-- /.box-body -->
       <div class="box-footer clearfix">
         <a href="{{ url('admin/mensalidades/create') }}" class="btn btn-sm btn-info btn-flat pull-left">Adicionar Mensalidade</a>
-        <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">Todas Mensalidades</a>
+
       </div>
       <!-- /.box-footer -->
     </div>

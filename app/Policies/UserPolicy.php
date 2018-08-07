@@ -44,6 +44,11 @@ class UserPolicy
         return $user->isAdmin();
     }
 
+    public function configs(User $user)
+    {
+        return $user->isAdmin();
+    }
+
     /**
      * Determine whether the user can view the model.
      *

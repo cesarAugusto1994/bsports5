@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Config extends Model
+class StatusVenda extends Model
 {
-    protected $fillable = ['key', 'value'];
+    protected $table = 'status_venda';
 }

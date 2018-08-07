@@ -116,7 +116,7 @@ return [
         ],
         [
             'text'        => 'Painel do Jogador',
-            'url'         => 'player',
+            'url'         => 'player/dashboard',
             'can'         => 'player-panel',
         ],
         [
@@ -147,8 +147,14 @@ return [
 
         'Configurações da conta',
         [
+            'text' => 'Configurações',
+            'url'  => 'admin/configs',
+            'icon' => 'cogs',
+            'can'  => 'manage-configs'
+        ],
+        [
             'text' => 'Perfil',
-            'url'  => 'player/profile',
+            'url'  => 'player/profile/details',
             'icon' => 'user',
             'can'  => 'manage-perfil'
         ],
@@ -158,6 +164,9 @@ return [
             'icon' => 'lock',
             'can'  => 'manage-password'
         ],
+
+
+
 
 
     ],

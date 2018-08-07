@@ -27,30 +27,31 @@
       <!-- /.box-header -->
       <div class="box-body">
 
-        <form class="form-horizontal">
+        <form class="form-horizontal" method="post" action="{{ route('players.store') }}">
+          {{ csrf_field() }}
           <div class="box-body">
             <div class="form-group">
               <label for="nome" class="col-sm-2 control-label">Nome</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="nome" placeholder="Nome" required>
+                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" required>
               </div>
             </div>
             <div class="form-group">
               <label for="email" class="col-sm-2 control-label">Email</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="email" placeholder="Email" required>
+                <input type="text" class="form-control" id="email" name="email" placeholder="Email" required>
               </div>
             </div>
             <div class="form-group">
               <label for="nascimento" class="col-sm-2 control-label">Nascimento</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control date" id="nascimento" placeholder="Nascimento" required>
+                <input type="text" class="form-control date" id="nascimento" name="nascimento" placeholder="Nascimento" required>
               </div>
             </div>
             <div class="form-group">
               <label for="lateralidade" class="col-sm-2 control-label">Lateralidade</label>
               <div class="col-sm-10">
-                <select name="lateralidade" class="form-control" id="lateralidade" required>
+                <select name="lateralidade" class="form-control" id="lateralidade" name="lateralidade" required>
                     <option value="Destro">Destro</option>
                     <option value="Canhoto">Canhoto</option>
                 </select>
@@ -59,7 +60,7 @@
             <div class="form-group">
               <label for="categoria" class="col-sm-2 control-label">Categoria</label>
               <div class="col-sm-10">
-                <select name="categoria" class="form-control" id="categoria" required>
+                <select name="categoria" class="form-control" id="categoria" name="categoria" required>
                     @foreach(\App\Models\Categoria::where('tipo', 'Simples')->orderBy('tipo')->get() as $categoria)
                         <option value="{{ $categoria->id }}">{{ $categoria->nome }}</option>
                     @endforeach
@@ -69,19 +70,19 @@
             <div class="form-group">
               <label for="observacao" class="col-sm-2 control-label">Observação</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="observacao" placeholder="Observação">
+                <input type="text" class="form-control" id="observacao" name="observacao" placeholder="Observação">
               </div>
             </div>
             <div class="form-group">
-              <label for="inputPassword3" class="col-sm-2 control-label">Senha</label>
+              <label for="password" class="col-sm-2 control-label">Senha</label>
               <div class="col-sm-10">
-                <input type="password" class="form-control" id="inputPassword3" placeholder="Senha" required>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Senha" required>
               </div>
             </div>
             <div class="form-group">
-              <label for="inputPassword3" class="col-sm-2 control-label">Repetir Senha</label>
+              <label for="password_confirmation" class="col-sm-2 control-label">Repetir Senha</label>
               <div class="col-sm-10">
-                <input type="password" class="form-control" id="inputPassword3" placeholder="Repetir Senha" required>
+                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Repetir Senha" required>
               </div>
             </div>
 

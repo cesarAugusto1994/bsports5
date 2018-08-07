@@ -70,14 +70,14 @@
             <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">Bookmarks</span>
-              <span class="info-box-number">41,410</span>
+              <span class="info-box-text">Pontos</span>
+              <span class="info-box-number">{{ $jogador->resultados->sum('pontos') - $jogador->resultados->sum('bonus') }}</span>
 
               <div class="progress">
                 <div class="progress-bar" style="width: 70%"></div>
               </div>
                   <span class="progress-description">
-                    70% Increase in 30 Days
+
                   </span>
             </div>
             <!-- /.info-box-content -->
@@ -90,14 +90,13 @@
             <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">Likes</span>
-              <span class="info-box-number">41,410</span>
+              <span class="info-box-text">Vitórias</span>
+              <span class="info-box-number">{{ $vitorias }}</span>
 
               <div class="progress">
                 <div class="progress-bar" style="width: 70%"></div>
               </div>
                   <span class="progress-description">
-                    70% Increase in 30 Days
                   </span>
             </div>
             <!-- /.info-box-content -->
@@ -110,14 +109,13 @@
             <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">Events</span>
-              <span class="info-box-number">41,410</span>
+              <span class="info-box-text">Partidas</span>
+              <span class="info-box-number">{{ $jogador->resultados->count() }}</span>
 
               <div class="progress">
                 <div class="progress-bar" style="width: 70%"></div>
               </div>
                   <span class="progress-description">
-                    70% Increase in 30 Days
                   </span>
             </div>
             <!-- /.info-box-content -->
@@ -130,14 +128,23 @@
             <span class="info-box-icon"><i class="fa fa-comments-o"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">Comments</span>
-              <span class="info-box-number">41,410</span>
+
+              @php
+
+                    $derrotas = $jogador->resultados->filter(function($resultado) {
+                        return $resultado->resultado_final < 2;
+                    })->count();
+
+              @endphp
+
+              <span class="info-box-text">Derrotas</span>
+              <span class="info-box-number">{{ $derrotas }}</span>
 
               <div class="progress">
                 <div class="progress-bar" style="width: 70%"></div>
               </div>
                   <span class="progress-description">
-                    70% Increase in 30 Days
+
                   </span>
             </div>
             <!-- /.info-box-content -->
