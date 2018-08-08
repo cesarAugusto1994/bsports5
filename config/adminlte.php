@@ -144,6 +144,13 @@ return [
             'url'         => 'admin/torneios',
             'can'         => 'manage-torneios',
         ],
+        [
+            'text'        => 'Banners',
+            'url'         => 'admin/banners',
+            'can'         => 'manage-banners',
+        ],
+
+
 
         'Configurações da conta',
         [

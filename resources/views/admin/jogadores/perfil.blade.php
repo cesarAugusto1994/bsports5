@@ -120,7 +120,10 @@
 
                   @endphp
 
-                  <h3 class="timeline-header"><a href="{{ route('jogador', [str_slug($jogadorAdversario->jogador->pessoa->nome), $jogadorAdversario->jogador->id]) }}">{{ $jogadorAdversario->jogador->pessoa->nome }}</a></h3>
+                  @if($jogadorAdversario)
+                  <h3 class="timeline-header">
+                    <a href="{{ route('jogador', [str_slug($jogadorAdversario->jogador->pessoa->nome), $jogadorAdversario->jogador->id]) }}">
+                    {{ $jogadorAdversario->jogador->pessoa->nome }}</a></h3>
 
                   <div class="timeline-body">
                       Resultado: {{ $resultado->resultado_final }} x {{ $jogadorAdversario->resultado_final }}
@@ -133,6 +136,7 @@
                     @endphp
                     <a class="btn btn-primary btn-xs">{{$label}}</a>
                   </div>
+                  @endif
                 </div>
               </li>
               @empty

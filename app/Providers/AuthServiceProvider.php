@@ -34,6 +34,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('manage-categorias', 'App\Policies\UserPolicy@categorias');
         Gate::define('manage-torneios', 'App\Policies\UserPolicy@torneios');
         Gate::define('manage-configs', 'App\Policies\UserPolicy@configs');
+        Gate::define('manage-banners', 'App\Policies\UserPolicy@banners');
 
         //
     }

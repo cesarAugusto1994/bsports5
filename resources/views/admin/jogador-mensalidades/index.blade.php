@@ -45,7 +45,7 @@
 
                       <td>
                           <p class="name">
-                              <a href="{{ route('jogador', [str_slug($mensalidade->jogador->pessoa->nome), $mensalidade->jogador->id]) }}">
+                              <a href="{{ route('player_profile', $mensalidade->jogador->uuid) }}">
                                  {{ $mensalidade->jogador->pessoa->nome }}
                               </a>
                           </p>
@@ -81,7 +81,9 @@
       </div>
       <!-- /.box-body -->
       <div class="box-footer clearfix">
-        <a href="{{ url('admin/mensalidades/create') }}" class="btn btn-sm btn-info btn-flat pull-left">Adicionar Mensalidade</a>
+        <a href="{{ url('admin/mensalidades/create') }}" class="btn btn-sm btn-info btn-flat">Adicionar Mensalidade</a>
+        <a href="{{ route('mensalidade_create_from_categories') }}" class="btn btn-sm btn-danger btn-flat">Adicionar Mensalidade Por categoria</a>
+
 
       </div>
       <!-- /.box-footer -->

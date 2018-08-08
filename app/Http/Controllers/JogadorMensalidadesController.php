@@ -28,9 +28,25 @@ class JogadorMensalidadesController extends Controller
      */
     public function create()
     {
-        //$jogadores = Jogador::where('ativo', true)->orderByDesc('id')->get();
-
         return view('admin.jogador-mensalidades.create');
+    }
+
+    public function createFromCategories(Request $request)
+    {
+
+        $jogadores = [];
+
+        if($request->has('categoria')) {
+
+          $categoria = $request->get('categoria');
+
+          $jogadores = Jogador::whereHas('categoria', function($query) use ($categoria) {
+            return $query->where('id', $categoria);
+          })->get();
+
+        }
+
+        return view('admin.jogador-mensalidades.create-from-categorias', compact('jogadores'));
     }
 
     /**

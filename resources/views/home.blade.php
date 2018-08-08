@@ -39,7 +39,7 @@
                                       <div class="previous-item">
                                         <div class="player-ranking-details">
                                           <div class="player-ranking-name">
-                                            <a ><span class="first-name">{{ $item['primeiro_nome'] }}</span> <span class="last-name">{{ $item['ultimo_nome'] }}</span></a>
+                                            <a href="{{route('players.show', $item['uuid'])}}" ><span class="first-name">{{ $item['primeiro_nome'] }}</span> <span class="last-name">{{ $item['ultimo_nome'] }}</span></a>
                                           </div>
                                         </div>
                                       </div>

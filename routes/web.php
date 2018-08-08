@@ -71,6 +71,9 @@ Route::middleware('loadCache')->group(function() {
               Route::get('/appointment/create', 'PartidasController@create')->name('create_partida');
               //Route::resource('perfil', 'PerfilController');
               Route::get('/mensalidade', 'JogadoresController@mensalidade')->name('mensalidade');
+              Route::get('/banner/link', 'BannersController@image')->name('banner_link');
+
+
               Route::get('/players/{id}/profile', 'JogadoresController@view')->name('player_profile');
               Route::resource('configs', 'ConfigsController');
               Route::resource('partida', 'PartidasController');
@@ -78,6 +81,10 @@ Route::middleware('loadCache')->group(function() {
               Route::resource('mensalidades', 'JogadorMensalidadesController');
               Route::resource('categorias', 'CategoriasController');
               Route::resource('torneios', 'TorneiosController');
+              Route::resource('banners', 'BannersController');
+
+              Route::get('mensalidades/create/from-categories', 'JogadorMensalidadesController@createFromCategories')->name('mensalidade_create_from_categories');
+
               Route::get('/appointment/{id}/match', 'PartidasController@agendar')->name('agendar_partida_jogador');
               Route::post('/appointment/{id}/match/store', 'PartidasController@agendarStore')->name('partida_jogador_store');
               Route::get('/appointment/ajax', 'PartidasController@listaPartidasAjax')->name('lista_partidas_ajax');

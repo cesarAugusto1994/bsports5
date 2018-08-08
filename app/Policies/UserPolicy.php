@@ -49,6 +49,11 @@ class UserPolicy
         return $user->isAdmin();
     }
 
+    public function banners(User $user)
+    {
+        return $user->isAdmin();
+    }
+
     /**
      * Determine whether the user can view the model.
      *
