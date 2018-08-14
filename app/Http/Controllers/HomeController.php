@@ -67,7 +67,7 @@ class HomeController extends Controller
                 inner join jogadores jg ON(jg.id = res.jogador_id)
                 inner join pessoas pe ON(pe.id = jg.pessoa_id)
                 where jg.categoria_simples_id = ?
-                group by jg.id, pe.nome, jg.categoria_simples_id
+                group by jg.id, jg.uuid, pe.nome, jg.categoria_simples_id
                 order by pontos DESC
                 limit 5";
 
@@ -145,7 +145,7 @@ class HomeController extends Controller
           $sql .= " AND pe.nome like '%$jogador%' ";
         }
 
-        $sql .= "group by jg.id, pe.nome, jg.categoria_simples_id, ca.nome
+        $sql .= "group by jg.id, jg.uuid, pe.nome, jg.categoria_simples_id, ca.nome
         order by pontos DESC";
 
         $resultado = \DB::select($sql, [$id]);

@@ -22,6 +22,10 @@
         vertical-align:top;
       }
 
+      .inner-banner {
+        background: url('images/banners/BANNER-1.png') no-repeat center center;
+      }
+
     </style>
     <link href="{{ asset('css/fullcalendar.css') }}" rel="stylesheet"/>
 @stop
@@ -30,7 +34,7 @@
 
 <!--Inner Banner Start-->
 <div class="inner-banner">
-    <h1>Calendário Partidas</h1>
+
 </div>
 <div class="fl-breadcrumps">
     <div class="container">

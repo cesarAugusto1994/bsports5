@@ -247,6 +247,8 @@
             <tr>
               <th>ID</th>
               <th>Mês</th>
+              <th>Valor</th>
+              <th>Vencimento</th>
               <th>Situação</th>
               <th>Opções</th>
             </tr>
@@ -256,9 +258,11 @@
                 <tr>
                   <td><a href="#">{{ substr($mensalidade->uuid, 0, 8) }}</a></td>
                   <td>{{ $mensalidade->mes }}</td>
+                  <td>{{ number_format($mensalidade->valor, 2, ',', '.') }}</td>
+                  <td>{{ ($mensalidade->vencimento->format('d/m/Y')) }}</td>
                   <td>
                     @if($mensalidade->status->id == 1)
-                        <span class="label label-default">Pendente</span>
+                        <span class="label label-default">A Vencer</span>
                     @else
                         <span class="label label-success">Pago</span>
                     @endif

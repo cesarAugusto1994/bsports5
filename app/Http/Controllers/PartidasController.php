@@ -16,7 +16,8 @@ class PartidasController extends Controller
      */
     public function index()
     {
-        //
+        $partidas = Partida::orderByDesc('id')->paginate();
+        return view('admin.partidas.index', compact('partidas'));
     }
 
     public function agendamento(Request $request)
@@ -181,7 +182,7 @@ class PartidasController extends Controller
 
             $dataHora = $partida->data->setTime($horario->format('H'), $horario->format('i'));
 
-            $dataFim = (new \DateTime($dataHora->format('Y-m-d H:i')))->modify('+ 1 hour');
+            $dataFim = (new \DateTime($dataHora->format('Y-m-d H:i')))->modify('+ 1 hour +30 minutes');
 
             $jogador1 = $jogador2 = 'A definir';
 
@@ -220,7 +221,7 @@ class PartidasController extends Controller
      */
     public function create()
     {
-        return view('pages.novo-agendamento', compact('partidas'));
+        return view('admin.partidas.create');
     }
 
     /**

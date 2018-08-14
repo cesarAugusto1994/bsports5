@@ -16,7 +16,7 @@ class JogadorMensalidadesController extends Controller
      */
     public function index()
     {
-        $mensalidades = Mensalidade::orderByDesc('id')->paginate(10);
+        $mensalidades = Mensalidade::orderBy('mes')->paginate(10);
 
         return view('admin.jogador-mensalidades.index', compact('mensalidades'));
     }

@@ -20,7 +20,7 @@ class JogadoresController extends Controller
     {
       $jogadores = \App\Models\Pessoa\Jogador::orderByDesc('id')->paginate();
 
-      return view('admin.jogadores', compact('jogadores'));
+      return view('admin.jogadores.index', compact('jogadores'));
     }
 
     public function create()

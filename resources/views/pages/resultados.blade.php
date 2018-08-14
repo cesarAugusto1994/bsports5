@@ -7,6 +7,10 @@
         width: 100%;
       }
 
+      .inner-banner {
+        background: url('images/banners/BANNER-2.png') no-repeat center center;
+      }
+
     </style>
 @stop
 
@@ -14,7 +18,6 @@
 
 <!--Inner Banner Start-->
 <div class="inner-banner">
-    <h1>Resultado Partidas</h1>
 </div>
 <div class="fl-breadcrumps">
     <div class="container">

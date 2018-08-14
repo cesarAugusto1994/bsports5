@@ -130,6 +130,11 @@ return [
             'can'         => 'manage-players',
         ],
         [
+            'text'        => 'Partidas',
+            'url'         => 'admin/matches',
+            'can'         => 'manage-partidas',
+        ],
+        [
             'text'        => 'Mensalidades',
             'url'         => 'admin/mensalidades',
             'can'         => 'manage-mensalidades',

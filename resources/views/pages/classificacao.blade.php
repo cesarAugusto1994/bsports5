@@ -11,6 +11,10 @@
         padding: 35px 0 0 35px;
       }
 
+      .inner-banner {
+        background: url('images/banners/BANNER-3.png') no-repeat center center;
+      }
+
     </style>
 @stop
 
@@ -18,7 +22,6 @@
 
 <!--Inner Banner Start-->
 <div class="inner-banner">
-    <h1>Calendário Partidas</h1>
 </div>
 <div class="fl-breadcrumps">
     <div class="container">

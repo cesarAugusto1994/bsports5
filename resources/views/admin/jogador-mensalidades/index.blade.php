@@ -29,7 +29,8 @@
                   <tr>
                       <th>ID</th>
                       <th>Nome</th>
-                      <th>Mes</th>
+                      <th>Mês</th>
+                      <th>Valor</th>
                       <th>Vencimento</th>
                       <th>Status</th>
                       <th>Referencia</th>
@@ -52,6 +53,7 @@
                       </td>
 
                       <td>{{ $mensalidade->mes }}</td>
+                      <td>{{ number_format($mensalidade->valor, 2, ',', '.') }}</td>
                       <td>{{ $mensalidade->vencimento->format('d/m/Y') }}</td>
                       <td>{{ $mensalidade->status->nome }}</td>
                       <td>{{ $mensalidade->referencia }}</td>

@@ -6,6 +6,8 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Models\{Pessoa, Partida, Semana, Categoria, Pagina};
+use App\Models\Pessoa\{Jogador, Telefone};
 
 class RegisterController extends Controller
 {
@@ -62,10 +64,29 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+
+        \DB::table('role_user')->insert([
+          'user_id' => $user->id,
+          'role_id' => 3
+        ]);
+
+        $pessoa = new Pessoa();
+        $pessoa->nome = $data['name'];
+        $pessoa->nascimento = now();
+        $pessoa->email = $data['email'];
+        $pessoa->save();
+
+        $jogador = new Jogador();
+        $jogador->lateralidade = 'Destro';
+        $jogador->categoria_simples_id = 1;
+        $jogador->pessoa_id = $pessoa->id;
+        $jogador->save();
+
+        return $user;
     }
 }

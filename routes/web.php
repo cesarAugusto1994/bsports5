@@ -67,6 +67,7 @@ Route::middleware('loadCache')->group(function() {
               Route::get('/', 'AdminController@index')->name('admin_index');
               Route::get('/players', 'AdminController@jogadores')->name('admin_jogadores');
               Route::resource('players', 'JogadoresController');
+              Route::resource('matches', 'PartidasController');
               Route::get('/appointment', 'PartidasController@agendamento')->name('agendar_partida');
               Route::get('/appointment/create', 'PartidasController@create')->name('create_partida');
               //Route::resource('perfil', 'PerfilController');
