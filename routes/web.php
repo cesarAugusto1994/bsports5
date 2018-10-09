@@ -87,6 +87,7 @@ Route::middleware('loadCache')->group(function() {
               Route::resource('mensalidades', 'JogadorMensalidadesController');
               Route::resource('categorias', 'CategoriasController');
               Route::resource('torneios', 'TorneiosController');
+              Route::resource('quadras', 'QuadrasController');
               Route::resource('banners', 'BannersController');
               Route::resource('eventos', 'EventoController');
               Route::resource('noticias', 'NoticiasController');

@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Quadras extends Model
 {
-    //
+    protected $fillable = ['nome', 'ativo'];
 }

@@ -160,6 +160,11 @@ return [
             'can'         => 'manage-torneios',
         ],
         [
+            'text'        => 'Quadras',
+            'url'         => 'admin/quadras',
+            'can'         => 'manage-quadras',
+        ],
+        [
             'text'        => 'Banners',
             'url'         => 'admin/banners',
             'can'         => 'manage-banners',

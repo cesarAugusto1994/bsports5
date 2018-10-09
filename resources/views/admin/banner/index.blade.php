@@ -40,7 +40,7 @@
               @foreach($banners as $banner)
                 <tr>
                   <td>
-                    <img class="img" src="{{ ('/app/'.$banner->link) }}" alt=""/>
+                    <img class="img" src="{{ route('image', ['link'=>$banner->link]) }}" style="width:86px" alt=""/>
                   </td>
                   <td>{{ $banner->link }}</td>
                   <td>{{ $banner->ativo ? 'Ativo' : 'Inativo' }}</td>

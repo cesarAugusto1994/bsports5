@@ -44,6 +44,11 @@ class UserPolicy
         return $user->isAdmin();
     }
 
+    public function quadras(User $user)
+    {
+        return $user->isAdmin();
+    }
+
     public function configs(User $user)
     {
         return $user->isAdmin();
