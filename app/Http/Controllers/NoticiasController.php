@@ -57,7 +57,8 @@ class NoticiasController extends Controller
      */
     public function show($id)
     {
-        //
+        $noticia = Noticia::findOrFail($id);
+        return view('pages.noticia-details', compact('noticia'));
     }
 
     /**

@@ -303,7 +303,7 @@
 <script>
   $('.cpf').mask('000.000.000-00', {reverse: true, placeholder: "___.___.___-__"});
   $('.date').mask("00/00/0000", {placeholder: "__/__/____"})
-  $('.phone').mask('(00) 00000-0000');
+  $('.phone').mask('(00) 0000-0000');
   $('.celphone').mask('(00) 00000-0000');
 </script>
 @stop

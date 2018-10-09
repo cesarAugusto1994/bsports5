@@ -129,7 +129,7 @@
                               <div class="news-txt">
                                   <h4> <a href="{{ route('evento', ['id'=>$evento->id,'titulo'=>str_slug($evento->titulo)]) }}">{{ $evento->titulo }}</a> </h4>
                                   <p> {{ $evento->conteudo }} </p>
-                                  <a class="rm" href="#"> Saber mais </a> </div>
+                                  <a class="rm" href="{{ route('evento', ['id'=>$evento->id,'titulo'=>str_slug($evento->titulo)]) }}"> Saber mais </a> </div>
                           </div>
                       </div>
                     @endforeach
@@ -153,9 +153,9 @@
                             <div class="news-block ">
                                 <div class="news-thumb"> <img src="{{ route('image', ['link'=>$noticia->banner]) }}" alt="" /> </div>
                                 <div class="news-txt">
-                                    <h4> <a href="#">{{ $noticia->titulo }}</a> </h4>
+                                    <h4> <a href="{{ route('noticia', ['id'=>$noticia->id,'titulo'=>str_slug($noticia->titulo)]) }}">{{ $noticia->titulo }}</a> </h4>
                                     <p> {{ $noticia->conteudo }} </p>
-                                    <a class="rm" href="#"> Saiba Mais </a> </div>
+                                    <a class="rm" href="{{ route('noticia', ['id'=>$noticia->id,'titulo'=>str_slug($noticia->titulo)]) }}"> Saiba Mais </a> </div>
                             </div>
                         </div>
                         @endforeach

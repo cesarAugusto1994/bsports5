@@ -27,8 +27,8 @@
 
                     <!--Blog Post Start-->
                     <div class="blog-post">
-                        <h3><a href="#">{{ $evento->titulo }}</a></h3>
-                        <div class="blog-thumb"><img src="{{ route('image', ['link'=>$evento->banner]) }}" alt="" /> </div>
+                        <h3><a href="#">{{ $noticia->titulo }}</a></h3>
+                        <div class="blog-thumb"><img src="{{ route('image', ['link'=>$noticia->banner]) }}" alt="" /> </div>
                         <div class="blog-content">
                           <!--
                             <ul class="post-tags">
@@ -42,7 +42,7 @@
                                 <li><i class="fa fa-folder"></i> Football</li>
                             </ul>
                           -->
-                            {!! $evento->conteudo !!}
+                            {!! $noticia->conteudo !!}
                         </div>
                     </div>
                     <!--Blog Post End-->

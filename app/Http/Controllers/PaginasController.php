@@ -16,7 +16,7 @@ class PaginasController extends Controller
     {
         $paginas = Pagina::where('ativo', true)->paginate();
 
-        return view('paginas', compact('paginas'));
+        return view('pages.paginas', compact('paginas'));
     }
 
     /**
@@ -50,7 +50,7 @@ class PaginasController extends Controller
     {
         $pagina = Pagina::findOrfail($id);
 
-        return view('pagina', compact('pagina'));
+        return view('pages.pagina', compact('pagina'));
     }
 
     /**

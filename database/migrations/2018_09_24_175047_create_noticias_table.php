@@ -18,13 +18,13 @@ class CreateNoticiasTable extends Migration
 
             $table->string('titulo');
 
-            $table->string('conteudo')->nullable();
+            $table->longText('conteudo')->nullable();
             $table->string('banner')->nullable();
             $table->string('video')->nullable();
             $table->string('link')->nullable();
 
             $table->boolean('ativo')->default(true);
-            
+
             $table->timestamps();
         });
     }

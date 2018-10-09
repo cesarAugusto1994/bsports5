@@ -21,9 +21,8 @@ Route::middleware('loadCache')->group(function() {
   Route::get('/contato', 'HomeController@contato')->name('contato');
   Route::get('/classificacao', 'HomeController@classificacao')->name('classificacao');
 
-
-
   Route::get('/evento/{id}/{titulo}', 'EventoController@show')->name('evento');
+  Route::get('/noticia/{id}/{titulo}', 'NoticiasController@show')->name('noticia');
 
   Route::get('/jogador/{slug}/{id}', 'JogadoresController@show')->name('jogador');
 
