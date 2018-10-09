@@ -11,17 +11,24 @@
 <div class="row">
 
   <div class="col-md-12">
-    <div class="box box-info">
+    <div class="box">
+      <div class="box-header with-border">
+        <h3 class="box-title">Opções</h3>
+      </div>
+      <div class="box-body">
+
+        <a href="{{ url('admin/mensalidades/create') }}" class="btn btn-sm btn-info btn-flat">Adicionar Mensalidade</a>
+        <a href="{{ route('mensalidade_create_from_categories') }}" class="btn btn-sm btn-danger btn-flat">Adicionar Mensalidade Por categoria</a>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="box">
       <div class="box-header with-border">
         <h3 class="box-title">Histórico de Mensalidades</h3>
-
-        <div class="box-tools pull-right">
-          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-          </button>
-          <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-        </div>
       </div>
-      <!-- /.box-header -->
       <div class="box-body">
         <div class="table-responsive">
           <table id="dataTable" class="table table-striped database-tables">
@@ -59,11 +66,14 @@
                       <td>{{ $mensalidade->referencia }}</td>
 
                       <td class="actions">
-                          <a class="btn btn-danger btn-sm pull-right delete_table"
-                             data-table="{{ $mensalidade->name }}">
+                        @if($mensalidade->status->id == 1)
+                          <a class="btn btn-danger btn-sm pull-right delete_table btnRemoveItem"
+                             data-table="{{ $mensalidade->name }}"
+                             data-route="{{ route('mensalidades.destroy', $mensalidade->id) }}">
                              <i class="fa fa-trash"></i>
                           </a>
-                          <a href=""
+                        @endif
+                          <!--<a href=""
                              class="btn btn-sm btn-primary pull-right" style="display:inline; margin-right:10px;">
                              <i class="fa fa-edit"></i>
                           </a>
@@ -72,6 +82,7 @@
                              class="btn btn-sm btn-warning pull-right desctable" style="display:inline; margin-right:10px;">
                              <i class="fa fa-eye"></i>
                           </a>
+                        -->
                       </td>
                   </tr>
               @endforeach
@@ -79,20 +90,14 @@
           </table>
           <div class="text-center">{{ $mensalidades->links() }}</div>
         </div>
-        <!-- /.table-responsive -->
       </div>
-      <!-- /.box-body -->
       <div class="box-footer clearfix">
         <a href="{{ url('admin/mensalidades/create') }}" class="btn btn-sm btn-info btn-flat">Adicionar Mensalidade</a>
         <a href="{{ route('mensalidade_create_from_categories') }}" class="btn btn-sm btn-danger btn-flat">Adicionar Mensalidade Por categoria</a>
-
-
       </div>
-      <!-- /.box-footer -->
     </div>
   </div>
 </div>
-
 
 @stop
 

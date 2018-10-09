@@ -127,14 +127,14 @@
     <div class="news-section-wrapper">
         <div class="tab-news">
             <div class="container">
-                <div class="row">
+                <div class="row proximas-partidas">
                     <div class="col-md-4">
                         <h2 class="section-title"> Próximas Partidas </h2>
                     </div>
                     <div class="col-md-8">
                         <ul class="nav" role="tablist">
                           @foreach(\App\Models\MenuCategorias::all() as $key => $item)
-                            <li role="presentation" class="{{ $loop->index == 0 ? 'active' : '' }}"><a href="#news-tab-{{ $item->categoria->id }}" aria-controls="news-tab1" role="tab" data-toggle="tab">{{ $item->categoria->nome }}</a></li>
+                            <li role="presentation" class="{{ $loop->index == 0 ? 'active' : '' }}"><a {{ $loop->index == 0 ? 'style=color:white' : '' }}  class="tab-proximas-partidas" href="#news-tab-{{ $item->categoria->id }}" aria-controls="news-tab1" role="tab" data-toggle="tab">{{ $item->categoria->nome }}</a></li>
                           @endforeach
                         </ul>
                     </div>

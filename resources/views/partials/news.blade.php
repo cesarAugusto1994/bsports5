@@ -115,36 +115,50 @@
 <div class="news-section-wrapper gallery">
     <div class="container">
         <div class="row">
+          <div class="col-md-12">
+              <h2 class="section-title">Eventos</h2>
+          </div>
+          <div class="col-md-12">
+              <div class="newsblock-grid1">
+
+                  <div class="row">
+                    @foreach(\App\Models\Evento::all() as $evento)
+                      <div class="col-md-4 col-sm-4">
+                          <div class="news-block ">
+                              <div class="news-thumb"> <img src="{{ route('image', ['link'=>$evento->banner]) }}" alt="" /> </div>
+                              <div class="news-txt">
+                                  <h4> <a href="{{ route('evento', ['id'=>$evento->id,'titulo'=>str_slug($evento->titulo)]) }}">{{ $evento->titulo }}</a> </h4>
+                                  <p> {{ $evento->conteudo }} </p>
+                                  <a class="rm" href="#"> Saber mais </a> </div>
+                          </div>
+                      </div>
+                    @endforeach
+
+                  </div>
+              </div>
+          </div>
+        </div>
+        <br/>
+        <br/>
+        <div class="row">
             <div class="col-md-8">
                 <div class="banner-ad m30"> <img src="./images/banner-ad.jpg" alt="" /> </div>
                 <div class="newsblock-grid1">
                     <div class="row">
+                        <div class="col-md-12">
+                            <h2 class="section-title">Noticias</h2>
+                        </div>
+                        @foreach(\App\Models\Noticia::all() as $noticia)
                         <div class="col-md-6 col-sm-6">
                             <div class="news-block ">
-                                <div class="news-thumb"> <a href="https://www.youtube.com/watch?v=DfZIv2FKWj4" data-rel="prettyPhoto[gallery1]"><i class="fa fa-play"></i></a> <span class="vtime"><i class="fa fa-clock-o"></i> 1:05</span> <img src="./images/ng-img1.jpg" alt="" /> </div>
+                                <div class="news-thumb"> <img src="{{ route('image', ['link'=>$noticia->banner]) }}" alt="" /> </div>
                                 <div class="news-txt">
-                                    <ul class="meta-info">
-                                        <li>By <a href="#">Dylan Carter</a></li>
-                                        <li>Mar. 15, 2017</li>
-                                    </ul>
-                                    <h4> <a href="#">Tom Verducci Welcome to baseball's new era filled</a> </h4>
-                                    <p> It's the story that has rocked the transfer window: Neymar has been linked with an incredible move to Paris Saint.Germain. </p>
-                                    <a class="rm" href="#"> Read more </a> </div>
+                                    <h4> <a href="#">{{ $noticia->titulo }}</a> </h4>
+                                    <p> {{ $noticia->conteudo }} </p>
+                                    <a class="rm" href="#"> Saiba Mais </a> </div>
                             </div>
                         </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="news-block">
-                                <div class="news-thumb"> <a href="https://www.youtube.com/watch?v=DfZIv2FKWj4" data-rel="prettyPhoto[gallery1]"><i class="fa fa-play"></i></a> <span class="vtime"><i class="fa fa-clock-o"></i> 1:05</span> <img src="./images/ng-img2.jpg" alt="" /> </div>
-                                <div class="news-txt">
-                                    <ul class="meta-info">
-                                        <li>By <a href="#">Dylan Carter</a></li>
-                                        <li>Mar. 15, 2017</li>
-                                    </ul>
-                                    <h4> <a href="#">Ut et quam aliquet, dictum massa eu, cursus purus</a> </h4>
-                                    <p> It's the story that has rocked the transfer window: Neymar has been linked with an incredible move to Paris Saint.Germain. </p>
-                                    <a class="rm" href="#"> Read more </a> </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -634,12 +648,12 @@
                         <div class="col-md-7 col-sm-7">
                             <div class="news-txt">
                                 <ul class="meta-info">
-                                    <li>By <a href="#">Dylan Carter</a></li>
+                                    <li>By <a href="#" class="author">Dylan Carter</a></li>
                                     <li>Mar. 15, 2017</li>
                                 </ul>
-                                <h4> <a href="#"> Duis pulvinar dolor consectetur orci congue, id fermentum metus facilisis</a></h4>
+                                <h4> <a href="#" class="title-news"> Duis pulvinar dolor consectetur orci congue, id fermentum metus facilisis</a></h4>
                                 <p>BMC Racing Team will be targeting stage wins at the demanding six-day Vuelta Ciclista al Pais Vasco, the next UCI WorldTour stage race of the season.to go. Sport teams, athletes., </p>
-                                <a class="rm" href="#"> Read more </a> </div>
+                                <a class="rm" href="#" class="btn-news"> Saber mais </a> </div>
                         </div>
                     </div>
                 </div>

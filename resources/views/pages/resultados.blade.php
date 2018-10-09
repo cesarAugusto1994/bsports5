@@ -11,6 +11,31 @@
         background: url('images/banners/BANNER-2.png') no-repeat center center;
       }
 
+      .grid-players {
+        min-height: 90px;
+        background: url('images/img/box-participante.png') no-repeat left top #f4f4f4
+      }
+
+      .jogador1 {
+        margin-left: 15px;
+        font-size: 24px;
+        left: 5px;
+        color: white;
+        float: left;
+        word-wrap: break-word;
+        width: 5em;
+      }
+
+      .jogador2 {
+        margin-right: 15px;
+        font-size: 24px;
+        right: 5px;
+        color: white;
+        float: right;
+        word-wrap: break-word;
+        width: 5em;
+      }
+
     </style>
 @stop
 
@@ -34,7 +59,7 @@
     <div class="blog-list">
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-9">
                     <div class="events-posts">
                       @foreach($resultados as $resultado)
 
@@ -49,7 +74,16 @@
                             <div class="event-content">
                                 <div class="event-txt-wrap">
                                     <div class="event-txt">
-                                        <h4><a href="{{route('players.show', $resultado->resultado->first()->jogador->uuid)}}">{{ $resultado->resultado->first()->jogador->pessoa->nome }}</a> vs <a href="{{route('players.show', $resultado->resultado->last()->jogador->uuid)}}">{{ $resultado->resultado->last()->jogador->pessoa->nome }}</a></h4>
+                                      <div class="grid-players">
+                                        <div class="row">
+                                          <div class="col-md-6">
+                                          <a class="jogador1" href="{{route('players.show', $resultado->resultado->first()->jogador->uuid)}}"><p>{{ $resultado->resultado->first()->jogador->pessoa->nome }}</p></a>
+                                          </div>
+                                          <div class="col-md-6">
+                                          <a class="jogador2" href="{{route('players.show', $resultado->resultado->last()->jogador->uuid)}}">{{ substr($resultado->resultado->last()->jogador->pessoa->nome, 0, 15) }}</a>
+                                          </div>
+                                        </div>
+                                      </div>
                                         <p class="loc"><i class="fa fa-map-marker"></i> {{ $resultado->quadra->nome }}</p>
                                         <div class="event-box-footer">
 

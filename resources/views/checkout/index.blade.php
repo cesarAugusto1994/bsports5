@@ -98,11 +98,6 @@
         dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
       </p>
       -->
-      <p class="lead">Informações Complementares</p>
-      <strong>Telefone: </strong><input type="text" class="form-control phone" autocomplete="off" value="{{ $mensalidade->jogador->pessoa->telefone }}" name="telefone" required><br>
-      <strong>CPF: </strong><input type="text" class="form-control cpf" autocomplete="off" value="{{ $mensalidade->jogador->pessoa->cpf }}" name="cpf" required><br>
-      <strong>Nascimento: </strong><input type="text" class="form-control date" autocomplete="off" value="{{ $mensalidade->jogador->pessoa->nascimento->format('d/m/Y') ?? '-' }}" name="nascimento" required><br>
-
 
     </div>
     <!-- /.col -->
@@ -126,6 +121,179 @@
     <!-- /.col -->
   </div>
   <!-- /.row -->
+
+  <div class="row">
+
+    <div class="col-md-3">
+      <p class="lead">Informações Complementares</p>
+      <strong>Telefone: </strong><input type="text" class="form-control phone" autocomplete="off" value="{{ $mensalidade->jogador->pessoa->telefone }}" name="telefone" required><br>
+      <strong>CPF: </strong><input type="text" class="form-control cpf" autocomplete="off" value="{{ $mensalidade->jogador->pessoa->cpf }}" name="cpf" required><br>
+      <strong>Nascimento: </strong><input type="text" class="form-control date" autocomplete="off" value="{{ $mensalidade->jogador->pessoa->nascimento->format('d/m/Y') ?? '-' }}" name="nascimento" required><br>
+    </div>
+
+    <div class="col-md-2">
+
+      <p class="lead">Pagamento</p>
+
+      <div class="row">
+
+        <div class="col-md-12">
+
+          <div id="paymentMethodsOptions">
+
+            <div class="field radio">
+              <label><input type="radio" id="creditCardRadio" name="changePaymentMethod" value="creditCard">Cartão de Crédito</label>
+            </div>
+
+            <div class="field radio">
+              <label><input type="radio" id="boletoRadio" name="changePaymentMethod" value="boleto">Boleto</label>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+      <p class="lead">Dados do Cartão</p>
+
+      <input type="hidden" name="creditCardToken" id="creditCardToken"  />
+      <input type="hidden" name="creditCardBrand" id="creditCardBrand"  />
+
+      <div class="row">
+
+        <div class="col-md-12">
+
+          <strong>Número: </strong><input id="cardNumber" type="text" class="form-control cardDatainput" autocomplete="off" name="cardNumber" required maxlength="16"/>
+          <span>
+              <img class="bandeiraCartao" id="bandeiraCartao"/>
+          </span>
+
+        </div>
+
+        <div class="col-md-12">
+
+          <div class="row">
+
+            <div class="col-md-6">
+
+              <strong>Data de Vencimento (99/9999): </strong>
+
+              <div class="row">
+                <div class="col-md-6">
+                    <input id="cardExpirationMonth" type="text" class="form-control cardDatainput" autocomplete="off" name="cardExpirationMonth" required maxlength="2"/>
+                </div>
+                <div class="col-md-6" style="padding-left:0">
+                    <input id="cardExpirationYear" type="text" class="form-control cardDatainput" autocomplete="off" name="cardExpirationYear" required maxlength="4"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+
+              <strong>Código de Segurança: </strong><input id="cardCvv" type="text" class="form-control cardDatainput" autocomplete="off" name="cardCvv" required maxlength="3"/>
+
+            </div>
+
+          </div>
+          <br/>
+
+        </div>
+
+        <div class="col-md-12">
+
+          <div class="" id="installmentsWrapper">
+            <strong>Parcelamento: </strong>
+            <select class="form-control cardDatainput" name="installmentQuantity" id="installmentQuantity"></select>
+            <input type="hidden" name="installmentValue" id="installmentValue" />
+            <input type="hidden" name="totalAmount" id="totalAmount" />
+          </div>
+
+        </div>
+
+        <div class="col-md-12">
+
+          <div id="holderDataChoice">
+
+            <div class="checkbox">
+              <input type="radio" name="holderType" id="sameHolder" value="sameHolder"/><label for="sameHolder">mesmo que o comprador</label>
+            </div>
+
+            <div class="checkbox">
+              <input checked type="radio" name="holderType" id="otherHolder" value="otherHolder"/><label for="otherHolder">outro</label>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="col-md-12">
+
+          <strong>Data de Nascimento do Titular do Cartão: </strong>
+          <input id="creditCardHolderBirthDate" type="text" class="form-control cardDatainput" autocomplete="off" name="creditCardHolderBirthDate" required maxlength="10"/>
+          <br/>
+
+        </div>
+
+        <div class="col-md-12">
+
+          <strong>Nome (Como está impresso no cartão): </strong>
+          <input id="creditCardHolderName" type="text" class="form-control cardDatainput" autocomplete="off" name="creditCardHolderName" required/>
+          <br/>
+
+        </div>
+
+        <div class="col-md-12">
+
+          <strong>CPF (somente n&uacute;meros): </strong>
+          <input id="creditCardHolderCPF" type="text" class="form-control cardDatainput" autocomplete="off" name="creditCardHolderCPF" required/>
+          <br/>
+
+        </div>
+
+        <div class="col-md-12">
+
+          <strong>Telefone: </strong>
+
+          <div class="row">
+            <div class="col-md-2">
+                <input id="creditCardHolderAreaCode" type="text" class="form-control cardDatainput" placeholder="DDD" autocomplete="off" name="creditCardHolderAreaCode" required maxlength="2"/>
+            </div>
+            <div class="col-md-10" style="padding-left:0">
+                <input id="creditCardHolderPhone" type="text" class="form-control cardDatainput" placeholder="Número" autocomplete="off" name="creditCardHolderPhone" required maxlength="9"/>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-md-12">
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+    <div class="col-md-3">
+
+      <p class="lead">Boleto</p>
+
+      <div class="col-md-12">
+
+        <div id="boletoData" name="boletoData" class="paymentMethodGroup" dataMethod="boleto">
+          <button id="boletoButton" class="btn btn-primary btn-block" />Gerar Boleto e Finalizar Compra</button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
 
   <!-- this row will not appear when printing -->
   <div class="row no-print">

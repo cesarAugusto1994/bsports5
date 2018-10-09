@@ -2,55 +2,41 @@
     <div class="footer-top">
         <div class="container">
             <div class="row">
-                <div class="col-md-2 col-sm-4">
+                <div class="col-md-3 col-sm-4">
                     <div class="footer-widget">
-                        <h4>Racing</h4>
+                        <h4>Logo</h4>
                         <img src="./images/fimg1.jpg" alt="" />
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-4">
+                    <div class="footer-widget">
+                        <h4>Menu</h4>
                         <ul class="footer-nav">
-                            <li><a href="#">Motorcycling</a></li>
-                            <li><a href="#">Car Racing </a></li>
-                            <li><a href="#">Cycle Racing</a></li>
+                          <li> <a href="{{ route('home') }}">Home</a></li>
+                          <li><a href="{{ route('calendario') }}">Calendário de jogos</a></li>
+                          <li><a href="{{ route('resultados') }}">Resultados de Jogos</a></li>
+                          <li><a href="{{ route('classificacao') }}">Classificação</a></li>
+                          <li><a href="{{ route('contato') }}">Contato</a></li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-2 col-sm-4">
+
+                <div class="col-md-3 col-sm-4">
                     <div class="footer-widget">
-                        <h4>Premier League</h4>
-                        <img src="./images/fimg2.jpg" alt="" />
+                        <h4>Perdizes</h4>
                         <ul class="footer-nav">
-                            <li><a href="#">Arsenal - Leicester City </a></li>
-                            <li><a href="#">Newcastle United </a></li>
-                            <li><a href="#">West Ham Utd.</a></li>
+                            <li>Rua Ana Pimentel, 272</li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-4">
+                <div class="col-md-3 col-sm-4">
                     <div class="footer-widget">
-                        <h4>About us</h4>
-                        <p>Get expert analysis, unrivaled access, and the award-winning storytelling only Soccercity can provide .</p>
-                        <ul class="footer-add">
-                            <li><i class="fa fa-map-marker"></i> 70 Bowman St. South Windsor, CT 06074</li>
-                            <li><i class="fa fa-phone"></i> 1-202-555-0176</li>
-                            <li><i class="fa fa-envelope-o"></i> soccercitynews@live.co.london</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-2 col-sm-4">
-                    <div class="footer-widget">
-                        <h4>Quick Links</h4>
-                        <ul class="footer-nav">
-                            <li><a href="#">Home </a></li>
-                            <li><a href="#"> About us</a></li>
-                            <li><a href="#"> Blog</a></li>
-                            <li><a href="#"> Newsletter</a></li>
-                            <li><a href="#"> Mobile Apps</a></li>
-                            <li><a href="#"> Contact us</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-2 col-sm-4">
-                    <div class="footer-widget">
-                        <h4>Sports</h4>
+                        <h4>Santana</h4>
                         <ul class="footer-nav">
                             <li><a href="#">Football </a></li>
                             <li><a href="#">Probable lineups</a></li>

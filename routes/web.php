@@ -21,6 +21,10 @@ Route::middleware('loadCache')->group(function() {
   Route::get('/contato', 'HomeController@contato')->name('contato');
   Route::get('/classificacao', 'HomeController@classificacao')->name('classificacao');
 
+
+
+  Route::get('/evento/{id}/{titulo}', 'EventoController@show')->name('evento');
+
   Route::get('/jogador/{slug}/{id}', 'JogadoresController@show')->name('jogador');
 
   Route::get('/pagina/{slug}/{id}', 'PaginasController@show')->name('pagina');
@@ -36,6 +40,8 @@ Route::middleware('loadCache')->group(function() {
   Route::get('jogadores/get-ajax', 'JogadoresController@toAjax')->name('jogadores_ajax');
 
   Route::group(['middleware' => 'auth'], function () {
+
+      Route::get('/image/external', 'ImagensController@image')->name('image');
 
   //  Route::group(['middleware' => 'checkrole'], function () {
 
@@ -65,7 +71,7 @@ Route::middleware('loadCache')->group(function() {
           Route::group(['prefix' => 'admin'], function () {
               Route::get('/dashboard', 'AdminController@index')->name('admin_dashboard');
               Route::get('/', 'AdminController@index')->name('admin_index');
-              Route::get('/players', 'AdminController@jogadores')->name('admin_jogadores');
+              Route::get('/players/list', 'AdminController@jogadores')->name('admin_jogadores');
               Route::resource('players', 'JogadoresController');
               Route::resource('matches', 'PartidasController');
               Route::get('/appointment', 'PartidasController@agendamento')->name('agendar_partida');
@@ -78,11 +84,15 @@ Route::middleware('loadCache')->group(function() {
               Route::get('/players/{id}/profile', 'JogadoresController@view')->name('player_profile');
               Route::resource('configs', 'ConfigsController');
               Route::resource('partida', 'PartidasController');
-              Route::resource('players', 'JogadoresController');
+              //Route::resource('players', 'JogadoresController');
               Route::resource('mensalidades', 'JogadorMensalidadesController');
               Route::resource('categorias', 'CategoriasController');
               Route::resource('torneios', 'TorneiosController');
               Route::resource('banners', 'BannersController');
+              Route::resource('eventos', 'EventoController');
+              Route::resource('noticias', 'NoticiasController');
+
+              //Route::get('image/external', 'ImagensController@image')->name('image');
 
               Route::get('mensalidades/create/from-categories', 'JogadorMensalidadesController@createFromCategories')->name('mensalidade_create_from_categories');
 

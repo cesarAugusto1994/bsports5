@@ -28,6 +28,22 @@
 			height: 25%
     }
 
+    .footer {
+      background: #003d57;
+    }
+
+    .footer-widget h4 {
+      color: #d7eb22;
+    }
+
+    .footer-widget ul.footer-nav li{
+      color:white;
+    }
+
+    .footer-bottom{
+      border-top: 1px solid #d7eb22;
+    }
+
 		div#featured-slider.owl-theme .owl-nav [class*=owl-] {
 			color: #FFF;
 			font-size: 0;
@@ -53,6 +69,93 @@
       box-shadow:none;
     }
 
+    .login-btn {
+      color: #d7eb22;
+    }
+
+    .link-categorias {
+      color:white;
+    }
+
+    .link-categorias:hover {
+      background-color:#1b4465;
+    }
+
+    .nav>li>a:focus, .nav>li>a:hover{
+      background-color:#1b4465;
+    }
+
+    .logo-nav {
+      background:#215a88;
+    }
+
+    .data-number{
+      color:#dade3c;
+    }
+
+    .player-ranking-data{
+      background-color: #1a1f23;
+    }
+
+    .owl-prev, .owl-next {
+      background: #1b4465;
+    }
+
+    div#featured-slider.owl-theme .owl-nav [class*=owl-] {
+      background: #1b4465;
+    }
+
+    .first-name, .last-name{
+      color:#6189aa;
+    }
+
+    .proximas-partidas{
+      background-color: #111f44;
+      padding: 1em 1em;
+    }
+
+    .proximas-partidas h2{
+      color: white;
+    }
+
+    .tab-news ul.nav li a{
+      color: #d7eb22;
+      border-bottom: 4px solid #d7eb22;
+    }
+
+    .title-news{
+      color: #6da9d9;
+    }
+
+    .btn-news {
+      color: #6da9d9;
+      background-color:#6da9d9;
+    }
+
+    .news-txt h3 a, .news-txt h4 a, .news-txt h5 a, .news-txt h6 a{
+      color:#6da9d9;
+    }
+
+    .author{
+      color:black;
+    }
+
+    .sidenews-slider .owl-theme .owl-nav [class*=owl-], .newslist-block .news-block:hover .news-txt a.rm{
+      background-color:#6da9d9;
+    }
+
+    .news-txt a.rm{
+      background-color:#6da9d9;
+      color:white;
+    }
+
+    .tab-proximas-partidas:focus {
+      color:white !important;
+    }
+
+    .tab-proximas-partidas:hover {
+      color:white !important;
+    }
 
     </style>
 

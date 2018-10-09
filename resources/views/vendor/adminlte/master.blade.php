@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title_prefix', config('adminlte.title_prefix', ''))
 @yield('title', config('adminlte.title', 'AdminLTE 2'))
 @yield('title_postfix', config('adminlte.title_postfix', ''))</title>
@@ -71,6 +72,57 @@
 @endif
 
 @yield('adminlte_js')
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.20.6/sweetalert2.all.min.js"></script>
+
+<script>
+
+  $(".btnRemoveItem").click(function(e) {
+      var self = $(this);
+
+      swal({
+        title: 'Remover este item?',
+        text: "Não será possível recuperá-lo!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim',
+        cancelButtonText: 'Cancelar'
+        }).then((result) => {
+        if (result.value) {
+
+          e.preventDefault();
+
+          $.ajax({
+            headers: {
+             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+             },
+            url: self.data('route'),
+            type: 'POST',
+            dataType: 'json',
+            data: {
+              _method: 'DELETE'
+            }
+          }).done(function() {
+
+            self.parents('tr').hide();
+
+            swal(
+              'Ok!',
+              'O registro foi removido com sucesso.',
+              'success'
+            )
+
+          });
+
+
+        }
+      });
+
+  });
+
+</script>
 
 </body>
 </html>

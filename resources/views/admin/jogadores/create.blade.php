@@ -67,10 +67,32 @@
                 </select>
               </div>
             </div>
+
+            <div class="form-group">
+              <label for="telefone" class="col-sm-2 control-label">Celular</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control celphone" name="celular" id="celular" placeholder="Celular">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="telefone" class="col-sm-2 control-label">Telefone</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control phone" name="telefone" id="telefone" placeholder="Telefone">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="telefone" class="col-sm-2 control-label">Avatar</label>
+              <div class="col-sm-10">
+                <input type="file" class="form-control" name="avatar" id="avatar" placeholder="Avatar">
+              </div>
+            </div>
+
             <div class="form-group">
               <label for="observacao" class="col-sm-2 control-label">Observação</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="observacao" name="observacao" placeholder="Observação">
+                <textarea class="form-control" id="observacao" name="observacao"></textarea>
               </div>
             </div>
             <div class="form-group">

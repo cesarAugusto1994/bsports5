@@ -59,6 +59,16 @@ class UserPolicy
         return $user->isAdmin();
     }
 
+    public function eventos(User $user)
+    {
+        return $user->isAdmin();
+    }
+
+    public function noticias(User $user)
+    {
+        return $user->isAdmin();
+    }
+
     /**
      * Determine whether the user can view the model.
      *

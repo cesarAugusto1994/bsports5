@@ -20,7 +20,8 @@
             <h5 class="widget-user-desc">{{ $jogador->categoria->nome}}</h5>
           </div>
           <div class="widget-user-image">
-            <img class="img-circle" src="{{Gravatar::get(\Auth::user()->email)}}" alt="User Avatar">
+
+            <img class="profile-user-img img-responsive img-circle" alt="" src="{{ route('image', ['link'=>$jogador->pessoa->avatar]) }}"/>
 
           </div>
           <div class="box-footer">
@@ -157,18 +158,12 @@
 <div class="row">
 
   <div class="col-md-6">
-    <div class="box box-info">
+    <div class="box">
       <div class="box-header with-border">
         <h3 class="box-title">Partidas</h3>
-
-        <div class="box-tools pull-right">
-          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-          </button>
-          <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-        </div>
       </div>
-      <!-- /.box-header -->
       <div class="box-body">
+        @if($jogador->resultados->isNotEmpty())
         <div class="table-responsive">
           <table class="table no-margin">
             <thead>
@@ -218,29 +213,20 @@
             </tbody>
           </table>
         </div>
-        <!-- /.table-responsive -->
+        @else
+        <div class="alert alert-warning">Nenhuma partida encontrada!</div>
+        @endif
       </div>
-      <!-- /.box-body -->
-      <div class="box-footer clearfix">
-        <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">Todas Partidas</a>
-      </div>
-      <!-- /.box-footer -->
     </div>
   </div>
 
   <div class="col-md-6">
-    <div class="box box-info">
+    <div class="box">
       <div class="box-header with-border">
         <h3 class="box-title">Histórico de Mensalidades</h3>
-
-        <div class="box-tools pull-right">
-          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-          </button>
-          <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-        </div>
       </div>
-      <!-- /.box-header -->
       <div class="box-body">
+        @if($jogador->mensalidades->isNotEmpty())
         <div class="table-responsive">
           <table class="table no-margin">
             <thead>
@@ -279,13 +265,9 @@
             </tbody>
           </table>
         </div>
-        <!-- /.table-responsive -->
-      </div>
-      <!-- /.box-body -->
-      <div class="box-footer clearfix">
-        <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">Todo Hitórico</a>
-      </div>
-      <!-- /.box-footer -->
+        @else
+        <div class="alert alert-warning">Nenhuma mensalidade encontrada!</div>
+        @endif
     </div>
   </div>
 </div>

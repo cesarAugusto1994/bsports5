@@ -49,16 +49,25 @@ class JogadoresController extends Controller
 
         $user = \Auth::user();
 
-        $jogadores = \App\Models\Pessoa::where('nome', 'like', "%$search%")->get();
+        $jogadores = \App\Models\Pessoa::where('nome', 'like', "%$search%")
+        ->orWhere('email', 'like', "%$search%")
+        ->get();
 
         $resultatos = [];
 
         $resultatos = $jogadores->map(function($jogador) {
+
+            $categoria = null;
+
+            if($jogador->jogador && $jogador->jogador->categoria) {
+                $categoria = $jogador->jogador->categoria->nome;
+            }
+
             return [
               'nome' => $jogador->nome,
               'email' => $jogador->email,
               'id' => $jogador->id,
-              'categoria' => $jogador->jogador->categoria ? $jogador->jogador->categoria->nome : null,
+              'categoria' => $categoria,
             ];
         });
 
@@ -75,6 +84,13 @@ class JogadoresController extends Controller
     public function store(Request $request)
     {
         $data = $request->request->all();
+
+        $hasEmail = Pessoa::where('email', $data['email'])->get();
+
+        if($hasEmail->isNotEmpty()){
+          flash('Email já existente.')->warning()->important();
+          return redirect()->back();
+        }
 
         $userRole = Role::where('name', '=', 'User')->first();
 
@@ -100,12 +116,20 @@ class JogadoresController extends Controller
            $pessoa->telefone = $data['telefone'];
         }
 
+        if($request->has('celular')) {
+           $pessoa->celular = $data['celular'];
+        }
+
         if($request->has('cpf')) {
            $pessoa->cpf = $data['cpf'];
         }
 
         if($request->has('nascimento')) {
            $pessoa->nascimento = \DateTime::createFromFormat('d/m/Y', $data['nascimento']);
+        }
+
+        if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
+            $pessoa->avatar = $request->avatar->store('avatar');
         }
 
         $pessoa->save();
@@ -118,8 +142,7 @@ class JogadoresController extends Controller
         $jogador->save();
 
         flash('Perfil Adicionado com sucesso.')->success()->important();
-
-        return redirect()->back();
+        return redirect()->route('player_profile', $jogador->uuid);
     }
 
     public function update(Request $request, $id)
@@ -128,7 +151,6 @@ class JogadoresController extends Controller
 
         $user = \Auth::user();
         $user->name = $data['nome'];
-        //$user->email = $data['email'];
 
         if($request->has('password')) {
             $user->password = bcrypt($data['password']);
@@ -147,12 +169,20 @@ class JogadoresController extends Controller
            $pessoa->telefone = $data['telefone'];
         }
 
+        if($request->has('celular')) {
+           $pessoa->celular = $data['celular'];
+        }
+
         if($request->has('cpf')) {
            $pessoa->cpf = $data['cpf'];
         }
 
         if($request->has('nascimento')) {
            $pessoa->nascimento = \DateTime::createFromFormat('d/m/Y', $data['nascimento']);
+        }
+
+        if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
+            $pessoa->avatar = $request->avatar->store('avatar');
         }
 
         $pessoa->save();

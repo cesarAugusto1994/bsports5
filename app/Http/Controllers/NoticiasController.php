@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Torneio};
+use App\Models\Noticia;
 
-class TorneiosController extends Controller
+class NoticiasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class TorneiosController extends Controller
      */
     public function index()
     {
-        $torneios = Torneio::orderByDesc('id')->paginate();
-        return view('admin.torneio.index', compact('torneios'));
+        $noticias = Noticia::orderByDesc('id')->paginate();
+        return view('admin.noticias.index', compact('noticias'));
     }
 
     /**
@@ -25,7 +25,7 @@ class TorneiosController extends Controller
      */
     public function create()
     {
-        return view('admin.torneio.create');
+        return view('admin.noticias.create');
     }
 
     /**
@@ -37,12 +37,16 @@ class TorneiosController extends Controller
     public function store(Request $request)
     {
         $data = $request->request->all();
-        $data['valor'] = number_format(str_replace(',', '.', $data['valor']), 2);
-        Torneio::create($data);
 
-        flash('Torneio adicionado com sucesso.')->success()->important();
+        if ($request->hasFile('banner') && $request->file('banner')->isValid()) {
+            $data['banner'] = $request->banner->store('noticias');
+        }
 
-        return redirect()->route('torneios.index');
+        Noticia::create($data);
+
+        flash('Noticia adicionada com sucesso.')->success()->important();
+
+        return redirect()->route('noticias.index');
     }
 
     /**
@@ -64,9 +68,9 @@ class TorneiosController extends Controller
      */
     public function edit($id)
     {
-        $torneio = Torneio::findOrFail($id);
+        $noticia = Noticia::findOrFail($id);
 
-        return view('admin.torneio.edit', compact('torneio'));
+        return view('admin.noticias.edit', compact('noticia'));
     }
 
     /**
@@ -80,14 +84,18 @@ class TorneiosController extends Controller
     {
         $data = $request->request->all();
 
-        $torneio = Torneio::findOrFail($id);
+        $noticia = Noticia::findOrFail($id);
+
+        if ($request->hasFile('banner') && $request->file('banner')->isValid()) {
+            $data['banner'] = $request->banner->store('noticias');
+        }
+
         $data['ativo'] = $request->has('ativo') ? true : false;
-        $data['valor'] = number_format(str_replace(',', '.', $data['valor']), 2);
-        $torneio->update($data);
+        $noticia->update($data);
 
-        flash('Torneio atualizado com sucesso.')->success()->important();
+        flash('Noticia atualizada com sucesso.')->success()->important();
 
-        return redirect()->route('torneios.index');
+        return redirect()->route('noticias.index');
     }
 
     /**
@@ -98,11 +106,11 @@ class TorneiosController extends Controller
      */
     public function destroy($id)
     {
-        $torneio = Torneio::findOrFail($id);
+        $noticia = Noticia::findOrFail($id);
 
-        $torneio->delete();
+        $noticia->delete();
 
-        flash('Torneio removido com sucesso.')->success()->important();
-        return redirect()->route('torneios.index');
+        flash('Noticia removida com sucesso.')->success()->important();
+        return redirect()->route('noticias.index');
     }
 }

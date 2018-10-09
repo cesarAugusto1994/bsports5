@@ -130,6 +130,16 @@ return [
             'can'         => 'manage-players',
         ],
         [
+            'text'        => 'Eventos',
+            'url'         => 'admin/eventos',
+            'can'         => 'manage-eventos',
+        ],
+        [
+            'text'        => 'Noticias',
+            'url'         => 'admin/noticias',
+            'can'         => 'manage-noticias',
+        ],
+        [
             'text'        => 'Partidas',
             'url'         => 'admin/matches',
             'can'         => 'manage-partidas',

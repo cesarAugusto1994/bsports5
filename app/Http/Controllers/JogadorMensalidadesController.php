@@ -73,33 +73,21 @@ class JogadorMensalidadesController extends Controller
 
                 $existeMensalidade = Mensalidade::where('referencia', "$jogador:$dataMes")->get();
 
-                if($existeMensalidade->isNotEmpty()) {
-                    continue;
+                if($existeMensalidade->isEmpty()) {
+                  foreach($mesesCobrarMensalidade as $mes) {
+                      $mensalidade = new Mensalidade();
+                      $dataMes = (\DateTime::createFromFormat('m/Y', $mes));
+                      $mensalidade->mes = $dataMes->format('m/Y');
+                      $mensalidade->jogador_id = $jogador;
+                      $mensalidade->referencia = "$jogador:" . $dataMes->format('mY');
+                      $mensalidade->valor = $valor;
+                      $dataVencimento = (\DateTime::createFromFormat('m/Y', $mes)->modify('+1 month'));
+                      $mensalidade->vencimento = $dataVencimento;
+                      $mensalidade->status_id = 1;
+                      $mensalidade->save();
+                  }
                 }
-
-                $mesesCobrarMensalidade[] = $mes;
-
             }
-
-            if(!empty($mesesCobrarMensalidade)) {
-
-              foreach($mesesCobrarMensalidade as $mes) {
-                  $mensalidade = new Mensalidade();
-                  $dataMes = (\DateTime::createFromFormat('m/Y', $mes));
-                  $mensalidade->mes = $dataMes->format('m/Y');
-                  $mensalidade->jogador_id = $jogador;
-                  $mensalidade->referencia = "$jogador:" . $dataMes->format('mY');
-                  $mensalidade->valor = $valor;
-                  $dataVencimento = (\DateTime::createFromFormat('m/Y', $mes)->modify('+1 month'));
-                  $mensalidade->vencimento = $dataVencimento;
-                  $mensalidade->status_id = 1;
-                  $mensalidade->save();
-              }
-
-            }
-
-
-
         }
 
         return redirect()->route('mensalidades.index');
@@ -147,7 +135,21 @@ class JogadorMensalidadesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $registro = Mensalidade::findOrFail($id);
+            $registro->delete();
+
+            return response()->json([
+              'code' => 201,
+              'message' => 'Removido com sucesso!'
+            ]);
+
+        } catch(Exception $e) {
+            return response()->json([
+              'code' => 501,
+              'message' => $e->getMessage()
+            ]);
+        }
     }
 
     public function sale(Request $request)

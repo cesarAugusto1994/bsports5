@@ -15,6 +15,29 @@
         background: url('images/banners/BANNER-3.png') no-repeat center center;
       }
 
+      .team-box {
+        background: url('images/img/Banner-top-2.png') no-repeat left top #f4f4f4
+      }
+
+      .team-box div.player-number {
+        font-family: 'Fira Sans Condensed', serif;
+        font-size: 38px;
+        color: #e9e9e9;
+        position: absolute;
+        left: 37px;
+        bottom: 5px;
+        line-height: 90px;
+      }
+
+      .team-box div.player-info {
+        font-family: 'Fira Sans Condensed', serif;
+        font-size: 18px;
+        position: absolute;
+        color: #e9e9e9;
+        right: 5px;
+        bottom: 5px;
+      }
+
     </style>
 @stop
 
@@ -81,13 +104,15 @@
                           <!--Team Box Start-->
                           <div class="col-md-4">
                               <div class="team-box">
-                                  <div class="player-name">
-                                      <p>{{ $posicao['categoria_nome'] }}
-                                          <br>
-                                          <strong class="name"><a href="{{route('players.show', $posicao['uuid'])}}">{{ $posicao['primeiro_nome'] }}</a></strong>
-                                          <br> {{ $posicao['pontos'] }} </p>
-                                      <strong class="player-number">#{{ $posicao['posicao'] }}</strong> </div>
-                                  <a href="{{route('players.show', $posicao['uuid'])}}" class="readmore">+</a> </div>
+                                <div class="player-number">#{{ $posicao['posicao'] }}</div>
+
+                                <div class="player-info">
+                                  {{ $posicao['categoria_nome'] }}
+                                  <br>
+                                  <strong class="name"><a  style="color:#D5E904" href="{{route('players.show', $posicao['uuid'])}}">{{ $posicao['primeiro_nome'] }}</a></strong>
+                                  <br> {{ $posicao['pontos'] }}
+                                </div>
+                              </div>
                           </div>
                           <!--Team Box End-->
                         @endforeach

@@ -15,7 +15,8 @@
       <!-- Profile Image -->
       <div class="box box-primary">
         <div class="box-body box-profile">
-          <img class="profile-user-img img-responsive img-circle" src="{{Gravatar::get(\Auth::user()->email)}}" alt="">
+
+          <img class="profile-user-img img-responsive img-circle" alt="" src="{{ route('image', ['link'=>$jogador->pessoa->avatar]) }}"/>
 
           <h3 class="profile-username text-center">{{ $jogador->pessoa->nome}}</h3>
 
@@ -83,13 +84,56 @@
     <div class="col-md-9">
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-          <li class="active"><a href="#activity" data-toggle="tab">Atividades</a></li>
+          <li><a href="#activity" data-toggle="tab">Mensalidades</a></li>
           <li><a href="#timeline" data-toggle="tab">Partidas</a></li>
-          <li><a href="#settings" data-toggle="tab">Configurações</a></li>
+          <li class="active"><a href="#settings" data-toggle="tab">Dados do Jogador</a></li>
         </ul>
         <div class="tab-content">
-          <div class="active tab-pane" id="activity">
-
+          <div class="tab-pane" id="activity">
+            @if($jogador->mensalidades->isNotEmpty())
+            <div class="table-responsive">
+              <table class="table no-margin">
+                <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Mês</th>
+                  <th>Valor</th>
+                  <th>Vencimento</th>
+                  <th>Situação</th>
+                  <th>Opções</th>
+                </tr>
+                </thead>
+                <tbody>
+                  @foreach($jogador->mensalidades as $mensalidade)
+                    <tr>
+                      <td><a href="#">{{ substr($mensalidade->uuid, 0, 8) }}</a></td>
+                      <td>{{ $mensalidade->mes }}</td>
+                      <td>{{ number_format($mensalidade->valor, 2, ',', '.') }}</td>
+                      <td>{{ ($mensalidade->vencimento->format('d/m/Y')) }}</td>
+                      <td>
+                        @if($mensalidade->status->id == 1)
+                            <span class="label label-default">A Vencer</span>
+                        @else
+                            <span class="label label-success">Pago</span>
+                        @endif
+                      </td>
+                      <td>
+                        @role('user')
+                        @if($mensalidade->status->id == 1)
+                          <a class="btn btn-success btn-xs" href="{{ route('checkout.show', $mensalidade->uuid) }}">
+                             <i class="fa fa-dollar"></i> Pagar
+                          </a>
+                        @endif
+                        @endrole
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+            @else
+            <div class="alert alert-warning">Nenhuma mensalidade encontrada!</div>
+            @endif
           </div>
           <!-- /.tab-pane -->
           <div class="tab-pane" id="timeline">
@@ -140,7 +184,7 @@
                 </div>
               </li>
               @empty
-                <div class="alert alert-info">Nenhuma Partida jogada até o momento.</div>
+                <div class="alert alert-warning">Nenhuma Partida jogada até o momento.</div>
               @endforelse
               <!-- END timeline item -->
 
@@ -153,8 +197,7 @@
             </ul>
           </div>
           <!-- /.tab-pane -->
-
-          <div class="tab-pane" id="settings">
+          <div class="tab-pane active" id="settings">
 
             @php
 
@@ -166,7 +209,7 @@
 
             @endphp
 
-            <form class="form-horizontal" method="post" action="{{ $route }}">
+            <form class="form-horizontal" method="post" action="{{ $route }}" enctype="multipart/form-data">
               {{ csrf_field() }}
               {{ method_field('PUT') }}
               <div class="form-group">
@@ -197,9 +240,23 @@
               </div>
 
               <div class="form-group">
+                <label for="telefone" class="col-sm-2 control-label">Celular</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control celphone" name="celular" id="celular" placeholder="Celular" value="{{ $jogador->pessoa->celular }}">
+                </div>
+              </div>
+
+              <div class="form-group">
                 <label for="telefone" class="col-sm-2 control-label">Telefone</label>
                 <div class="col-sm-10">
                   <input type="text" class="form-control phone" name="telefone" id="telefone" placeholder="Telefone" value="{{ $jogador->pessoa->telefone }}">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="telefone" class="col-sm-2 control-label">Avatar</label>
+                <div class="col-sm-10">
+                  <input type="file" class="form-control" name="avatar" id="avatar" placeholder="Avatar">
                 </div>
               </div>
 
@@ -247,5 +304,6 @@
   $('.cpf').mask('000.000.000-00', {reverse: true, placeholder: "___.___.___-__"});
   $('.date').mask("00/00/0000", {placeholder: "__/__/____"})
   $('.phone').mask('(00) 00000-0000');
+  $('.celphone').mask('(00) 00000-0000');
 </script>
 @stop

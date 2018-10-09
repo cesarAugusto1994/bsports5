@@ -108,12 +108,20 @@ class PlayerController extends Controller
            $pessoa->telefone = $data['telefone'];
         }
 
+        if($request->has('celular')) {
+           $pessoa->celular = $data['celular'];
+        }
+
         if($request->has('cpf')) {
            $pessoa->cpf = $data['cpf'];
         }
 
         if($request->has('nascimento')) {
            $pessoa->nascimento = \DateTime::createFromFormat('d/m/Y', $data['nascimento']);
+        }
+
+        if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
+            $pessoa->avatar = $request->avatar->store('avatar');
         }
 
         $pessoa->save();
