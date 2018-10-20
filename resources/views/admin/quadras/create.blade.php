@@ -27,9 +27,15 @@
 
           <div class="form-group">
             <label for="nome" class="col-sm-2 control-label">Nome</label>
-
             <div class="col-sm-10">
-              <input type="text" class="form-control" value="" name="nome" id="nome" placeholder="Nome" required>
+              <input type="text" class="form-control" value="" name="nome" id="nome" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="nome" class="col-sm-2 control-label">Cor</label>
+            <div class="col-sm-10">
+              <input type="color" class="form-control" value="" name="cor" id="cor" required>
             </div>
           </div>
 

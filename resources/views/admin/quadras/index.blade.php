@@ -34,7 +34,8 @@
             <thead>
             <tr>
               <th>Nome</th>
-              <th>Ativo</th>
+              <th style="width:80px">Cor</th>
+              <th style="width:80px">Ativo</th>
               <th style="width:100px">Opções</th>
             </tr>
             </thead>
@@ -42,6 +43,7 @@
               @foreach($quadras as $quadra)
                 <tr>
                   <td>{{ $quadra->nome }}</td>
+                  <td style="background-color:{{ $quadra->cor }}"></td>
                   <td>{{ $quadra->ativo ? 'Ativo' : 'Inativo' }}</td>
                   <td>
                     <a href="{{ route('quadras.edit', $quadra->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>

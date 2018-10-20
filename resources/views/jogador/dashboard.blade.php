@@ -16,12 +16,12 @@
         <div class="box box-widget widget-user">
           <!-- Add the bg color to the header using any of the bg-* classes -->
           <div class="widget-user-header bg-aqua-active">
-            <h3 class="widget-user-username">{{ $jogador->pessoa->nome}}</h3>
+            <h3 class="widget-user-username">{{ $jogador->nome}}</h3>
             <h5 class="widget-user-desc">{{ $jogador->categoria->nome}}</h5>
           </div>
           <div class="widget-user-image">
 
-            <img class="profile-user-img img-responsive img-circle" alt="" src="{{ route('image', ['link'=>$jogador->pessoa->avatar]) }}"/>
+            <img class="profile-user-img img-responsive img-circle" alt="" src="{{ route('image', ['link'=>$jogador->avatar]) }}"/>
 
           </div>
           <div class="box-footer">
@@ -179,7 +179,7 @@
               @foreach($jogador->resultados->take(10) as $resultado)
                 <tr>
                   <td><a href="#"></a></td>
-                  <td>{{ $resultado->partida->data->format('d/m/Y') }} : {{ $resultado->partida->horario }}</td>
+                  <td>{{ $resultado->partida->inicio->format('d/m/Y H:i') }}</td>
                   <td>
                     @php
 
@@ -191,18 +191,19 @@
 
                     @endphp
 
-                    {{ $jogadorAdversario->jogador->pessoa->nome }}</td>
-                  <td><span class="label label-success">
-
+                    {{ $jogadorAdversario->jogador->nome }}</td>
 
                     @php
 
                         $label = $jogadorAdversario->pontos < $resultado->pontos ? 'Venceu' : 'Perdeu';
+                        $class = $jogadorAdversario->pontos < $resultado->pontos ? 'success' : 'danger';
 
                     @endphp
+                  <td>
 
+                    <span class="label label-{{$class}}">{{ $label }}</span>
 
-                    {{ $label }}</span></td>
+                  </td>
                   <td>
 
                     {{ $resultado->resultado_final }} x {{ $jogadorAdversario->resultado_final }}

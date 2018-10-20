@@ -38,8 +38,8 @@ class CreateVendasTable extends Migration
         Schema::create('vendas', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->unsignedInteger('pessoa_id');
-            $table->foreign('pessoa_id')->references('id')->on('pessoas');
+            $table->unsignedInteger('jogador_id');
+            $table->foreign('jogador_id')->references('id')->on('jogadores');
 
             $table->unsignedInteger('gateway_id');
             $table->foreign('gateway_id')->references('id')->on('gateway');

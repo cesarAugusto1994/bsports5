@@ -49,7 +49,7 @@ class JogadoresController extends Controller
 
         $user = \Auth::user();
 
-        $jogadores = \App\Models\Pessoa::where('nome', 'like', "%$search%")
+        $jogadores = \App\Models\Pessoa\Jogador::where('nome', 'like', "%$search%")
         ->orWhere('email', 'like', "%$search%")
         ->get();
 
@@ -85,7 +85,7 @@ class JogadoresController extends Controller
     {
         $data = $request->request->all();
 
-        $hasEmail = Pessoa::where('email', $data['email'])->get();
+        $hasEmail = Jogador::where('email', $data['email'])->get();
 
         if($hasEmail->isNotEmpty()){
           flash('Email já existente.')->warning()->important();
@@ -107,36 +107,32 @@ class JogadoresController extends Controller
 
         $data['ativo'] = $request->has('ativo') ? true : false;
 
-        $pessoa = new Pessoa();
-        $pessoa->nome = $data['nome'];
-        $pessoa->email = $data['email'];
-        $pessoa->ativo = $data['ativo'];
+        $jogador = new Jogador();
+        $jogador->nome = $data['nome'];
+        $jogador->email = $data['email'];
+        $jogador->ativo = $data['ativo'];
 
         if($request->has('telefone')) {
-           $pessoa->telefone = $data['telefone'];
+           $jogador->telefone = $data['telefone'];
         }
 
         if($request->has('celular')) {
-           $pessoa->celular = $data['celular'];
+           $jogador->celular = $data['celular'];
         }
 
         if($request->has('cpf')) {
-           $pessoa->cpf = $data['cpf'];
+           $jogador->cpf = $data['cpf'];
         }
 
         if($request->has('nascimento')) {
-           $pessoa->nascimento = \DateTime::createFromFormat('d/m/Y', $data['nascimento']);
+           $jogador->nascimento = \DateTime::createFromFormat('d/m/Y', $data['nascimento']);
         }
 
         if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
-            $pessoa->avatar = $request->avatar->store('avatar');
+            $jogador->avatar = $request->avatar->store('avatar');
         }
 
-        $pessoa->save();
-
-        $jogador = new Jogador();
-        $jogador->pessoa_id = $pessoa->id;
-        $jogador->categoria_simples_id = $data['categoria'];
+        $jogador->categoria_id = $data['categoria'];
         $jogador->lateralidade = $data['lateralidade'];
         $jogador->ativo = $data['ativo'];
         $jogador->save();
@@ -160,34 +156,31 @@ class JogadoresController extends Controller
 
         $data['ativo'] = $request->has('ativo') ? true : false;
 
-        $pessoa = Pessoa::findOrFail($id);
-        $pessoa->nome = $data['nome'];
-        $pessoa->email = $data['email'];
-        $pessoa->ativo = $data['ativo'];
+        $jogador = Jogador::findOrFail($id);
+        $jogador->nome = $data['nome'];
+        $jogador->email = $data['email'];
+        $jogador->ativo = $data['ativo'];
 
         if($request->has('telefone')) {
-           $pessoa->telefone = $data['telefone'];
+           $jogador->telefone = $data['telefone'];
         }
 
         if($request->has('celular')) {
-           $pessoa->celular = $data['celular'];
+           $jogador->celular = $data['celular'];
         }
 
         if($request->has('cpf')) {
-           $pessoa->cpf = $data['cpf'];
+           $jogador->cpf = $data['cpf'];
         }
 
         if($request->has('nascimento')) {
-           $pessoa->nascimento = \DateTime::createFromFormat('d/m/Y', $data['nascimento']);
+           $jogador->nascimento = \DateTime::createFromFormat('d/m/Y', $data['nascimento']);
         }
 
         if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
-            $pessoa->avatar = $request->avatar->store('avatar');
+            $jogador->avatar = $request->avatar->store('avatar');
         }
 
-        $pessoa->save();
-
-        $jogador = $pessoa->jogador;
         $jogador->lateralidade = $data['lateralidade'];
         $jogador->ativo = $data['ativo'];
         $jogador->save();

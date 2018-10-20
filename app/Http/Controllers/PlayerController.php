@@ -17,35 +17,9 @@ class PlayerController extends Controller
     {
         $user = \Auth::user();
 
-        $pessoa = Pessoa::where('email', $user->email)->get()->first();
-        $jogador = [];
-
-        if($pessoa) {
-          $jogador = Jogador::where('pessoa_id', $pessoa->id)->get()->first();
-        }
+        $jogador = Jogador::where('email', $user->email)->get()->first();
 
         return view('jogador.dashboard', compact('jogador'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -58,12 +32,7 @@ class PlayerController extends Controller
     {
         $user = \Auth::user();
 
-        $pessoa = Pessoa::where('email', $user->email)->get()->first();
-        $jogador = [];
-
-        if($pessoa) {
-          $jogador = Jogador::where('pessoa_id', $pessoa->id)->get()->first();
-        }
+        $jogador = Jogador::where('email', $user->email)->get()->first();
 
         return view('jogador.perfil', compact('jogador'));
     }
@@ -100,33 +69,30 @@ class PlayerController extends Controller
 
         $user->save();
 
-        $pessoa = Pessoa::findOrFail($id);
-        $pessoa->nome = $data['nome'];
-        $pessoa->email = $data['email'];
+        $jogador = Jogador::findOrFail($id);
+        $jogador->nome = $data['nome'];
+        $jogador->email = $data['email'];
 
         if($request->has('telefone')) {
-           $pessoa->telefone = $data['telefone'];
+           $jogador->telefone = $data['telefone'];
         }
 
         if($request->has('celular')) {
-           $pessoa->celular = $data['celular'];
+           $jogador->celular = $data['celular'];
         }
 
         if($request->has('cpf')) {
-           $pessoa->cpf = $data['cpf'];
+           $jogador->cpf = $data['cpf'];
         }
 
         if($request->has('nascimento')) {
-           $pessoa->nascimento = \DateTime::createFromFormat('d/m/Y', $data['nascimento']);
+           $jogador->nascimento = \DateTime::createFromFormat('d/m/Y', $data['nascimento']);
         }
 
         if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
-            $pessoa->avatar = $request->avatar->store('avatar');
+            $jogador->avatar = $request->avatar->store('avatar');
         }
 
-        $pessoa->save();
-
-        $jogador = $pessoa->jogador;
         $jogador->lateralidade = $data['lateralidade'];
         $jogador->save();
 

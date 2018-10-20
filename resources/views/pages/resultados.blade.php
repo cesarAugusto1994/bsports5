@@ -61,30 +61,30 @@
             <div class="row">
                 <div class="col-md-9">
                     <div class="events-posts">
-                      @foreach($resultados as $resultado)
-
-                        @if($resultado->resultado->isEmpty())
-                          @continue;
-                        @endif
+                      @foreach($partidas as $partida)
 
                         <div class="event-post">
                             <div class="event-date">
-                                <h5><span>{{ $resultado->data->format('M') }}</span> {{ $resultado->data->format('d, Y') }}</h5>
-                                <strong>{{ $resultado->horario }}</strong> </div>
+                                <h5><span>{{ $partida->inicio->format('M') }}</span> {{ $partida->inicio->format('d, Y') }}</h5>
+                                <strong>{{ $partida->inicio->format('H:i') }} - {{ $partida->fim->format('H:i') }}</strong> </div>
                             <div class="event-content">
                                 <div class="event-txt-wrap">
                                     <div class="event-txt">
                                       <div class="grid-players">
                                         <div class="row">
                                           <div class="col-md-6">
-                                          <a class="jogador1" href="{{route('players.show', $resultado->resultado->first()->jogador->uuid)}}"><p>{{ $resultado->resultado->first()->jogador->pessoa->nome }}</p></a>
+                                            @if($partida->jogador1)
+                                                <a class="jogador1" href="{{route('jogador', $partida->jogador1->uuid)}}"><p>{{ $partida->jogador1->nome }}</p></a>
+                                            @endif
                                           </div>
                                           <div class="col-md-6">
-                                          <a class="jogador2" href="{{route('players.show', $resultado->resultado->last()->jogador->uuid)}}">{{ substr($resultado->resultado->last()->jogador->pessoa->nome, 0, 15) }}</a>
+                                            @if($partida->jogador2)
+                                                <a class="jogador2" href="{{route('jogador', $partida->jogador2->uuid)}}">{{ substr($partida->jogador2->nome, 0, 15) }}</a>
+                                            @endif
                                           </div>
                                         </div>
                                       </div>
-                                        <p class="loc"><i class="fa fa-map-marker"></i> {{ $resultado->quadra->nome }}</p>
+                                        <p class="loc"><i class="fa fa-map-marker"></i> {{ $partida->quadra->nome }}</p>
                                         <div class="event-box-footer">
 
                                           <div class="widget">
@@ -92,31 +92,31 @@
                                                 <ul>
                                                     <li>
                                                         <a class="item twitter">
-                                                          <span class="count">{{$resultado->resultado->first()->set1}} x {{$resultado->resultado->last()->set1}}</span>
+                                                          <span class="count">{{$partida->jogador1_set1}} x {{$partida->jogador2_set1}}</span>
                                                           <em>1º SET</em> </a>
                                                     </li>
                                                     <li>
                                                         <a class="item ">
-                                                          <span class="count">{{$resultado->resultado->first()->set2}} x {{$resultado->resultado->last()->set2}}</span>
+                                                          <span class="count">{{$partida->jogador1_set2}} x {{$partida->jogador2_set2}}</span>
                                                           <em>2º SET</em> </a>
                                                     </li>
                                                     <li>
                                                         <a class="item twitter">
-                                                          <span class="count">{{$resultado->resultado->first()->set3}} x {{$resultado->resultado->last()->set3}}</span>
+                                                          <span class="count">{{$partida->jogador1_set3}} x {{$partida->jogador2_set3}}</span>
                                                           <em>3º SET</em> </a>
                                                     </li>
                                                     <li>
                                                         <a class="item ">
-                                                          <span class="count">{{$resultado->resultado->first()->resultado_final}} x {{$resultado->resultado->last()->resultado_final}}</span>
+                                                          <span class="count">{{$partida->jogador1_resultado_final}} x {{$partida->jogador2_resultado_final}}</span>
                                                           <em>SETS</em> </a>
                                                     </li>
                                                     <li>
                                                         <a class="item twitter">
-                                                          <span class="count">{{$resultado->resultado->first()->pontos}} x {{$resultado->resultado->last()->pontos}}</span><em>Pontos</em> </a>
+                                                          <span class="count">{{$partida->jogador1_pontos}} x {{$partida->jogador2_pontos}}</span><em>Pontos</em> </a>
                                                     </li>
                                                     <li>
                                                         <a class="item">
-                                                          <span class="count">{{$resultado->resultado->first()->bonus}} x {{$resultado->resultado->last()->bonus}}</span><em>Bonus</em> </a>
+                                                          <span class="count">{{$partida->jogador1_bonus}} x {{$partida->jogador2_bonus}}</span><em>Bonus</em> </a>
                                                     </li>
                                                     <li></li>
                                                 </ul>
@@ -135,7 +135,7 @@
                     </div>
 
                     <div class="techlinqs-pagination text-center">
-                        {{ $resultados->links() }}
+                        {{ $partidas->links() }}
                     </div>
                 </div>
 

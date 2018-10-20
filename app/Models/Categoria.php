@@ -11,7 +11,7 @@ class Categoria extends Model
 
     public function jogadores()
     {
-        return $this->hasMany(Jogador::class, 'categoria_simples_id');
+        return $this->hasMany(Jogador::class, 'categoria_id');
     }
 
     public function menu()

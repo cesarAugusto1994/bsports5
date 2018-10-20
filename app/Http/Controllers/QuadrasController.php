@@ -78,7 +78,7 @@ class QuadrasController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->request->all();
-
+        
         $quadra = Quadras::findOrFail($id);
         $data['ativo'] = $request->has('ativo') ? true : false;
         $quadra->update($data);

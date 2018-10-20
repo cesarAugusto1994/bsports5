@@ -12,9 +12,6 @@
             <div class="container">
                 <div class="row">
 
-                    <!--
-                    <div class="banner-ad m30"> <img src="{{ \App\Helpers\Helper::getConfig('empresa-banner-topo-vertical') ?? 'holder.js/944x67' }}" alt=""> </div>
-                  -->
                     <div class="col-md-9 p3r">
                         <div id="featured-slider" class="owl-carousel owl-theme" style="min-height:500px;max-height:500px;">
                           @foreach($ranking as $key => $item)
@@ -39,16 +36,15 @@
                                       <div class="previous-item">
                                         <div class="player-ranking-details">
                                           <div class="player-ranking-name">
-                                            <a href="{{route('players.show', $item['uuid'])}}" ><span class="first-name">{{ $item['primeiro_nome'] }}</span> <span class="last-name">{{ $item['ultimo_nome'] }}</span></a>
+                                            <a href="{{ route('jogador', $item['uuid']) }}" ><span class="first-name">{{ $item['primeiro_nome'] }}</span> <span class="last-name">{{ $item['ultimo_nome'] }}</span></a>
                                           </div>
                                         </div>
                                       </div>
-                                    </div> <!---->
+                                    </div>
                                   </div>
                                   <div class="player-ranking-links">
                                     <a href="{{route('classificacao')}}">Rankings</a>
-                                    <a href="{{route('players.show', $item['uuid'])}}">Informações</a>
-                                    <!--<a>Video</a>-->
+                                    <a href="{{ route('jogador', $item['uuid']) }}">Informações</a>
                                   </div>
                                 </div>
                                   <div class="player-ranking-bottom">
@@ -147,17 +143,50 @@
                           <div class="col-md-12">
                               <div id="ls-slider" class="owl-carousel owl-theme">
 
+                                @php
+
+                                    $categoria = $item->id;
+
+                                    $partidas = \App\Models\Partida::whereHas('resultado', function($query) use($categoria) {
+                                        $query->whereHas('jogador', function($query2) use($categoria) {
+                                            $query2->where('categoria_id', $categoria);
+                                        });
+                                    })->where('inicio', '>', now())->get();
+
+                                @endphp
+
+                                @foreach($partidas as $partida)
 
                                   <!--LS Box Start-->
                                   <div class="item">
-                                      <div class="schedule-box">
-                                          <div class="sdate"> <strong>24</strong> Mar </div>
-                                          <div class="steams">
-                                              <div class="matches"> <strong class="count">1-7</strong> <strong class="win">Win</strong> </div>
-                                              <div class="teams-vs"> <strong class="t1"><img src="./images/tlogos/tl1.png" alt="" /> Blu</strong> <strong class="vs">vs</strong> <strong class="t2">Eag <img src="./images/tlogos/tl2.png" alt="" /></strong> </div>
-                                          </div>
-                                      </div>
+
+                                    <div class="match-box">
+                                        <ul class="match-fixture-inner">
+                                            <li class="team"> <img src="{{ route('image', ['link'=>$partida->jogador1->avatar]) }}" alt="" />
+                                              <strong><a href="{{ route('jogador', $partida->jogador1->uuid) }}">
+                                                {{ substr($partida->jogador1->nome, 0, 12) }}</a></strong>
+                                            </li>
+                                            <li class="time-batch"><strong class="m-date">{{  $partida->inicio->format('d.m.Y') }}</strong>
+                                              <strong class="m-time">{{  $partida->inicio->format('H:i') }}</strong> <strong class="m-vs">VS</strong></li>
+                                            <li class="team"><img src="{{ route('image', ['link'=>'avatar.png']) }}" alt="" />
+                                              <strong>
+                                              @if($partida->jogador2)
+                                              <a href="{{ route('jogador', $partida->jogador2->uuid) }}">
+                                                {{ substr($partida->jogador2->nome, 0, 12) }}</a>
+                                              @else
+
+                                                A definir
+
+                                              @endif
+                                              </strong>
+                                            </li>
+                                        </ul>
+                                        <div class="mb-footer"> {{ $partida->quadra->nome }}</div>
+                                    </div>
+
                                   </div>
+
+                                @endforeach
 
                               </div>
                           </div>

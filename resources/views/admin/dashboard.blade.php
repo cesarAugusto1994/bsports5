@@ -100,18 +100,11 @@
 
   </div>
 
-  <div class="col-md-6">
-    <div class="box box-info">
+  <div class="col-md-12">
+    <div class="box box-solid">
       <div class="box-header with-border">
         <h3 class="box-title">Partidas</h3>
-
-        <div class="box-tools pull-right">
-          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-          </button>
-          <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-        </div>
       </div>
-      <!-- /.box-header -->
       <div class="box-body">
         <div class="table-responsive">
           <table class="table no-margin">
@@ -119,7 +112,7 @@
             <tr>
               <th></th>
               <th>Data</th>
-              <th>Opnente</th>
+              <th>Oponente</th>
               <th>Placar</th>
             </tr>
             </thead>
@@ -127,24 +120,21 @@
               @foreach($partidas as $partida)
                 <tr>
                   <td><a href="#"></a></td>
-                  <td>{{ $partida->data->format('d/m/Y') }} : {{ $partida->horario }}</td>
-                  <td>{{ $partida->resultado->first()->jogador->pessoa->nome ?? 'A definir' }} x
-                    {{ $partida->resultado->count() == 2 && $partida->resultado->last()->jogador->pessoa->nome ?? 'A definir' }}</td>
+                  <td>{{ $partida->inicio->format('d/m/Y') }} <b>{{ $partida->inicio->format('H:i') }} : {{ $partida->fim->format('H:i') }}</b></td>
+                  <td>{{ $partida->jogador1->nome ?? 'A definir' }} x
+                    {{ $partida->jogador2->nome ?? 'A definir' }}</td>
                   <td>
-                    {{ $partida->resultado->first()->resultado_final ?? 0 }} x {{ $partida->resultado->last()->resultado_final ?? 0 }}
+                    {{ $partida->jogador1_resultado_final ?? 0 }} x {{ $partida->jogador2_resultado_final ?? 0 }}
                   </td>
                 </tr>
               @endforeach
             </tbody>
           </table>
         </div>
-        <!-- /.table-responsive -->
       </div>
-      <!-- /.box-body -->
       <div class="box-footer clearfix">
         <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">Todas Partidas</a>
       </div>
-      <!-- /.box-footer -->
     </div>
   </div>
 

@@ -43,40 +43,102 @@
           <div class="row">
               <div class="col-md-12">
 
-                <form method="post" action="{{ route('partida_jogador_store', $partida->id) }}">
+                @php
+
+                  $user = \Auth::user();
+
+                  $route = route('player_partida_jogador_store', $partida->id);
+
+                  if($user->isAdmin()) {
+                      $route = route('partida_jogador_store', $partida->id);
+                  }
+
+                  $jogador = \App\Models\Pessoa\Jogador::where('email', $user->email)->get()->first();
+
+                @endphp
+
+                <form method="post" action="{{ $route }}">
 
                 <div class="match-fixture-thumb">
                   <ul class="fix">
-                    @if($partida->resultado->isNotEmpty())
-                    <li class="team-logo"> <img src="#" alt=""> <strong>{{ substr($partida->resultado->first()->jogador->pessoa->nome, 0, 12) }}</strong> </li>
-                    <input type="hidden" name="jogador[]" value="{{ $partida->resultado->first()->jogador->id }}"/>
-                    @else
-                    <li class="team-logo">
 
-                      <select class="form-control select2 select-jogador" style="width:270px" name="jogador[]">
-                          <option value=""></option>
+                      <li class="team-logo">
 
-                      </select>
+                        @if($partida->jogador1)
 
-                     </li>
-                    @endif
+                            <img width="128" style="max-width:128px" src="{{ route('image', ['link'=>$partida->jogador1->avatar]) }}" alt=""/>
+                            <strong>{{ substr($partida->jogador1->nome, 0, 12) }}</strong>
+                            <input type="hidden" name="jogador1" value="{{ $partida->jogador1->id }}"/>
+
+                        @else
+
+                          @if($user->isAdmin())
+                              <select class="form-control select2 select-jogador" style="width:270px" name="jogador1">
+                                  <option value=""></option>
+                              </select>
+                          @else
+
+                              @if($partida->jogador1 && $partida->jogador2)
+
+                                  <img style="max-width:128px" src="{{ route('image', ['link'=>$jogador->avatar]) }}" alt="">
+                                  <strong>{{ substr($jogador->nome, 0, 12) }}</strong>
+                                  <input type="hidden" name="jogador1" value="{{ $jogador->id }}"/>
+
+                              else
+
+                                  A definir
+
+                              @endif
+
+
+                          @endif
+
+                        @endif
+
+                      </li>
+
                     <li class="t-vs"> <span>vs</span></li>
-                    @if($jogador)
-                    <li class="team-logo"> <img src="#" alt=""> <strong>{{ $jogador->pessoa->nome }}</strong> </li>
-                    @else
+
+
                     <li class="team-logo">
 
-                      <h3>Indefinido</h3>
+                      @if($partida->jogador2)
 
-                     </li>
-                    @endif
+                          <img width="128" style="max-width:128px" src="{{ route('image', ['link'=>$partida->jogador2->avatar]) }}" alt=""/>
+                          <strong>{{ substr($partida->jogador2->nome, 0, 12) }}</strong>
+                          <input type="hidden" name="jogador2" value="{{ $partida->jogador2->id }}"/>
+
+                      @else
+
+                        @if($user->isAdmin())
+                            <select class="form-control select2 select-jogador" style="width:270px" name="jogador2">
+                                <option value=""></option>
+                            </select>
+                        @else
+
+                          @if($partida->jogador1 && $partida->jogador2)
+
+                              A definir
+
+                          @else
+
+                              <img  width="128" style="max-width:128px" src="{{ route('image', ['link'=>$jogador->avatar]) }}" alt="">
+                              <strong>{{ substr($jogador->nome, 0, 12) }}</strong>
+                              <input type="hidden" name="jogador2" value="{{ $jogador->id }}"/>
+
+                          @endif
+
+
+                        @endif
+
+                      @endif
+
+                    </li>
+
+
                   </ul>
                   <ul class="post-meta">
-                    <li><i class="fa fa-calendar"></i> {{ $partida->data->format('d M Y') }}</li>
-                    <!--
-                    <li><i class="fa fa-thumbs-up"></i> 178 Likes</li>
-                    <li><i class="fa fa-comment"></i> 56 Comments</li>
-                    -->
+                    <li class="pull-left"><i class="fa fa-calendar"></i> {{ $partida->inicio->format('d/m/Y') }}</li>
 
                         <li class="buy">
 
@@ -84,7 +146,7 @@
                             @if($jogador)
                             <input type="hidden" name="jogador[]" value="{{ $jogador->id }}">
                             @endif
-                            <button type="submit" class="btn btn-info">Agendar</button>
+                            <button type="submit" class="btn btn-primary btn-lg">Agendar</button>
 
                         </li>
 

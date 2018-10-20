@@ -11,15 +11,9 @@
 <div class="row">
 
   <div class="col-md-12">
-      <div class="box box-info">
+      <div class="box box-solid">
         <div class="box-header with-border">
           <h3 class="box-title">Opções</h3>
-
-          <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-            </button>
-            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-          </div>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -31,17 +25,10 @@
   </div>
 
   <div class="col-md-12">
-    <div class="box box-info">
+    <div class="box box-solid">
       <div class="box-header with-border">
         <h3 class="box-title">Partidas</h3>
-
-        <div class="box-tools pull-right">
-          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-          </button>
-          <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-        </div>
       </div>
-      <!-- /.box-header -->
       <div class="box-body">
         <div class="table-responsive">
           <table class="table no-margin">
@@ -58,7 +45,7 @@
               @foreach($partidas as $partida)
                 <tr>
                   <td># {{ $partida->id }}</td>
-                  <td>{{ $partida->data->format('d/m/Y') }} : {{ $partida->horario }}</td>
+                  <td>{{ $partida->inicio->format('d/m/Y') }} <b>{{ $partida->inicio->format('H:i') }} : {{ $partida->fim->format('H:i') }}</b></td>
 
                   @php
 
@@ -69,53 +56,72 @@
                     $jogador1Uuid = '';
                     $jogador2Uuid = '';
 
-                    if($partida->resultado->isNotEmpty()) {
-                        $jogador1 = $partida->resultado->first()->jogador->pessoa->nome;
-                        $jogador1Pontos = $partida->resultado->first()->resultado_final;
-                        $jogador1Uuid = $partida->resultado->first()->jogador->uuid;
+                    $showPlacar = $podeRemover = false;
+
+                    if($partida->jogador1) {
+                        $jogador1 = $partida->jogador1->nome;
+                        $jogador1Pontos = $partida->jogador1_resultado_final;
+                        $jogador1Uuid = $partida->jogador1->uuid;
                     }
 
-                    if($partida->resultado->isNotEmpty() && $partida->resultado->count() == 2) {
-                        $jogador2 = $partida->resultado->last()->jogador->pessoa->nome;
-                        $jogador2Pontos = $partida->resultado->last()->resultado_final;
-                        $jogador2Uuid = $partida->resultado->last()->jogador->uuid;
+                    if($partida->jogador2) {
+                        $jogador2 = $partida->jogador2->nome;
+                        $jogador2Pontos = $partida->jogador2_resultado_final;
+                        $jogador2Uuid = $partida->jogador2->uuid;
+                    }
+
+                    if($partida->inicio > now()) {
+                      $podeRemover = true;
+                    } else {
+                      $showPlacar = true;
                     }
 
                   @endphp
 
                   <td>
                     @if($jogador1Uuid)
-                    <a href="{{ route('player_profile', $jogador1Uuid) }}">{{ $jogador1 }}</a>
+                      @if($podeRemover)
+                        <a class="btn btn-danger btn-xs" href="{{ route('remover_jogador_partida', [$partida->id, $partida->jogador1->id]) }}"><i class="fa fa-trash"></i></a>
+                      @endif
+                        <a href="{{ route('player_profile', $jogador1Uuid) }}">{{ $jogador1 }}</a>
+                      @if($showPlacar)
+                        {{ $jogador1Pontos }}
+                      @endif
                     @else
-                    {{ $jogador1 }}
+                        {{ $jogador1 }}
                     @endif
                     x
                     @if($jogador2Uuid)
-                    <a href="{{ route('player_profile', $jogador2Uuid) }}">{{ $jogador2 }}</a></td>
+                        @if($showPlacar)
+                            {{ $jogador2Pontos }}
+                        @endif
+                        <a href="{{ route('player_profile', $jogador2Uuid) }}">{{ $jogador2 }}</a>
+                        @if($podeRemover)
+                            <a class="btn btn-danger btn-xs" href="{{ route('remover_jogador_partida', [$partida->id, $partida->jogador2->id]) }}"><i class="fa fa-trash"></i></a>
+                        @endif
                     @else
-                    {{ $jogador2 }}
+                        {{ $jogador2 }}
                     @endif
+                  </td>
                   <td>
                     {{ $jogador1Pontos }} x {{ $jogador2Pontos }}
                   </td>
-                  <td></td>
+                  <td>
+                    <button data-route="{{ route('partida.destroy', ['id' => $partida->id]) }}" class="btn btn-sm btn-danger btnRemoveItem"><i class="fa fa-trash"></i> </button>
+                  </td>
                 </tr>
               @endforeach
             </tbody>
           </table>
         </div>
-        <!-- /.table-responsive -->
       </div>
-      <!-- /.box-body -->
       <div class="box-footer clearfix">
         <a href="{{ route('matches.create') }}" class="btn btn-sm btn-info btn-flat pull-left">Nova Partida</a>
         <span class="pull-right">{{ $partidas->links() }}</span>
       </div>
-      <!-- /.box-footer -->
     </div>
   </div>
 </div>
-
 
 @stop
 

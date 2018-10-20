@@ -105,11 +105,11 @@
                           <div class="col-md-4">
                               <div class="team-box">
                                 <div class="player-number">#{{ $posicao['posicao'] }}</div>
-
+                                <img width="128" src="{{ route('image', ['link'=>$posicao['avatar']]) }}" alt="" />
                                 <div class="player-info">
                                   {{ $posicao['categoria_nome'] }}
                                   <br>
-                                  <strong class="name"><a  style="color:#D5E904" href="{{route('players.show', $posicao['uuid'])}}">{{ $posicao['primeiro_nome'] }}</a></strong>
+                                  <strong class="name"><a  style="color:#D5E904" href="{{route('jogador', $posicao['uuid'])}}">{{ $posicao['primeiro_nome'] }}</a></strong>
                                   <br> {{ $posicao['pontos'] }}
                                 </div>
                               </div>

@@ -13,6 +13,8 @@ class Jogador extends Model
     use Uuids;
     protected $table = 'jogadores';
 
+    protected $dates = ['nascimento'];
+
     public function pessoa()
     {
         return $this->belongsTo(Pessoa::class, 'pessoa_id');
@@ -23,18 +25,28 @@ class Jogador extends Model
         return $this->hasMany(Resultado::class, 'jogador_id');
     }
 
+    public function partidas()
+    {
+        return $this->hasMany(Partida::class, 'jogador1_id');
+    }
+
+    public function partidas2()
+    {
+        return $this->hasMany(Partida::class, 'jogador2_id');
+    }
+
     public function mensalidades()
     {
         return $this->hasMany(Mensalidade::class, 'jogador_id');
     }
-
+/*
     public function partidas()
     {
         return $this->hasManyThrough(Resultado::class, Partida::class, 'jogador_id', 'partida_id', 'id', 'id');
     }
-
+*/
     public function categoria()
     {
-        return $this->belongsTo(Categoria::class, 'categoria_simples_id');
+        return $this->belongsTo(Categoria::class, 'categoria_id');
     }
 }

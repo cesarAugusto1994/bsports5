@@ -13,31 +13,18 @@ use App\{User, Role};
 class HomeController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //$this->middleware('auth');
-    }
-
-    /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        if(Pessoa::count() == 0) {
+        if(Jogador::count() == 0) {
             $this->importJogadores();
         }
 
         if(Partida::count() == 0) {
             $this->importPartidas();
-        }
-
-        if(Resultado::count() == 0) {
             $this->importResultados();
         }
 
@@ -58,16 +45,15 @@ class HomeController extends Controller
         $sql = "select
                 jg.id,
                 jg.uuid,
-                pe.nome,
-                categoria_simples_id categoria,
-                sum(pontos) - SUM(bonus) as pontos,
+                jg.nome,
+                categoria_id categoria,
+                sum(partida.jogador1_pontos) - SUM(partida.jogador1_bonus) as pontos,
                 '' link,
                 '' url
-                from partida_resultados res
-                inner join jogadores jg ON(jg.id = res.jogador_id)
-                inner join pessoas pe ON(pe.id = jg.pessoa_id)
-                where jg.categoria_simples_id = ?
-                group by jg.id, jg.uuid, pe.nome, jg.categoria_simples_id
+                from partidas partida
+                inner join jogadores jg ON(jg.id = partida.jogador1_id)
+                where jg.categoria_id = ?
+                group by jg.id, jg.uuid, jg.nome, jg.categoria_id
                 order by pontos DESC
                 limit 5";
 
@@ -96,13 +82,9 @@ class HomeController extends Controller
 
         $categorias = Categoria::whereHas('jogadores', function ($query) {
             $query->whereHas('resultados', function ($query2) {
-              return $query2->with('partida.data', '>=', now());
+              return $query2->with('partida.inicio', '>=', now());
             });
         })->get();
-
-        //$proximasPartidas = Partida::where('data', '>', now())->get();
-
-        #dd($categorias->first()->jogadores->first()->resultados);
 
         return view('home', compact('ranking'));
     }
@@ -128,24 +110,24 @@ class HomeController extends Controller
         $sql = "select
                 jg.id,
                 jg.uuid,
-                pe.nome,
-                categoria_simples_id categoria,
+                jg.nome,
+                categoria_id categoria,
                 ca.nome categoria_nome,
-                sum(pontos) as pontos,
+                sum(partida.jogador1_pontos) as pontos,
                 '' link,
-                '' url
-                from partida_resultados res
-                inner join jogadores jg ON(jg.id = res.jogador_id)
-                inner join pessoas pe ON(pe.id = jg.pessoa_id)
-                inner join categorias ca ON(ca.id = jg.categoria_simples_id)
-                where jg.categoria_simples_id = ?
+                '' url,
+                jg.avatar avatar
+                from partidas partida
+                inner join jogadores jg ON(jg.id = partida.jogador1_id)
+                inner join categorias ca ON(ca.id = jg.categoria_id)
+                where jg.categoria_id = ?
                 ";
 
         if($jogador) {
-          $sql .= " AND pe.nome like '%$jogador%' ";
+          $sql .= " AND jg.nome like '%$jogador%' ";
         }
 
-        $sql .= "group by jg.id, jg.uuid, pe.nome, jg.categoria_simples_id, ca.nome
+        $sql .= "group by jg.id, jg.uuid, jg.nome, jg.categoria_id, ca.nome, jg.avatar
         order by pontos DESC";
 
         $resultado = \DB::select($sql, [$id]);
@@ -172,7 +154,8 @@ class HomeController extends Controller
             "pontos" => $item->pontos,
             "posicao" => $key+1,
             "link" => $item->link,
-            "url" => $item->url
+            "url" => $item->url,
+            "avatar" => $item->avatar,
           ];
 
           $items->push($ranking[$key]);
@@ -195,6 +178,8 @@ class HomeController extends Controller
     {
         $file = file_get_contents(storage_path('app/data/jogadors.json'));
 
+        //$file = \Storage::get('data/jogadors.json');
+
         $registros = json_decode($file, true);
 
         //abort(404);
@@ -206,25 +191,20 @@ class HomeController extends Controller
             //echo $key . '<br/>';
 
             if(empty($data['ds_email'])){
-              $data['ds_email'] = 'mail@mail.com';
+              $data['ds_email'] = str_slug($data['nm_jogador']).'@bsports.com.br';
             }
-
-            $pessoa = new Pessoa();
-            $pessoa->id = $data['id'];
-            $pessoa->nome = $data['nm_jogador'];
-            $pessoa->nascimento = $data['dt_nascimento'];
-            $pessoa->email = $data['ds_email'];
-            $pessoa->save();
 
             $jogador = new Jogador();
             $jogador->id = $data['id'];
+            $jogador->nome = $data['nm_jogador'];
+            $jogador->nascimento = $data['dt_nascimento'];
+            $jogador->email = $data['ds_email'];
+            $jogador->avatar = 'avatar.png';
+            $jogador->telefone = $data['nr_telefone2'];
+            $jogador->celular = $data['nr_telefone'];
             $jogador->lateralidade = $data['ds_lateralidade'];
-            $jogador->categoria_simples_id = $data['categoria_simples_id'];
-            $jogador->categoria_duplas_id = $data['categoria_duplas_id'];
-            $jogador->participa_duplas = $data['ic_participacao_duplas'] ?? false;
-            $jogador->participa_simples = $data['ic_participacao_simples'] ?? false;
+            $jogador->categoria_id = $data['categoria_simples_id'];
             $jogador->observacao = $data['ds_observacao'] ?? '';
-            $jogador->pessoa_id = $pessoa->id;
             $jogador->save();
 
             $hasUser = \DB::table('users')->where([
@@ -237,37 +217,13 @@ class HomeController extends Controller
                   'name' => $data['nm_jogador'],
                   'email' => $data['ds_email'],
                   'password' => bcrypt($data['ds_senha'] ?? 123),
+                  'jogador_id' => $jogador->id
               ]);
 
               \DB::table('role_user')->insert([
                 'user_id' => $user->id,
                 'role_id' => 3
               ]);
-
-            }
-
-            $telefones = [];
-
-            if(!empty($data['nr_telefone'])) {
-               array_push($telefones, $data['nr_telefone']);
-            }
-
-            if(!empty($data['nr_telefone2'])) {
-               array_push($telefones, $data['nr_telefone2']);
-            }
-
-            foreach ($telefones as $key => $item) {
-
-              $item = intval($item);
-
-              if(is_null($item) || empty($item)) {
-                  continue;
-              }
-
-              $telefone = new Telefone();
-              $telefone->pessoa_id = $pessoa->id;
-              $telefone->numero = $item;
-              $telefone->save();
 
             }
 
@@ -279,16 +235,27 @@ class HomeController extends Controller
     {
         $file = file_get_contents(storage_path('app/data/partidas.json'));
 
+        //$file = \Storage::get('data/partidas.json');
+
         $registros = json_decode($file, true);
 
         foreach ($registros as $key => $data) {
+
+            $datetime = \DateTime::createFromFormat('Y-m-d H:i', $data['dt_partida'].' '.$data['hr_partida']);
+
+            $inicio = $fim = null;
+
+            if($datetime) {
+              $inicio = $datetime;
+              $fim = (new \DateTime($datetime->format('Y-m-d H:i:s')))->modify('+1 hour +30 minutes');
+            }
 
             $partida = new Partida();
             $partida->id = $data['id'];
             $partida->torneio_id = $data['torneio_id'];
             $partida->quadra_id = $data['campo_id'];
-            $partida->horario = $data['hr_partida'];
-            $partida->data = $data['dt_partida'];
+            $partida->inicio = $inicio;
+            $partida->fim = $fim;
             $partida->tipo_jogo = $data['ds_tipo_jogo'];
             $partida->semana = $data['ds_semana'];
             $partida->save();
@@ -298,39 +265,70 @@ class HomeController extends Controller
 
     public function importResultados()
     {
+        //$file = \Storage::get('data/resultados.json');
+
         $file = file_get_contents(storage_path('app/data/resultados.json'));
 
         $registros = json_decode($file, true);
 
-        foreach ($registros as $key => $data) {
+        $regs = [];
 
-            $partida = Partida::find($data['partida_id']);
+        foreach ($registros as $item) {
+            $regs[$item['partida_id']][] = $item;
+        }
+
+        foreach ($regs as $key => $reg) {
+
+            $partida = Partida::findOrfail($key);
 
             if(!$partida) {
               continue;
             }
 
-            $jogador = Jogador::find($data['jogador_id']);
+            foreach ($reg as $key => $item) {
 
-            if(!$jogador) {
-              continue;
+              $jogador = Jogador::findOrfail($item['jogador_id']);
+
+              if(!$jogador) {
+                continue;
+              }
+
+              $index = $key + 1;
+
+              if($index == 1) {
+
+                $partida->jogador1_id = $jogador->id;
+                $partida->jogador1_resultado_final = $item['nr_resultado_final'] ?? 0;
+                $partida->jogador1_set1 = $item['nr_set1'] ?? 0;
+                $partida->jogador1_set2 = $item['nr_set2'] ?? 0;
+                $partida->jogador1_set3 = $item['nr_set3'] ?? 0;
+                $partida->jogador1_tiebreak = $item['nr_tiebreak'] ?? 0;
+                $partida->jogador1_vitoria_wo = $item['ic_vitoria_wo'] ?? 0;
+                $partida->jogador1_desistencia = $item['ic_desistencia'] ?? 0;
+                $partida->jogador1_pontos = $item['nr_pontos'] ?? 0;
+                $partida->jogador1_bonus = $item['nr_bonus'] ?? 0;
+                $partida->jogador1_computado = $item['ic_computado'] ?? 1;
+                $partida->save();
+
+              } else {
+
+
+                $partida->jogador2_id = $jogador->id;
+                $partida->jogador2_resultado_final = $item['nr_resultado_final'] ?? 0;
+                $partida->jogador2_set1 = $item['nr_set1'] ?? 0;
+                $partida->jogador2_set2 = $item['nr_set2'] ?? 0;
+                $partida->jogador2_set3 = $item['nr_set3'] ?? 0;
+                $partida->jogador2_tiebreak = $item['nr_tiebreak'] ?? 0;
+                $partida->jogador2_vitoria_wo = $item['ic_vitoria_wo'] ?? 0;
+                $partida->jogador2_desistencia = $item['ic_desistencia'] ?? 0;
+                $partida->jogador2_pontos = $item['nr_pontos'] ?? 0;
+                $partida->jogador2_bonus = $item['nr_bonus'] ?? 0;
+                $partida->jogador2_computado = $item['ic_computado'] ?? 1;
+                $partida->save();
+
+              }
+
             }
-
-            $resultado = new Resultado();
-            $resultado->id = $data['id'];
-            $resultado->jogador_id = $data['jogador_id'];
-            $resultado->partida_id = $data['partida_id'];
-            $resultado->resultado_final = $data['nr_resultado_final'] ?? 0;
-            $resultado->set1 = $data['nr_set1'] ?? 0;
-            $resultado->set2 = $data['nr_set2'] ?? 0;
-            $resultado->set3 = $data['nr_set3'] ?? 0;
-            $resultado->tiebreak = $data['nr_tiebreak'] ?? 0;
-            $resultado->vitoria_wo = $data['ic_vitoria_wo'] ?? 0;
-            $resultado->desistencia = $data['ic_desistencia'] ?? 0;
-            $resultado->pontos = $data['nr_pontos'] ?? 0;
-            $resultado->bonus = $data['nr_bonus'] ?? 0;
-            $resultado->computado = $data['ic_computado'] ?? 1;
-            $resultado->save();
 
         }
     }
@@ -338,6 +336,8 @@ class HomeController extends Controller
     public function importSemanas()
     {
         $file = file_get_contents(storage_path('app/data/semanas.json'));
+
+        //$file = \Storage::get('data/semanas.json');
 
         $registros = json_decode($file, true);
 
@@ -364,6 +364,8 @@ class HomeController extends Controller
     public function importPaginas()
     {
         $file = file_get_contents(storage_path('app/data/paginas.json'));
+
+        //$file = \Storage::get('data/paginas.json');
 
         $registros = json_decode($file, true);
 

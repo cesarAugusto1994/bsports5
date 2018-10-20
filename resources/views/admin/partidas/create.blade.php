@@ -21,8 +21,7 @@
 
     </style>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" rel="stylesheet">
-
-    <link href="{{ asset('css/fullcalendar.css') }}" rel="stylesheet"/>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.3.0/fullcalendar.min.css" rel="stylesheet"/>
 @stop
 
 @section('title', 'Partidas')
@@ -35,122 +34,135 @@
 
   <div class="row">
 
-              <div class="col-md-12">@include('flash::message')</div>
+      <div class="col-md-12">@include('flash::message')</div>
 
-              <div class="col-md-8">
-                  <div class="box box-info">
-                    <div class="box-header with-border">
-                      <h3 class="box-title">Caledário</h3>
+      <div class="col-md-8">
+          <div class="box box-solid">
+            <div class="box-header with-border">
+              <h3 class="box-title">Caledário</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
 
-                      <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              <div class="calendar"></div>
+
+            </div>
+          </div>
+      </div>
+
+      <div class="col-md-4">
+
+          <div class="row">
+
+              <div class="col-md-12">
+
+                <div class="box box-default color-palette-box">
+                  <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-tag"></i> Legenda Quadras</h3>
+                  </div>
+                  <div class="box-body">
+                    <div class="row">
+                        @foreach(\App\Models\Quadras::where('ativo', true)->get() as $quadra)
+                      <div class="col-sm-4 col-md-4">
+                        <p class="text-center">{{ $quadra->nome }}</p>
+                        <div class="color-palette-set">
+                              <option value="{{ $quadra->id }}"></option>
+                              <div style="height:20px;background-color:{{ $quadra->cor }}"><span></span></div>
+                        </div>
                       </div>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-
-                      <div class="calendar"></div>
-
+                      @endforeach
                     </div>
                   </div>
+                  <!-- /.box-body -->
+                </div>
+
               </div>
 
-              <div class="col-md-4">
-                  <div class="box box-info">
-                    <div class="box-header with-border">
-                      <h3 class="box-title">Caledário</h3>
+              <div class="col-md-12">
+              <div class="box box-solid">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Agendamento</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
 
-                      <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  <form id="" method="POST" action="{{ route('partida.store') }}">
+
+                      {{  csrf_field() }}
+                      <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Inicio</label>
+                                <div class="input-group col-md-12 col-xs-12 col-sm-12">
+                                  <input type="text" class="form-control date_time" name="inicio" id="inicio" required/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Fim</label>
+                                <div class="input-group col-md-12 col-xs-12 col-sm-12">
+                                  <input type="text" class="form-control date_time" maxlength="" name="fim" id="fim" required/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Jogadores</label>
+                                <div class="input-group col-md-12 col-xs-12 col-sm-12">
+                                  <select class="form-control select2 select-jogador" multiple style="width:270px" id="jogadores" name="jogador[]">
+                                      <option value=""></option>
+
+                                  </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Quadra</label>
+                                <div class="input-group col-md-12 col-xs-12 col-sm-12">
+                                    <select class="form-control select2" multiple name="quadra[]" id="quadra">
+                                      @foreach(\App\Models\Quadras::all() as $quadra)
+                                          <option value="{{ $quadra->id }}">{{ $quadra->nome }}</option>
+                                      @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Torneio</label>
+                                <div class="input-group col-md-12 col-xs-12 col-sm-12">
+                                    <select class="form-control" name="torneio" id="torneio">
+                                      @foreach(\App\Models\Torneio::all() as $quadra)
+                                          <option value="{{ $quadra->id }}" {{ $loop->last ? 'selected' : '' }}>{{ $quadra->nome }}</option>
+                                      @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
                       </div>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
 
-                      <form id="" method="POST" action="{{ route('partida.store') }}">
+                    <button type="submit" id="btnAgendar" class="btn btn-success">Agendar</button>
 
-                          {{  csrf_field() }}
-                          <div class="row">
+                  </form>
 
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <h2>Agendar partida</h2>
-                                </div>
-                            </div>
-
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Inicio</label>
-                                    <div class="input-group col-md-12 col-xs-12 col-sm-12">
-                                      <input type="text" class="form-control date_time" name="inicio" id="inicio" required/>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Fim</label>
-                                    <div class="input-group col-md-12 col-xs-12 col-sm-12">
-                                      <input type="text" class="form-control date_time" maxlength="" name="fim" id="fim" required/>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Jogadores</label>
-                                    <div class="input-group col-md-12 col-xs-12 col-sm-12">
-                                      <select class="form-control select2 select-jogador" multiple style="width:270px" id="jogadores" name="jogador[]">
-                                          <option value=""></option>
-
-                                      </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Quadra</label>
-                                    <div class="input-group col-md-12 col-xs-12 col-sm-12">
-                                        <select class="form-control" name="quadra" id="quadra">
-                                          @foreach(\App\Models\Quadras::all() as $quadra)
-                                              <option value="{{ $quadra->id }}">{{ $quadra->nome }}</option>
-                                          @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Torneio</label>
-                                    <div class="input-group col-md-12 col-xs-12 col-sm-12">
-                                        <select class="form-control" name="torneio" id="torneio">
-                                          @foreach(\App\Models\Torneio::all() as $quadra)
-                                              <option value="{{ $quadra->id }}" {{ $loop->last ? 'selected' : '' }}>{{ $quadra->nome }}</option>
-                                          @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                          </div>
-
-                        <button type="submit" id="btnAgendar" class="btn btn-block btn-info pull-right">Agendar</button>
-
-                      </form>
-
-                    </div>
-                  </div>
+                </div>
               </div>
+          </div>
 
           </div>
+
+      </div>
+
+  </div>
 
 <input type="hidden" id="partidas-ajax" value="{{ route('lista_partidas_ajax') }}">
 <input type="hidden" id="now" value="{{ now()->format('c') }}">
@@ -164,12 +176,15 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/i18n/pt-BR.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 
-  <script src="{{ asset('js/fullcalendar/moment.min.js') }}"></script>
-  <script src="{{ asset('js/fullcalendar/fullcalendar.min.js') }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/locale/pt-br.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.3.0/fullcalendar.min.js"></script>
 
   <script>
 
   $('.date_time').mask('00/00/0000 00:00:00', {placeholder: "__/__/____ __:__"});
+
+  $('.select2').select2();
 
   $(".select-jogador").select2({
     ajax: {
@@ -240,24 +255,65 @@
 
   }
 
-  $('.calendar').fullCalendar({
-    height: 380,
-    contentHeight: 590,
+  let $calendar = $('.calendar');
+
+  $calendar.fullCalendar({
+    views: {
+
+      listDay: {
+        buttonText: 'list day',
+        titleFormat: "dddd, DD MMMM YYYY",
+        columnFormat: "",
+        timeFormat: "HH:mm"
+      },
+
+      listWeek: {
+        buttonText: 'list week',
+        columnFormat: "ddd D",
+        timeFormat: "HH:mm"
+      },
+
+      listMonth: {
+        buttonText: 'list month',
+        titleFormat: "MMMM YYYY",
+        timeFormat: "HH:mm"
+      },
+
+      month: {
+        buttonText: 'month',
+        titleFormat: 'MMMM YYYY',
+        columnFormat: "ddd",
+        timeFormat: "HH:mm"
+      },
+
+      agendaWeek: {
+        buttonText: 'agendaWeek',
+        columnFormat: "ddd D",
+        timeFormat: "HH:mm"
+      },
+
+      agendaDay: {
+        buttonText: 'agendaDay',
+        titleFormat: 'dddd, DD MMMM YYYY',
+        columnFormat: "",
+        timeFormat: "HH:mm"
+      },
+    },
+
     lang: 'pt-br',
-    defaultView: 'agendaWeek',
     eventLimit: true,
     eventLimitText: 'partidas',
+    defaultView: 'listMonth',
     eventBorderColor: "#de1f1f",
     eventColor: "#AC1E23",
-    contentHeight: 'auto',
-    defaultEventMinutes: 30,
+    slotLabelFormat: 'HH:mm',
+    eventLimitText: 'consultas',
     minTime: '06:00:00',
     maxTime: '22:59:59',
-    header:
-    {
+    header: {
         left: 'prev,next,today',
         center: 'title',
-        right: 'month,agendaWeek,agendaDay'
+        right: 'month,agendaWeek,agendaDay,listMonth,listWeek'
     },
     navLinks: true,
     selectable: true,
@@ -276,62 +332,39 @@
         }
 
     },
-    eventClick: function(event, element, view) {
-        //popularModal(event);
-
-        //$(".select2").hide();
-        //$("#inicio").val(event.start.format('DD/MM/YYYY HH:mm'));
-        //$("#fim").val(event.end.format('DD/MM/YYYY HH:mm'));
-
-    },
-    editable: false,
+    editable: true,
     allDaySlot: false,
+    eventLimit: true,
     dayClick: function(date, jsEvent, view) {
 
         jsEvent.preventDefault();
 
-        //window.location.href = '?date=' + date.format('DD/MM/YYYY');
-
           setTimeout(function() {
-
-            //limparModal();
-
-            //$("#formConsultaModal").prop('action', $("#consultas-store").val());
-
             if(view.name == 'month') {
               $('.calendar').fullCalendar('gotoDate', date);
               $('.calendar').fullCalendar('changeView','agendaDay');
             }
-
           }, 100);
 
       },
-      eventSources: [
-
-        // your event source
-        {
-          url: $("#partidas-ajax").val(),
-          type: 'GET',
-          error: function() {
-            alert('there was an error while fetching events!');
-          },
-          complete: function() {
-
-
-
-          }
-        }
-
-        // any other sources...
-
-      ],
-      color: 'black',     // an option!
-      textColor: 'yellow', // an option!
-      //When u drop an event in the calendar do the following:
+      events: $("#partidas-ajax").val(),
+      color: 'black',
+      resourceRender: function(resourceObj, $td) {
+        $td.eq(0).find('.fc-cell-content')
+          .append(
+            $('<strong>(?)</strong>').popover({
+              title: resourceObj.title,
+              content: 'test!',
+              trigger: 'hover',
+              placement: 'bottom',
+              container: 'body'
+            })
+          );
+      },
+      textColor: 'yellow',
       eventDrop: function (event, delta, revertFunc) {
         popularModal(event);
       },
-      //When u resize an event in the calendar do the following:
       eventResize: function (event, delta, revertFunc) {
         popularModal(event);
       },
@@ -344,41 +377,9 @@
       monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
       dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado'],
       dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-      views: {
-        agenda: {
-          titleFormat: 'dddd, DD MMMM YYYY',
-          titleRangeSeparator: ' to ',
-          columnFormat: ''
-        },
-        day: {
-          titleFormat: 'dddd, DD MMMM YYYY',
-          titleRangeSeparator: ' to ',
-          columnFormat: ''
-        },
-        week: {
-          titleFormat: 'MMMM YYYY',
-          titleRangeSeparator: ' to ',
-          columnFormat: 'ddd D'
-        },
-        month: {
-          titleFormat: 'MMMM YYYY',
-          titleRangeSeparator: ' to ',
-          columnFormat: 'dddd'
-        }
-      },
-      nowIndicator: true,
-      now: $("#now").val(),
-      slotLabelFormat: '',
-      columnFormat: {
-          month: 'ddd',
-          week: 'ddd D',
-          day: 'dddd'
-      },
+
       axisFormat: 'HH:mm',
-      timeFormat: {
-          '': 'HH:mm',
-          agenda: 'HH:mm'
-      },
+
       buttonText: {
           prev: "<",
           next: ">",
@@ -387,7 +388,10 @@
           today: "Hoje",
           month: "Mês",
           week: "Semana",
-          day: "Dia"
+          day: "Dia",
+          listMonth: "Lista Mensal",
+          listWeek: "Lista Semanal",
+          listDay: "Lista Diária"
       }
 
   });

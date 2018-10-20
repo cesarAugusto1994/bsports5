@@ -62,8 +62,19 @@
                       </li>
 
                     @endif
+
+                    @php
+
+                      $route = route('player_agendar_partida');
+
+                      if(\Auth::check() && \Auth::user()->isAdmin()) {
+                          $route = route('agendar_partida');
+                      }
+
+                    @endphp
+
                     <li>
-                        <a href="{{ route('agendar_partida') }}" class="login-btn"> <i class="fa fa-calendar-o"></i> Agendamento</a>
+                        <a href="{{ $route }}" class="login-btn"> <i class="fa fa-calendar-o"></i> Agendamento</a>
                     </li>
                     <li>
                         @php

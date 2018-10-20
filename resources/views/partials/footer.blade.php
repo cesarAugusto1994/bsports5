@@ -5,7 +5,7 @@
                 <div class="col-md-3 col-sm-4">
                     <div class="footer-widget">
                         <h4>Logo</h4>
-                        <img src="./images/fimg1.jpg" alt="" />
+                        <img src="{{ route('image',['link'=>'logo.png']) }}" alt="" />
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-4">
@@ -26,10 +26,10 @@
                         <h4>Perdizes</h4>
                         <ul class="footer-nav">
                             <li>Rua Ana Pimentel, 272</li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
+                            <li>(11) 3871-9555</li>
+                            <li>(11) 95070-7660</li>
+                            <li>bsportsbrasil</li>
+                            <li>BSportsBR</li>
                             <li></li>
                         </ul>
                     </div>
@@ -38,12 +38,11 @@
                     <div class="footer-widget">
                         <h4>Santana</h4>
                         <ul class="footer-nav">
-                            <li><a href="#">Football </a></li>
-                            <li><a href="#">Probable lineups</a></li>
-                            <li><a href="#">Aussies abroad</a></li>
-                            <li><a href="#">Fantanews</a></li>
-                            <li><a href="#">Motoring</a></li>
-                            <li><a href="#">Motorcycling</a></li>
+                            <li><a href="#">Rua Bento de Alvarena, 15</a></li>
+                            <li>(11) 2950-6871</li>
+                            <li>(11) 94019-5238</li>
+                            <li><a href="#">bsportssantana</a></li>
+                            <li><a href="#">BSportsSantana</a></li>
                         </ul>
                     </div>
                 </div>

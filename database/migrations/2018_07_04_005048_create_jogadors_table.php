@@ -15,17 +15,26 @@ class CreateJogadorsTable extends Migration
     {
         Schema::create('jogadores', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('pessoa_id')->unique();
+
+            $table->string('nome');
+            $table->date('nascimento')->nullable();
+            $table->string('email');
+            $table->string('cpf')->nullable();
+
+            $table->string('telefone')->nullable();
+            $table->string('celular')->nullable();
+
             $table->string('lateralidade')->nullable();
-            $table->boolean('ativo')->default(true);
-            $table->integer('categoria_simples_id')->nullable();
-            $table->integer('categoria_duplas_id')->nullable();
-            $table->boolean('participa_simples')->default(true);
-            $table->boolean('participa_duplas')->default(false);
+
+            $table->integer('categoria_id')->nullable();
+
+            $table->string('avatar')->nullable();
+
             $table->text('observacao')->nullable();
+
             $table->uuid('uuid');
+            $table->boolean('ativo')->default(true);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

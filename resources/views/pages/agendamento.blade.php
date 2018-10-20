@@ -70,119 +70,98 @@
                             <ul>
                               @foreach($partidas as $partida)
 
-                                @if($partida->resultado->isEmpty())
-
-                                @endif
-
                                 <li>
-                                    <div class="tickets-date"> <span>{{ $partida->data->format('D') }}</span> <strong>{{ $partida->data->format('M d') }}</strong> <span>{{ $partida->horario }}</span> </div>
+                                    <div class="tickets-date"> <span>{{ $partida->inicio ? $partida->inicio->format('D') : '' }}</span>
+                                      <strong>{{ $partida->inicio ? $partida->inicio->format('M d') : '' }}</strong> <span>{{ $partida->inicio->format('H:i') }}</span> </div>
                                     <div class="tickets-detail">
                                         <div class="team-vs text-center">
-                                            @if($partida->resultado->count() == 2)
+
+                                          @php
+
+                                          $user = \Auth::user();
+
+                                          if($user->isAdmin()) {
+
+                                            $rotaJOgador = route('agendar_partida_jogador', ['id' => $partida->id]);
+
+                                            $jogador = \App\Models\Pessoa\Jogador::where('email', \Auth::user()->email)->get()->first();
+
+                                            if(!is_null($jogador)) {
+                                              $categoria = $jogador->categoria->id;
+                                              $rotaJOgador = route('agendar_partida_jogador', ['id' => $partida->id, 'jogador' => $jogador->id]);
+                                            }
+
+                                          } else {
+
+                                            $rotaJOgador = route('player_agendar_partida_jogador', ['id' => $partida->id]);
+
+                                            $jogador = \App\Models\Pessoa\Jogador::where('email', \Auth::user()->email)->get()->first();
+
+                                            if(!is_null($jogador)) {
+                                              $categoria = $jogador->categoria->id;
+                                              $rotaJOgador = route('player_agendar_partida_jogador', ['id' => $partida->id, 'jogador' => $jogador->id]);
+                                            }
+
+                                          }
+
+                                          @endphp
+
                                             <h4>
-                                              <a href="{{ route('jogador', [str_slug($partida->resultado->first()->jogador->pessoa->nome), $partida->resultado->first()->jogador->id]) }}">
-                                              {{ substr($partida->resultado->first()->jogador->pessoa->nome, 0, 12) }}</a>
-                                              <i>vs</i>
-                                              <a href="{{ route('jogador', [str_slug($partida->resultado->last()->jogador->pessoa->nome), $partida->resultado->last()->jogador->id]) }}">
-                                              {{ substr($partida->resultado->last()->jogador->pessoa->nome, 0, 12) }}</a>
-
-                                            </h4>
-                                            <h3><small>{{ $partida->resultado->first()->jogador->categoria->nome }} x {{ $partida->resultado->last()->jogador->categoria->nome }}</small></h3>
-                                            @elseif($partida->resultado->count() == 1)
-                                            <h4>
-                                              <a href="{{ route('jogador', [str_slug($partida->resultado->first()->jogador->pessoa->nome), $partida->resultado->first()->jogador->id]) }}">
-                                              {{ substr($partida->resultado->first()->jogador->pessoa->nome, 0, 12) }}</a><i>vs</i>
-
-                                              @php
-
-                                                  $isJogador = false;
-                                                  $jogador = $categoria = null;
-
-                                                  //$email = 'francisco.gancalves2@hotmail.com';
-
-                                                  #\Auth::user()->email;
-
-                                                  $pessoa = \App\Models\Pessoa::where('email', \Auth::user()->email)->get()->first();
-
-                                                  if(!is_null($pessoa)) {
-                                                    $jogador = $pessoa->jogador;
-                                                    $categoria = $jogador->categoria->id;
-                                                  }
-
-                                              @endphp
-
-                                              @if($categoria == $partida->resultado->first()->jogador->categoria->id)
-                                                <a class="btn btn-success" href="{{ route('agendar_partida_jogador', ['id' => $partida->id, 'jogador' => $jogador->id]) }}">Agendar</a>
+                                              @if($partida->jogador1)
+                                                  <a href="{{ route('jogador', $partida->jogador1->uuid) }}">
+                                                  {{ substr($partida->jogador1->nome, 0, 12) }}</a>
                                               @else
-                                                <a class="btn btn-info" disabled title="categorias incompatíveis">Agendar</a>
+                                                <a class="btn btn-success btn-sm btn-flat" href="{{ $rotaJOgador }}">Agendar</a>
+                                              @endif
+                                              <i>vs</i>
+                                              @if($partida->jogador2)
+                                                  <a href="{{ route('jogador', $partida->jogador2->uuid) }}">
+                                                  {{ substr($partida->jogador2->nome, 0, 12) }}</a>
+                                              @else
+                                                <a class="btn btn-success btn-sm btn-flat" href="{{ $rotaJOgador }}">Agendar</a>
                                               @endif
                                             </h4>
-                                            <h3><small>{{ $partida->resultado->first()->jogador->categoria->nome }} x Indefinido</small></h3>
-                                            @else
-                                            <h4>
-                                              @php
 
-                                                  $isJogador = false;
-                                                  $jogador = $categoria = null;
-
-                                                  $rotaJOgador = route('agendar_partida_jogador', ['id' => $partida->id]);
-
-                                                  $pessoa = \App\Models\Pessoa::where('email', \Auth::user()->email)->get()->first();
-
-                                                  if(!is_null($pessoa)) {
-                                                    $jogador = $pessoa->jogador;
-                                                    $categoria = $jogador->categoria->id;
-
-                                                    $rotaJOgador = route('agendar_partida_jogador', ['id' => $partida->id, 'jogador' => $jogador->id]);
-                                                  }
-
-                                              @endphp
-
-                                              <a class="btn btn-success" href="{{ $rotaJOgador }}">Agendar</a><i>vs</i>
-                                              <a class="btn btn-success" href="{{ $rotaJOgador }}">Agendar</a>
-
-                                            </h4>
-                                            <h3><small>Indefinido x Indefinido</small></h3>
+                                            @if($partida->inicio < now())
+                                                <h3>{{$partida->jogador1_resultado_final}} x {{$partida->jogador2_resultado_final}}</h3>
                                             @endif
-                                            @if($partida->data < now() && $partida->resultado->isNotEmpty())
-                                            <h3>{{$partida->resultado->first()->resultado_final}} x {{$partida->resultado->last()->resultado_final}}</h3>
-                                            @endif
+
                                             <p>{{ $partida->quadra->nome }}</p>
                                         </div>
                                     </div>
-                                    @if($partida->data < now())
+                                    @if($partida->inicio < now())
                                     <div class="event-box-footer">
-                                      @if($partida->resultado->count() == 2)
+                                      @if($partida->jogador1)
                                       <div class="widget">
                                         <div class="social-counter">
                                             <ul>
                                                 <li>
                                                     <a class="item twitter">
-                                                      <span class="count">{{$partida->resultado->first()->set1}} x {{$partida->resultado->last()->set1}}</span>
+                                                      <span class="count">{{$partida->jogador1_set1}} x {{$partida->jogador2_set1}}</span>
                                                       <em>1º SET</em> </a>
                                                 </li>
                                                 <li>
                                                     <a class="item ">
-                                                      <span class="count">{{$partida->resultado->first()->set2}} x {{$partida->resultado->last()->set2}}</span>
+                                                      <span class="count">{{$partida->jogador1_set2}} x {{$partida->jogador2_set2}}</span>
                                                       <em>2º SET</em> </a>
                                                 </li>
                                                 <li>
                                                     <a class="item twitter">
-                                                      <span class="count">{{$partida->resultado->first()->set3}} x {{$partida->resultado->last()->set3}}</span>
+                                                      <span class="count">{{$partida->jogador1_set3}} x {{$partida->jogador2_set3}}</span>
                                                       <em>3º SET</em> </a>
                                                 </li>
                                                 <li>
                                                     <a class="item ">
-                                                      <span class="count">{{$partida->resultado->first()->resultado_final}} x {{$partida->resultado->last()->resultado_final}}</span>
+                                                      <span class="count">{{$partida->jogador1_resultado_final}} x {{$partida->jogador2_resultado_final}}</span>
                                                       <em>SETS</em> </a>
                                                 </li>
                                                 <li>
                                                     <a class="item twitter">
-                                                      <span class="count">{{$partida->resultado->first()->pontos}} x {{$partida->resultado->last()->pontos}}</span><em>Pontos</em> </a>
+                                                      <span class="count">{{$partida->jogador1_pontos}} x {{$partida->jogador2_pontos}}</span><em>Pontos</em> </a>
                                                 </li>
                                                 <li>
                                                     <a class="item">
-                                                      <span class="count">{{$partida->resultado->first()->bonus}} x {{$partida->resultado->last()->bonus}}</span><em>Bonus</em> </a>
+                                                      <span class="count">{{$partida->jogador1_bonus}} x {{$partida->jogador2_bonus}}</span><em>Bonus</em> </a>
                                                 </li>
                                                 <li></li>
                                             </ul>

@@ -15,9 +15,8 @@ class ResultadosController extends Controller
      */
     public function index(Request $request)
     {
-        $resultados = Partida::has('resultado')->orderByDesc('id')->paginate(5);
-
-        return view('pages.resultados', compact('resultados'));
+        $partidas = Partida::orderByDesc('id')->paginate(10);
+        return view('pages.resultados', compact('partidas'));
     }
 
     /**

@@ -21,7 +21,6 @@ class CreateTorneiosTable extends Migration
             $table->float('valor')->default(0);
             $table->uuid('uuid');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

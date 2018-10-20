@@ -16,6 +16,7 @@ class CreateQuadrasTable extends Migration
         Schema::create('quadras', function (Blueprint $table) {
           $table->increments('id');
           $table->string('nome')->unique();
+          $table->string('cor')->nullable();
           $table->boolean('ativo')->default(true);
           $table->timestamps();
           $table->softDeletes();

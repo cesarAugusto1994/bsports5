@@ -65,12 +65,15 @@
                       <thead>
                           <tr class="first">
                               <th>Horario</th>
-                              <th>Quadra 1</th>
-                              <th>Quadra 2</th>
-                              <th>Quadra 3</th>
-                              <th>Quadra 4</th>
-                              <th>Quadra 5</th>
-                              <th>Quadra 6</th>
+                              @php
+
+                                $quadras = \App\Models\Quadras::where('ativo',true)->get();
+
+                              @endphp
+
+                              @foreach($quadras as $quadra)
+                                  <th>{{$quadra->nome}}</th>
+                              @endforeach
                           </tr>
                       </thead>
                       <tbody>
@@ -83,9 +86,66 @@
 
                                   <div class="match-box">
                                       <ul class="match-fixture-inner">
-                                          <li class="team"> <strong>{{ $partida['quadra-1']['jogador1'] ? $partida['quadra-1']['jogador1'] : 'A definir' }}</strong></li>
+                                          <li class="team"> <strong>
+
+                                            @if($partida['quadra-1']['jogador1'])
+
+
+                                              {{$partida['quadra-1']['jogador1']}}
+
+
+                                            @else
+
+                                              @php
+
+                                                $user = \Auth::user();
+
+                                                if(\Auth::check() && $user->isAdmin()) {
+                                                  $rotaJOgador = route('agendar_partida_jogador', ['id' => $partida['quadra-1']['id']]);
+                                                } else {
+                                                  $rotaJOgador = route('player_agendar_partida_jogador', ['id' => $partida['quadra-1']['id']]);
+                                                }
+
+                                              @endphp
+
+                                              <a class="btn btn-sm btn-flat btn-success" href="{{ $rotaJOgador }}">Agendar</a>
+
+
+                                            @endif
+
+
+
+                                          </strong></li>
                                           <li class="time-batch"> <strong class="m-vs">VS</strong></li>
-                                          <li class="team"> <strong>{{ $partida['quadra-1']['jogador2'] ? $partida['quadra-1']['jogador2'] : 'A definir' }}</strong></li>
+                                          <li class="team">
+                                            <strong>
+                                            @if($partida['quadra-1']['jogador2'])
+
+
+                                              {{$partida['quadra-1']['jogador2']}}
+
+
+                                            @else
+
+                                              @php
+
+                                                $user = \Auth::user();
+
+                                                if(\Auth::check() && $user->isAdmin()) {
+                                                  $rotaJOgador = route('agendar_partida_jogador', ['id' => $partida['quadra-1']['id']]);
+                                                } else {
+                                                  $rotaJOgador = route('player_agendar_partida_jogador', ['id' => $partida['quadra-1']['id']]);
+                                                }
+
+                                              @endphp
+
+                                              <a class="btn btn-sm btn-flat btn-success" href="{{ $rotaJOgador }}">Agendar</a>
+
+
+                                            @endif
+
+
+                                            </strong></li>
                                       </ul>
                                   </div>
 
@@ -96,9 +156,62 @@
 
                                     <div class="match-box">
                                         <ul class="match-fixture-inner">
-                                            <li class="team"> <strong>{{ $partida['quadra-2']['jogador1'] ? $partida['quadra-2']['jogador1'] : 'A definir' }}</strong></li>
+                                            <li class="team"> <strong>
+
+                                              @if($partida['quadra-2']['jogador1'])
+
+
+                                                {{$partida['quadra-2']['jogador1']}}
+
+
+                                              @else
+
+                                                @php
+
+                                                  $user = \Auth::user();
+
+                                                  if(\Auth::check() && $user->isAdmin()) {
+                                                    $rotaJOgador = route('agendar_partida_jogador', ['id' => $partida['quadra-2']['id']]);
+                                                  } else {
+                                                    $rotaJOgador = route('player_agendar_partida_jogador', ['id' => $partida['quadra-2']['id']]);
+                                                  }
+
+                                                @endphp
+
+                                                <a class="btn btn-sm btn-flat btn-success" href="{{ $rotaJOgador }}">Agendar</a>
+
+
+                                              @endif
+
+                                            </strong></li>
                                             <li class="time-batch"> <strong class="m-vs">VS</strong></li>
-                                            <li class="team"> <strong>{{ $partida['quadra-2']['jogador2'] ? $partida['quadra-2']['jogador2'] : 'A definir' }}</strong></li>
+                                            <li class="team"> <strong>
+
+                                              @if($partida['quadra-2']['jogador2'])
+
+
+                                                {{$partida['quadra-2']['jogador2']}}
+
+
+                                              @else
+
+                                                @php
+
+                                                  $user = \Auth::user();
+
+                                                  if(\Auth::check() && $user->isAdmin()) {
+                                                    $rotaJOgador = route('agendar_partida_jogador', ['id' => $partida['quadra-2']['id']]);
+                                                  } else {
+                                                    $rotaJOgador = route('player_agendar_partida_jogador', ['id' => $partida['quadra-2']['id']]);
+                                                  }
+
+                                                @endphp
+
+                                                <a class="btn btn-sm btn-flat btn-success" href="{{ $rotaJOgador }}">Agendar</a>
+
+                                              @endif
+
+                                            </strong></li>
                                         </ul>
                                     </div>
 
@@ -109,9 +222,62 @@
 
                                   <div class="match-box">
                                       <ul class="match-fixture-inner">
-                                          <li class="team"> <strong>{{ $partida['quadra-3']['jogador1'] ? $partida['quadra-3']['jogador1'] : 'A definir' }}</strong></li>
+                                          <li class="team"> <strong>
+
+                                            @if($partida['quadra-3']['jogador1'])
+
+
+                                              {{$partida['quadra-3']['jogador1']}}
+
+
+                                            @else
+
+                                              @php
+
+                                                $user = \Auth::user();
+
+                                                if(\Auth::check() && $user->isAdmin()) {
+                                                  $rotaJOgador = route('agendar_partida_jogador', ['id' => $partida['quadra-3']['id']]);
+                                                } else {
+                                                  $rotaJOgador = route('player_agendar_partida_jogador', ['id' => $partida['quadra-3']['id']]);
+                                                }
+
+                                              @endphp
+
+                                              <a class="btn btn-sm btn-flat btn-success" href="{{ $rotaJOgador }}">Agendar</a>
+
+                                            @endif
+
+                                          </strong></li>
                                           <li class="time-batch"> <strong class="m-vs">VS</strong></li>
-                                          <li class="team"> <strong>{{ $partida['quadra-3']['jogador2'] ? $partida['quadra-3']['jogador2'] : 'A definir' }}</strong></li>
+                                          <li class="team"> <strong>
+
+                                            @if($partida['quadra-3']['jogador2'])
+
+
+                                              {{$partida['quadra-3']['jogador2']}}
+
+
+                                            @else
+
+                                              @php
+
+                                                $user = \Auth::user();
+
+                                                if(\Auth::check() && $user->isAdmin()) {
+                                                  $rotaJOgador = route('agendar_partida_jogador', ['id' => $partida['quadra-3']['id']]);
+                                                } else {
+                                                  $rotaJOgador = route('player_agendar_partida_jogador', ['id' => $partida['quadra-3']['id']]);
+                                                }
+
+                                              @endphp
+
+                                              <a class="btn btn-sm btn-flat btn-success" href="{{ $rotaJOgador }}">Agendar</a>
+
+                                            @endif
+
+
+                                          </strong></li>
                                       </ul>
                                   </div>
 
@@ -122,9 +288,63 @@
 
                                   <div class="match-box">
                                       <ul class="match-fixture-inner">
-                                          <li class="team"> <strong>{{ $partida['quadra-4']['jogador1'] ? $partida['quadra-4']['jogador1'] : 'A definir' }}</strong></li>
+                                          <li class="team"> <strong>
+
+                                            @if($partida['quadra-4']['jogador1'])
+
+
+                                              {{$partida['quadra-4']['jogador1']}}
+
+
+                                            @else
+
+                                              @php
+
+                                                $user = \Auth::user();
+
+                                                if(\Auth::check() && $user->isAdmin()) {
+                                                  $rotaJOgador = route('agendar_partida_jogador', ['id' => $partida['quadra-4']['id']]);
+                                                } else {
+                                                  $rotaJOgador = route('player_agendar_partida_jogador', ['id' => $partida['quadra-4']['id']]);
+                                                }
+
+                                              @endphp
+
+                                              <a class="btn btn-sm btn-flat btn-success" href="{{ $rotaJOgador }}">Agendar</a>
+
+                                            @endif
+
+                                          </strong></li>
                                           <li class="time-batch"> <strong class="m-vs">VS</strong></li>
-                                          <li class="team"> <strong>{{ $partida['quadra-4']['jogador2'] ? $partida['quadra-4']['jogador2'] : 'A definir' }}</strong></li>
+                                          <li class="team"> <strong>
+
+
+                                            @if($partida['quadra-4']['jogador2'])
+
+
+                                              {{$partida['quadra-4']['jogador2']}}
+
+
+                                            @else
+
+                                              @php
+
+                                                $user = \Auth::user();
+
+                                                if(\Auth::check() && $user->isAdmin()) {
+                                                  $rotaJOgador = route('agendar_partida_jogador', ['id' => $partida['quadra-4']['id']]);
+                                                } else {
+                                                  $rotaJOgador = route('player_agendar_partida_jogador', ['id' => $partida['quadra-4']['id']]);
+                                                }
+
+                                              @endphp
+
+                                              <a class="btn btn-sm btn-flat btn-success" href="{{ $rotaJOgador }}">Agendar</a>
+
+                                            @endif
+
+
+                                          </strong></li>
                                       </ul>
                                   </div>
 
@@ -135,9 +355,61 @@
 
                                   <div class="match-box">
                                       <ul class="match-fixture-inner">
-                                          <li class="team"> <strong>{{ $partida['quadra-5']['jogador1'] ? $partida['quadra-5']['jogador1'] : 'A definir' }}</strong></li>
+                                          <li class="team"> <strong>
+
+                                            @if($partida['quadra-5']['jogador1'])
+
+
+                                              {{$partida['quadra-5']['jogador1']}}
+
+
+                                            @else
+
+                                              @php
+
+                                                $user = \Auth::user();
+
+                                                if(\Auth::check() && $user->isAdmin()) {
+                                                  $rotaJOgador = route('agendar_partida_jogador', ['id' => $partida['quadra-5']['id']]);
+                                                } else {
+                                                  $rotaJOgador = route('player_agendar_partida_jogador', ['id' => $partida['quadra-5']['id']]);
+                                                }
+
+                                              @endphp
+
+                                              <a class="btn btn-sm btn-flat btn-success" href="{{ $rotaJOgador }}">Agendar</a>
+
+                                            @endif
+
+                                          </strong></li>
                                           <li class="time-batch"> <strong class="m-vs">VS</strong></li>
-                                          <li class="team"> <strong>{{ $partida['quadra-5']['jogador2'] ? $partida['quadra-5']['jogador2'] : 'A definir' }}</strong></li>
+                                          <li class="team"> <strong>
+
+                                            @if($partida['quadra-5']['jogador2'])
+
+
+                                              {{$partida['quadra-5']['jogador2']}}
+
+
+                                            @else
+
+                                              @php
+
+                                                $user = \Auth::user();
+
+                                                if(\Auth::check() && $user->isAdmin()) {
+                                                  $rotaJOgador = route('agendar_partida_jogador', ['id' => $partida['quadra-5']['id']]);
+                                                } else {
+                                                  $rotaJOgador = route('player_agendar_partida_jogador', ['id' => $partida['quadra-5']['id']]);
+                                                }
+
+                                              @endphp
+
+                                              <a class="btn btn-sm btn-flat btn-success" href="{{ $rotaJOgador }}">Agendar</a>
+
+                                            @endif
+
+                                          </strong></li>
                                       </ul>
                                   </div>
 
@@ -148,9 +420,61 @@
 
                                   <div class="match-box">
                                       <ul class="match-fixture-inner">
-                                          <li class="team"> <strong>{{ $partida['quadra-6']['jogador1'] ? $partida['quadra-6']['jogador1'] : 'A definir' }}</strong></li>
+                                          <li class="team"> <strong>
+
+                                            @if($partida['quadra-6']['jogador1'])
+
+
+                                              {{$partida['quadra-6']['jogador1']}}
+
+
+                                            @else
+
+                                              @php
+
+                                                $user = \Auth::user();
+
+                                                if(\Auth::check() && $user->isAdmin()) {
+                                                  $rotaJOgador = route('agendar_partida_jogador', ['id' => $partida['quadra-6']['id']]);
+                                                } else {
+                                                  $rotaJOgador = route('player_agendar_partida_jogador', ['id' => $partida['quadra-6']['id']]);
+                                                }
+
+                                              @endphp
+
+                                              <a class="btn btn-sm btn-flat btn-success" href="{{ $rotaJOgador }}">Agendar</a>
+
+                                            @endif
+
+                                          </strong></li>
                                           <li class="time-batch"> <strong class="m-vs">VS</strong></li>
-                                          <li class="team"> <strong>{{ $partida['quadra-6']['jogador2'] ? $partida['quadra-6']['jogador2'] : 'A definir' }}</strong></li>
+                                          <li class="team"> <strong>
+
+                                            @if($partida['quadra-6']['jogador2'])
+
+
+                                              {{$partida['quadra-6']['jogador2']}}
+
+
+                                            @else
+
+                                              @php
+
+                                                $user = \Auth::user();
+
+                                                if(\Auth::check() && $user->isAdmin()) {
+                                                  $rotaJOgador = route('agendar_partida_jogador', ['id' => $partida['quadra-6']['id']]);
+                                                } else {
+                                                  $rotaJOgador = route('player_agendar_partida_jogador', ['id' => $partida['quadra-6']['id']]);
+                                                }
+
+                                              @endphp
+
+                                              <a class="btn btn-sm btn-flat btn-success" href="{{ $rotaJOgador }}">Agendar</a>
+
+                                            @endif
+
+                                          </strong></li>
                                       </ul>
                                   </div>
 

@@ -16,8 +16,8 @@ class AdminController extends Controller
     {
         $user = \Auth::user();
 
-        $partidas = Partida::where('data', '>', now()->setTime(0,0,0))
-        ->orderBy('horario')
+        $partidas = Partida::where('inicio', '>', now()->setTime(0,0,0))
+        ->orderBy('inicio')
         ->get();
 
         return view('admin.dashboard', compact('user', 'partidas'));

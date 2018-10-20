@@ -16,9 +16,9 @@
       <div class="box box-primary">
         <div class="box-body box-profile">
 
-          <img class="profile-user-img img-responsive img-circle" alt="" src="{{ route('image', ['link'=>$jogador->pessoa->avatar]) }}"/>
+          <img class="profile-user-img img-responsive img-circle" alt="" src="{{ route('image', ['link'=>$jogador->avatar]) }}"/>
 
-          <h3 class="profile-username text-center">{{ $jogador->pessoa->nome}}</h3>
+          <h3 class="profile-username text-center">{{ $jogador->nome}}</h3>
 
           <p class="text-muted text-center">{{ $jogador->categoria->nome}}</p>
 
@@ -58,7 +58,7 @@
           <strong><i class="fa fa-at margin-r-5"></i> Email</strong>
 
           <p class="text-muted">
-            {{ $jogador->pessoa->email }}
+            {{ $jogador->email }}
           </p>
 
           <hr>
@@ -72,7 +72,7 @@
 
           <strong><i class="fa fa-map-marker margin-r-5"></i> Nascimento</strong>
 
-          <p class="text-muted">{{ $jogador->pessoa->nascimento }}</p>
+          <p class="text-muted">{{ $jogador->nascimento }}</p>
 
 
         </div>
@@ -85,7 +85,6 @@
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
           <li><a href="#activity" data-toggle="tab">Mensalidades</a></li>
-          <li><a href="#timeline" data-toggle="tab">Partidas</a></li>
           <li class="active"><a href="#settings" data-toggle="tab">Dados do Jogador</a></li>
         </ul>
         <div class="tab-content">
@@ -135,76 +134,15 @@
             <div class="alert alert-warning">Nenhuma mensalidade encontrada!</div>
             @endif
           </div>
-          <!-- /.tab-pane -->
-          <div class="tab-pane" id="timeline">
-            <!-- The timeline -->
-            <ul class="timeline timeline-inverse">
-              <!-- timeline time label -->
-              @forelse($jogador->resultados->take(10) as $resultado)
-              <li class="time-label">
-                    <span class="bg-blue">
-                      {{ $resultado->partida->data->format('d/m/Y') }}
-                    </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-user bg-blue"></i>
 
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> {{ $resultado->partida->horario }}</span>
-
-                  @php
-
-                      $resultadoPartida = $resultado->partida->resultado;
-
-                      $jogadorAdversario = $resultadoPartida->filter(function($resultado) use ($jogador) {
-                        return $resultado->jogador->id !== $jogador->id;
-                      })->first();
-
-                  @endphp
-
-                  @if($jogadorAdversario)
-                  <h3 class="timeline-header">
-                    <a href="{{ route('jogador', [str_slug($jogadorAdversario->jogador->pessoa->nome), $jogadorAdversario->jogador->id]) }}">
-                    {{ $jogadorAdversario->jogador->pessoa->nome }}</a></h3>
-
-                  <div class="timeline-body">
-                      Resultado: {{ $resultado->resultado_final }} x {{ $jogadorAdversario->resultado_final }}
-                  </div>
-                  <div class="timeline-footer">
-                    @php
-
-                        $label = $jogadorAdversario->pontos < $resultado->pontos ? 'Venceu' : 'Perdeu';
-
-                    @endphp
-                    <a class="btn btn-primary btn-xs">{{$label}}</a>
-                  </div>
-                  @endif
-                </div>
-              </li>
-              @empty
-                <div class="alert alert-warning">Nenhuma Partida jogada até o momento.</div>
-              @endforelse
-              <!-- END timeline item -->
-
-              <!-- END timeline item -->
-              @if($jogador->resultados->isNotEmpty())
-              <li>
-                <i class="fa fa-clock-o bg-gray"></i>
-              </li>
-              @endif
-            </ul>
-          </div>
-          <!-- /.tab-pane -->
           <div class="tab-pane active" id="settings">
 
             @php
 
-                $route = route('profile.update', $jogador->pessoa->id);
+                $route = route('profile.update', $jogador->id);
 
                 if(\Auth::user()->isAdmin()) {
-                  $route = route('players.update', $jogador->pessoa->id);
+                  $route = route('players.update', $jogador->id);
                 }
 
             @endphp
@@ -215,41 +153,41 @@
               <div class="form-group">
                 <label for="nome" class="col-sm-2 control-label">Nome</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" name="nome" value="{{ $jogador->pessoa->nome }}" id="nome" placeholder="Nome">
+                  <input type="text" class="form-control" name="nome" value="{{ $jogador->nome }}" id="nome" placeholder="Nome">
                 </div>
               </div>
               <div class="form-group">
                 <label for="email" class="col-sm-2 control-label">Email</label>
                 <div class="col-sm-10">
-                  <input type="email" class="form-control" id="email" name="email" value="{{ $jogador->pessoa->email }}" placeholder="Email">
+                  <input type="email" class="form-control" id="email" name="email" value="{{ $jogador->email }}" placeholder="Email">
                 </div>
               </div>
 
               <div class="form-group">
                 <label for="nascimento" class="col-sm-2 control-label">Nascimento</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control date" name="nascimento" id="nascimento" value="{{ $jogador->pessoa->nascimento->format('d/m/Y') ?? '' }}" placeholder="Nascimento">
+                  <input type="text" class="form-control date" name="nascimento" id="nascimento" value="{{ $jogador->nascimento->format('d/m/Y') ?? '' }}" placeholder="Nascimento">
                 </div>
               </div>
 
               <div class="form-group">
                 <label for="cpf" class="col-sm-2 control-label">CPF</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control cpf" id="cpf" name="cpf" placeholder="CPF" value="{{ $jogador->pessoa->cpf }}">
+                  <input type="text" class="form-control cpf" id="cpf" name="cpf" placeholder="CPF" value="{{ $jogador->cpf }}">
                 </div>
               </div>
 
               <div class="form-group">
                 <label for="telefone" class="col-sm-2 control-label">Celular</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control celphone" name="celular" id="celular" placeholder="Celular" value="{{ $jogador->pessoa->celular }}">
+                  <input type="text" class="form-control celphone" name="celular" id="celular" placeholder="Celular" value="{{ $jogador->celular }}">
                 </div>
               </div>
 
               <div class="form-group">
                 <label for="telefone" class="col-sm-2 control-label">Telefone</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control phone" name="telefone" id="telefone" placeholder="Telefone" value="{{ $jogador->pessoa->telefone }}">
+                  <input type="text" class="form-control phone" name="telefone" id="telefone" placeholder="Telefone" value="{{ $jogador->telefone }}">
                 </div>
               </div>
 

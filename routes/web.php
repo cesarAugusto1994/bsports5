@@ -24,7 +24,7 @@ Route::middleware('loadCache')->group(function() {
   Route::get('/evento/{id}/{titulo}', 'EventoController@show')->name('evento');
   Route::get('/noticia/{id}/{titulo}', 'NoticiasController@show')->name('noticia');
 
-  Route::get('/jogador/{slug}/{id}', 'JogadoresController@show')->name('jogador');
+  Route::get('/jogador/{id}', 'JogadoresController@show')->name('jogador');
 
   Route::get('/pagina/{slug}/{id}', 'PaginasController@show')->name('pagina');
   Route::get('/paginas', 'PaginasController@index')->name('paginas');
@@ -38,9 +38,11 @@ Route::middleware('loadCache')->group(function() {
   Route::get('/partidas/ajax', 'PartidasController@partidasAjax')->name('partidas_ajax');
   Route::get('jogadores/get-ajax', 'JogadoresController@toAjax')->name('jogadores_ajax');
 
-  Route::group(['middleware' => 'auth'], function () {
+  Route::get('/image/external', 'ImagensController@image')->name('image');
 
-      Route::get('/image/external', 'ImagensController@image')->name('image');
+  Route::get('/partida/{id}remover-jogador/{jogador}', 'PartidasController@removerJogador')->name('remover_jogador_partida');
+
+  Route::group(['middleware' => 'auth'], function () {
 
   //  Route::group(['middleware' => 'checkrole'], function () {
 
@@ -60,6 +62,7 @@ Route::middleware('loadCache')->group(function() {
             Route::resource('mensalidades', 'JogadorMensalidadesController');
             Route::resource('checkout', 'CheckoutController');
             Route::post('checkout/sale', 'CheckoutController@sale')->name('checkout_sale');
+
             Route::get('/appointment/{id}/match', 'PartidasController@agendar')->name('player_agendar_partida_jogador');
             Route::post('/appointment/{id}/match/store', 'PartidasController@agendarStore')->name('player_partida_jogador_store');
             Route::get('/appointment/ajax', 'PartidasController@listaPartidasAjax')->name('player_lista_partidas_ajax');

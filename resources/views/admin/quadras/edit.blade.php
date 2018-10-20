@@ -28,9 +28,15 @@
 
           <div class="form-group">
             <label for="nome" class="col-sm-2 control-label">Nome</label>
-
             <div class="col-sm-10">
               <input type="text" class="form-control" value="{{ $quadra->nome }}" name="nome" id="nome" placeholder="Nome">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="nome" class="col-sm-2 control-label">Cor</label>
+            <div class="col-sm-10">
+              <input type="color" class="form-control" value="{{ $quadra->cor }}" name="cor" id="cor" required>
             </div>
           </div>
 

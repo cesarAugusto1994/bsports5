@@ -127,8 +127,8 @@
                           <div class="news-block ">
                               <div class="news-thumb"> <img src="{{ route('image', ['link'=>$evento->banner]) }}" alt="" /> </div>
                               <div class="news-txt">
-                                  <h4> <a href="{{ route('evento', ['id'=>$evento->id,'titulo'=>str_slug($evento->titulo)]) }}">{{ $evento->titulo }}</a> </h4>
-                                  <p> {{ $evento->conteudo }} </p>
+                                  <h4> <a href="{{ route('evento', ['id'=>$evento->id,'titulo'=>str_slug($evento->titulo)]) }}">{{ substr($evento->titulo, 0, 250) }}</a> </h4>
+                                  <p> {{ substr($evento->conteudo, 0, 150) }} ... </p>
                                   <a class="rm" href="{{ route('evento', ['id'=>$evento->id,'titulo'=>str_slug($evento->titulo)]) }}"> Saber mais </a> </div>
                           </div>
                       </div>
@@ -154,7 +154,7 @@
                                 <div class="news-thumb"> <img src="{{ route('image', ['link'=>$noticia->banner]) }}" alt="" /> </div>
                                 <div class="news-txt">
                                     <h4> <a href="{{ route('noticia', ['id'=>$noticia->id,'titulo'=>str_slug($noticia->titulo)]) }}">{{ $noticia->titulo }}</a> </h4>
-                                    <p> {{ $noticia->conteudo }} </p>
+                                    <p> {{ substr($noticia->conteudo, 0, 150) }} </p>
                                     <a class="rm" href="{{ route('noticia', ['id'=>$noticia->id,'titulo'=>str_slug($noticia->titulo)]) }}"> Saiba Mais </a> </div>
                             </div>
                         </div>

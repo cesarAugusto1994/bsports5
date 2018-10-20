@@ -25,8 +25,8 @@ class PartidasController extends Controller
         $partidas = [];
 
         if($request->has('date')) {
-          $partidas = Partida::where('data', '>=', (\DateTime::createFromFormat('d/m/Y', $request->get('date')))->setTime(00, 00, 00))
-          ->where('data', '<=', (\DateTime::createFromFormat('d/m/Y', $request->get('date')))->setTime(23, 59, 59))
+          $partidas = Partida::where('inicio', '>=', (\DateTime::createFromFormat('d/m/Y', $request->get('date')))->setTime(00, 00, 00))
+          ->where('fim', '<=', (\DateTime::createFromFormat('d/m/Y', $request->get('date')))->setTime(23, 59, 59))
           ->where('tipo_jogo', 'Simples')->get();
         }
 
@@ -52,16 +52,15 @@ class PartidasController extends Controller
 
         $data = $request->request->all();
 
-        $jogadores = $data['jogador'];
-
-        foreach ($jogadores as $key => $item) {
-          $jogador = Jogador::findOrFail($item);
-          $resultado = new Resultado();
-          $resultado->jogador_id = $jogador->id;
-          $resultado->partida_id = $partida->id;
-          $resultado->resultado_final = 0;
-          $resultado->save();
+        if($request->has('jogador1') && !empty($request->get('jogador1'))) {
+            $partida->jogador1_id = $request->get('jogador1');
         }
+
+        if($request->has('jogador2') && !empty($request->get('jogador2'))) {
+            $partida->jogador2_id = $request->get('jogador2');
+        }
+
+        $partida->save();
 
         flash('Partida marcada com sucesso!')->success()->important();
 
@@ -77,7 +76,7 @@ class PartidasController extends Controller
         $inicio = new \DateTime($data['start']);
         $fim = new \DateTime($data['end']);
 
-        $partidas = Partida::where('data', '>=', $inicio)->where('data', '<=', $fim)->where('tipo_jogo', 'Simples')->get();
+        $partidas = Partida::where('inicio', '>=', $inicio)->where('fim', '<=', $fim)->where('tipo_jogo', 'Simples')->get();
 
         $cardCollor = "#1ab394";
         $editable = false;
@@ -103,21 +102,19 @@ class PartidasController extends Controller
                 $cardCollor = "#CB4335";
               break;
             }
-
+/*
             $horario = \DateTime::createFromFormat('H:i:s', $partida->horario);
-
             $dataHora = $partida->data->setTime($horario->format('H'), $horario->format('i'));
-
             $dataFim = (new \DateTime($dataHora->format('Y-m-d H:i')))->modify('+ 1 hour');
-
+*/
             $jogador1 = $jogador2 = 'A definir';
 
-            if($partida->resultado->isNotEmpty()) {
-              $jogador1 = $partida->resultado->first()->jogador->pessoa->nome;
+            if($partida->jogador1) {
+              $jogador1 = $partida->jogador1->nome;
+            }
 
-              if($partida->resultado->count() > 1) {
-                $jogador2 = $partida->resultado->last()->jogador->pessoa->nome;
-              }
+            if($partida->jogador2) {
+              $jogador2 = $partida->jogador2->nome;
             }
 
             $title = $jogador1 . ' x ' . $jogador2;
@@ -127,8 +124,8 @@ class PartidasController extends Controller
                 'torneio' => $partida->torneio->nome,
                 'quadra' => $partida->quadra->nome,
                 'title' => $title,
-                'start' => $dataHora->format('Y-m-d H:i'),
-                'end' => ($dataFim->format('Y-m-d H:i')),
+                'start' => $partida->inicio->format('Y-m-d H:i'),
+                'end' => $partida->fim->format('Y-m-d H:i'),
                 'color' => $cardCollor,
                 'rendering' => 'background',
                 'backgroundColor' => '#00aeef',
@@ -151,7 +148,7 @@ class PartidasController extends Controller
         $inicio = new \DateTime($data['start']);
         $fim = new \DateTime($data['end']);
 
-        $partidas = Partida::where('data', '>=', $inicio)->where('data', '<=', $fim)->where('tipo_jogo', 'Simples')->get();
+        $partidas = Partida::where('inicio', '>=', $inicio)->where('fim', '<=', $fim)->where('tipo_jogo', 'Simples')->get();
 
         $cardCollor = "#1ab394";
         $editable = false;
@@ -177,33 +174,31 @@ class PartidasController extends Controller
                 $cardCollor = "#CB4335";
               break;
             }
-
+/*
             $horario = \DateTime::createFromFormat('H:i:s', $partida->horario);
-
             $dataHora = $partida->data->setTime($horario->format('H'), $horario->format('i'));
-
             $dataFim = (new \DateTime($dataHora->format('Y-m-d H:i')))->modify('+ 1 hour +30 minutes');
-
+*/
             $jogador1 = $jogador2 = 'A definir';
 
-            if($partida->resultado->isNotEmpty()) {
-              $jogador1 = $partida->resultado->first()->jogador->pessoa->nome;
-
-              if($partida->resultado->count() > 1) {
-                $jogador2 = $partida->resultado->last()->jogador->pessoa->nome;
-              }
+            if($partida->jogador1) {
+              $jogador1 = $partida->jogador1->nome;
             }
 
-            $title = $jogador1 . ' x ' . $jogador2;
+            if($partida->jogador2) {
+              $jogador2 = $partida->jogador2->nome;
+            }
+
+            $title = $jogador1 . ' x ' . $jogador2 . ' ' . $partida->quadra->nome;
 
             return [
                 'id' => $partida->id,
                 'torneio' => $partida->torneio->nome,
                 'quadra' => $partida->quadra->nome,
                 'title' => $title,
-                'start' => $dataHora->format('Y-m-d H:i'),
-                'end' => ($dataFim->format('Y-m-d H:i')),
-                'color' => $cardCollor,
+                'start' => $partida->inicio->format('Y-m-d H:i'),
+                'end' => ($partida->fim->format('Y-m-d H:i')),
+                'color' =>  $partida->quadra->cor,
                 /*'colorText' => '#3498DB',*/
                 'editable' => $editable,
                 'allDay' => false
@@ -234,70 +229,46 @@ class PartidasController extends Controller
     {
         $data = $request->request->all();
 
-        $datapartida = \DateTime::createFromFormat('d/m/Y H:i', $data['inicio']);
+        $inicio = \DateTime::createFromFormat('d/m/Y H:i', $data['inicio']);
+        $fim = \DateTime::createFromFormat('d/m/Y H:i', $data['fim']);
 
-        $partida = new Partida();
-        $partida->torneio_id = $data['torneio'];
-        $partida->quadra_id = $data['quadra'];
-        $partida->horario = $datapartida;
-        $partida->data = $datapartida;
-        $partida->tipo_jogo = 'Simples';
-        $partida->semana = $datapartida->format('wY');
-        $partida->save();
+        if(!isset($data['quadra'])) {
+          flash('Nenhuma quadra informada.')->warning()->important();
+          return redirect()->back();
+        }
 
-        if($request->has('jogador')) {
+        $quadras = $data['quadra'];
 
-            $jogadores = $data['jogador'];
+        foreach ($quadras as $key => $quadra) {
 
-            foreach ($jogadores as $key => $item) {
-              $jogador = Jogador::findOrFail($item);
-              $resultado = new Resultado();
-              $resultado->jogador_id = $jogador->id;
-              $resultado->partida_id = $partida->id;
-              $resultado->resultado_final = 0;
-              $resultado->save();
-            }
+          $partida = new Partida();
+          $partida->torneio_id = $data['torneio'];
+          $partida->quadra_id = $quadra;
+          $partida->inicio = $inicio;
+          $partida->fim = $fim;
+
+          $partida->tipo_jogo = 'Simples';
+          $partida->semana = $inicio->format('wY');
+
+          if($request->has('jogador')) {
+
+              $jogadores = $data['jogador'];
+
+              foreach ($jogadores as $key => $item) {
+                if($key == 0) {
+                    $partida->jogador1_id = $item;
+                } else {
+                    $partida->jogador2_id = $item;
+                }
+              }
+          }
+
+          $partida->save();
 
         }
 
         flash('Partida marcada com sucesso!')->success()->important();
-
         return redirect()->back();
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     /**
@@ -308,6 +279,45 @@ class PartidasController extends Controller
      */
     public function destroy($id)
     {
-        //
+          try {
+              $partida = Partida::findOrFail($id);
+
+              $resultados = $partida->resultado;
+
+              foreach ($resultados as $key => $resultado) {
+                  $resultado->delete();
+              }
+
+              $partida->delete();
+
+              return response()->json([
+                'code' => 201,
+                'message' => 'registro removido com sucesso!'
+              ]);
+
+          } catch(Exception $e) {
+              return response()->json([
+                'code' => 501,
+                'message' => $e->getMessage()
+              ]);
+          }
+    }
+
+    public function removerJogador($id, $jogador)
+    {
+        $partida = Partida::findOrFail($id);
+
+        if($partida->jogador1_id == $jogador) {
+            $partida->jogador1_id = null;
+        }
+
+        if($partida->jogador2_id == $jogador) {
+            $partida->jogador2_id = null;
+        }
+
+        $partida->save();
+
+        flash('Jogadorremovido da partida com sucesso!')->success()->important();
+        return redirect()->back();
     }
 }
