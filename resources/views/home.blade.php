@@ -147,11 +147,19 @@
 
                                     $categoria = $item->id;
 
-                                    $partidas = \App\Models\Partida::whereHas('resultado', function($query) use($categoria) {
-                                        $query->whereHas('jogador', function($query2) use($categoria) {
-                                            $query2->where('categoria_id', $categoria);
-                                        });
-                                    })->where('inicio', '>', now())->get();
+                                    $itens = [];
+
+                                    $jogadores = \App\Models\Pessoa\Jogador::where('categoria_id', $categoria)->get();
+
+                                    $itens = $jogadores->map(function($jogador) {
+                                        return $jogador->id;
+                                    });
+
+                                    $partidas = \App\Models\Partida::whereIn('jogador1_id', $itens)
+                                    ->orWhereIn('jogador2_id', $itens)
+                                    ->where('inicio', '>', now())
+                                    ->orderByDesc('id')
+                                    ->get();
 
                                 @endphp
 

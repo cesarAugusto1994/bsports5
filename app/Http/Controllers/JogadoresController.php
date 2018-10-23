@@ -59,8 +59,8 @@ class JogadoresController extends Controller
 
             $categoria = null;
 
-            if($jogador->jogador && $jogador->jogador->categoria) {
-                $categoria = $jogador->jogador->categoria->nome;
+            if($jogador->categoria) {
+                $categoria = $jogador->categoria->nome;
             }
 
             return [

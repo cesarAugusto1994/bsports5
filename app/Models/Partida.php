@@ -11,6 +11,20 @@ class Partida extends Model
 {
     protected $dates = ['data','inicio','fim'];
 
+    protected $fillable = [
+      'jogador1_id', 'jogador1_resultado_final',
+      'jogador1_set1',
+      'jogador1_set2','jogador1_set3',
+      'jogador1_tiebreak','jogador1_vitoria_wo',
+      'jogador1_desistencia','jogador1_pontos',
+      'jogador1_bonus','jogador1_computado',
+      'jogador2_id','jogador2_resultado_final',
+      'jogador2_set1','jogador2_set2','jogador2_set3',
+      'jogador2_tiebreak','jogador2_vitoria_wo',
+      'jogador2_desistencia','jogador2_pontos',
+      'jogador2_bonus','jogador2_computado',
+    ];
+
     public function jogadores()
     {
         return $this->hasMany(Jogador::class, 'partida_id');

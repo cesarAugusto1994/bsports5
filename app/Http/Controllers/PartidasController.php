@@ -20,6 +20,30 @@ class PartidasController extends Controller
         return view('admin.partidas.index', compact('partidas'));
     }
 
+    public function placar($id)
+    {
+        $partida = Partida::findOrFail($id);
+
+        return view('admin.partidas.placar', compact('partida'));
+    }
+
+    public function editarPlacar($id)
+    {
+        $partida = Partida::findOrFail($id);
+
+        return view('admin.partidas.edit', compact('partida'));
+    }
+
+    public function placarUpdate(Request $request, $id)
+    {
+        $data = $request->request->all();
+
+        $partida = Partida::findOrFail($id);
+        $partida->update($data);
+
+        return view('admin.partidas.placar', compact('partida'));
+    }
+
     public function agendamento(Request $request)
     {
         $partidas = [];
@@ -102,11 +126,6 @@ class PartidasController extends Controller
                 $cardCollor = "#CB4335";
               break;
             }
-/*
-            $horario = \DateTime::createFromFormat('H:i:s', $partida->horario);
-            $dataHora = $partida->data->setTime($horario->format('H'), $horario->format('i'));
-            $dataFim = (new \DateTime($dataHora->format('Y-m-d H:i')))->modify('+ 1 hour');
-*/
             $jogador1 = $jogador2 = 'A definir';
 
             if($partida->jogador1) {
@@ -174,11 +193,6 @@ class PartidasController extends Controller
                 $cardCollor = "#CB4335";
               break;
             }
-/*
-            $horario = \DateTime::createFromFormat('H:i:s', $partida->horario);
-            $dataHora = $partida->data->setTime($horario->format('H'), $horario->format('i'));
-            $dataFim = (new \DateTime($dataHora->format('Y-m-d H:i')))->modify('+ 1 hour +30 minutes');
-*/
             $jogador1 = $jogador2 = 'A definir';
 
             if($partida->jogador1) {

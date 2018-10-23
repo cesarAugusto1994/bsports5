@@ -46,7 +46,7 @@ Route::middleware('loadCache')->group(function() {
 
   //  Route::group(['middleware' => 'checkrole'], function () {
 
-      Route::group(['middleware' => 'role:user'], function () {
+      Route::group(['middleware' => 'role:user|admin'], function () {
         Route::group(['prefix' => 'player'], function () {
             Route::get('/dashboard', 'PlayerController@index')->name('player_dashboard');
             Route::get('/', 'PlayerController@index')->name('player_index');
@@ -95,7 +95,9 @@ Route::middleware('loadCache')->group(function() {
               Route::resource('eventos', 'EventoController');
               Route::resource('noticias', 'NoticiasController');
 
-              //Route::get('image/external', 'ImagensController@image')->name('image');
+              Route::get('/partidas/{id}/placar', 'PartidasController@placar')->name('partida_placar');
+              Route::get('/partidas/{id}/placar/edit', 'PartidasController@editarPlacar')->name('editar_partida_placar');
+              Route::post('/partida/{id}/placar/update', 'PartidasController@placarUpdate')->name('partida_placar_update');
 
               Route::get('mensalidades/create/from-categories', 'JogadorMensalidadesController@createFromCategories')->name('mensalidade_create_from_categories');
 

@@ -56,7 +56,7 @@
                     $jogador1Uuid = '';
                     $jogador2Uuid = '';
 
-                    $showPlacar = $podeRemover = false;
+                    $showPlacar = $editavel = false;
 
                     if($partida->jogador1) {
                         $jogador1 = $partida->jogador1->nome;
@@ -71,7 +71,7 @@
                     }
 
                     if($partida->inicio > now()) {
-                      $podeRemover = true;
+                      $editavel = true;
                     } else {
                       $showPlacar = true;
                     }
@@ -80,7 +80,7 @@
 
                   <td>
                     @if($jogador1Uuid)
-                      @if($podeRemover)
+                      @if($editavel)
                         <a class="btn btn-danger btn-xs" href="{{ route('remover_jogador_partida', [$partida->id, $partida->jogador1->id]) }}"><i class="fa fa-trash"></i></a>
                       @endif
                         <a href="{{ route('player_profile', $jogador1Uuid) }}">{{ $jogador1 }}</a>
@@ -88,7 +88,13 @@
                         {{ $jogador1Pontos }}
                       @endif
                     @else
+
+                    @if($editavel)
+                        <a class="btn btn-success btn-xs" target="_blank" href="{{route('agendar_partida_jogador', $partida->id)}}"><i class="fa fa-plus"></i></a>
+                    @endif
+
                         {{ $jogador1 }}
+
                     @endif
                     x
                     @if($jogador2Uuid)
@@ -96,18 +102,25 @@
                             {{ $jogador2Pontos }}
                         @endif
                         <a href="{{ route('player_profile', $jogador2Uuid) }}">{{ $jogador2 }}</a>
-                        @if($podeRemover)
+                        @if($editavel)
                             <a class="btn btn-danger btn-xs" href="{{ route('remover_jogador_partida', [$partida->id, $partida->jogador2->id]) }}"><i class="fa fa-trash"></i></a>
                         @endif
                     @else
                         {{ $jogador2 }}
+
+                        @if($editavel)
+                            <a class="btn btn-success btn-xs" target="_blank" href="{{route('agendar_partida_jogador', $partida->id)}}"><i class="fa fa-plus"></i></a>
+                        @endif
+
                     @endif
                   </td>
                   <td>
                     {{ $jogador1Pontos }} x {{ $jogador2Pontos }}
                   </td>
                   <td>
+                    <a class="btn btn-primary btn-sm" href="{{ route('partida_placar', $partida->id) }}"><i class="fa fa-futbol-o"></i></a>
                     <button data-route="{{ route('partida.destroy', ['id' => $partida->id]) }}" class="btn btn-sm btn-danger btnRemoveItem"><i class="fa fa-trash"></i> </button>
+
                   </td>
                 </tr>
               @endforeach

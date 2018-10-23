@@ -4,7 +4,6 @@
             <div class="row">
                 <div class="col-md-3 col-sm-4">
                     <div class="footer-widget">
-                        <h4>Logo</h4>
                         <img src="{{ route('image',['link'=>'logo.png']) }}" alt="" />
                     </div>
                 </div>

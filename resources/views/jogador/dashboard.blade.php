@@ -8,13 +8,9 @@
 
 @section('content')
 
-
 <div class="row">
-
-        <div class="col-md-4">
-        <!-- Widget: user widget style 1 -->
+  <div class="col-md-4">
         <div class="box box-widget widget-user">
-          <!-- Add the bg color to the header using any of the bg-* classes -->
           <div class="widget-user-header bg-aqua-active">
             <h3 class="widget-user-username">{{ $jogador->nome}}</h3>
             <h5 class="widget-user-desc">{{ $jogador->categoria->nome}}</h5>
@@ -31,39 +27,27 @@
                   <h5 class="description-header">{{ $jogador->resultados->sum('pontos') - $jogador->resultados->sum('bonus') }}</h5>
                   <span class="description-text">Pontos</span>
                 </div>
-                <!-- /.description-block -->
               </div>
-              <!-- /.col -->
               <div class="col-sm-4 border-right">
                 <div class="description-block">
                   <h5 class="description-header">{{ $jogador->resultados->count() }}</h5>
                   <span class="description-text">Partidas</span>
                 </div>
-                <!-- /.description-block -->
               </div>
-              <!-- /.col -->
               <div class="col-sm-4">
                 <div class="description-block">
-
                   @php
-
                         $vitorias = $jogador->resultados->filter(function($resultado) {
                             return $resultado->resultado_final >= 2;
                         })->count();
-
                   @endphp
-
                   <h5 class="description-header">{{ $vitorias }}</h5>
                   <span class="description-text">Vitórias</span>
                 </div>
-                <!-- /.description-block -->
               </div>
-              <!-- /.col -->
             </div>
-            <!-- /.row -->
           </div>
         </div>
-        <!-- /.widget-user -->
         </div>
 
         <div class="col-md-4 col-sm-6 col-xs-12">
@@ -81,11 +65,8 @@
 
                   </span>
             </div>
-            <!-- /.info-box-content -->
           </div>
-          <!-- /.info-box -->
         </div>
-        <!-- /.col -->
         <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="info-box bg-green">
             <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
@@ -100,11 +81,8 @@
                   <span class="progress-description">
                   </span>
             </div>
-            <!-- /.info-box-content -->
           </div>
-          <!-- /.info-box -->
         </div>
-        <!-- /.col -->
         <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="info-box bg-yellow">
             <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
@@ -119,11 +97,8 @@
                   <span class="progress-description">
                   </span>
             </div>
-            <!-- /.info-box-content -->
           </div>
-          <!-- /.info-box -->
         </div>
-        <!-- /.col -->
         <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="info-box bg-red">
             <span class="info-box-icon"><i class="fa fa-comments-o"></i></span>
@@ -156,7 +131,6 @@
 </div>
 
 <div class="row">
-
   <div class="col-md-6">
     <div class="box">
       <div class="box-header with-border">
