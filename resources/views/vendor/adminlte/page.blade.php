@@ -6,8 +6,7 @@
     @stack('css')
     @yield('css')
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-    
+
 @stop
 
 @section('body_class', 'skin-' . config('adminlte.skin', 'blue') . ' sidebar-mini ' . (config('adminlte.layout') ? [
@@ -19,7 +18,6 @@
 @section('body')
     <div class="wrapper">
 
-        <!-- Main Header -->
         <header class="main-header">
             @if(config('adminlte.layout') == 'top-nav')
             <nav class="navbar navbar-static-top">
@@ -33,30 +31,22 @@
                         </button>
                     </div>
 
-                    <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                         <ul class="nav navbar-nav">
                             @each('adminlte::partials.menu-item-top-nav', $adminlte->menu(), 'item')
                         </ul>
                     </div>
-                    <!-- /.navbar-collapse -->
             @else
-            <!-- Logo -->
             <a href="{{ url(config('adminlte.dashboard_url', 'home')) }}" class="logo">
-                <!-- mini logo for sidebar mini 50x50 pixels -->
                 <span class="logo-mini">{!! config('adminlte.logo_mini', '<b>A</b>LT') !!}</span>
-                <!-- logo for regular state and mobile devices -->
                 <span class="logo-lg">{!! config('adminlte.logo', '<b>Admin</b>LTE') !!}</span>
             </a>
 
-            <!-- Header Navbar -->
             <nav class="navbar navbar-static-top" role="navigation">
-                <!-- Sidebar toggle button-->
                 <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
                     <span class="sr-only">{{ trans('adminlte::adminlte.toggle_navigation') }}</span>
                 </a>
             @endif
-                <!-- Navbar Right Menu -->
                 <div class="navbar-custom-menu">
 
                     <ul class="nav navbar-nav">
@@ -88,34 +78,26 @@
         </header>
 
         @if(config('adminlte.layout') != 'top-nav')
-        <!-- Left side column. contains the logo and sidebar -->
         <aside class="main-sidebar">
 
-            <!-- sidebar: style can be found in sidebar.less -->
             <section class="sidebar">
 
-                <!-- Sidebar Menu -->
                 <ul class="sidebar-menu" data-widget="tree">
                     @each('adminlte::partials.menu-item', $adminlte->menu(), 'item')
                 </ul>
-                <!-- /.sidebar-menu -->
             </section>
-            <!-- /.sidebar -->
         </aside>
         @endif
 
-        <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             @if(config('adminlte.layout') == 'top-nav')
             <div class="container">
             @endif
 
-            <!-- Content Header (Page header) -->
             <section class="content-header">
                 @yield('content_header')
             </section>
 
-            <!-- Main content -->
             <section class="content">
 
                 @include('flash::message')
@@ -123,30 +105,16 @@
                 @yield('content')
 
             </section>
-            <!-- /.content -->
             @if(config('adminlte.layout') == 'top-nav')
             </div>
-            <!-- /.container -->
             @endif
         </div>
-        <!-- /.content-wrapper -->
 
     </div>
-    <!-- ./wrapper -->
 @stop
 
 @section('adminlte_js')
     <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
     @stack('js')
     @yield('js')
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
-
-    <script type="text/javascript">
-        $(function () {
-            $('.datetimepicker').datetimepicker({
-              locale: 'pt-br'
-            });
-        });
-    </script>
 @stop

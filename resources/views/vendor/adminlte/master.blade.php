@@ -16,10 +16,7 @@
     <!-- Ionicons -->
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/vendor/Ionicons/css/ionicons.min.css') }}">
 
-    @if(config('adminlte.plugins.select2'))
-        <!-- Select2 -->
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css">
-    @endif
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css">
 
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/AdminLTE.min.css') }}">
@@ -47,33 +44,43 @@
 
 @yield('body')
 
-<script src="{{ asset('vendor/adminlte/vendor/jquery/dist/jquery.min.js') }}"></script>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
 <script src="{{ asset('vendor/adminlte/vendor/jquery/dist/jquery.slimscroll.min.js') }}"></script>
 <script src="{{ asset('vendor/adminlte/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.pt-BR.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
 
-@if(config('adminlte.plugins.select2'))
-    <!-- Select2 -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-@endif
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
-@if(config('adminlte.plugins.datatables'))
-    <!-- DataTables with bootstrap 3 renderer -->
-    <script src="//cdn.datatables.net/v/bs/dt-1.10.18/datatables.min.js"></script>
-@endif
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.20.6/sweetalert2.all.min.js"></script>
 
-@if(config('adminlte.plugins.chartjs'))
-    <!-- ChartJS -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
-@endif
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/i18n/pt-BR.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.pt-BR.min.js"></script>
 
 @yield('adminlte_js')
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.20.6/sweetalert2.all.min.js"></script>
+<script>
+    $('.money').mask('000.000.000.000.000,00', {reverse: true});
+    $('.date').mask('00/00/0000');
+
+    $('.datepicker').datepicker({
+      format: "dd/mm/yyyy",
+      clearBtn: true,
+      todayBtn: "linked",
+      language: "pt-BR",
+      calendarWeeks: true,
+      autoclose: true,
+      todayHighlight: true
+    });
+
+</script>
 
 <script>
 
@@ -104,15 +111,24 @@
             data: {
               _method: 'DELETE'
             }
-          }).done(function() {
+          }).done(function(data) {
 
-            self.parents('tr').hide();
+            if(data.code == 201) {
+                self.parents('tr').hide();
+                swal(
+                  'Ok!',
+                  data.message,
+                  'success'
+                )
+            } else {
 
-            swal(
-              'Ok!',
-              'O registro foi removido com sucesso.',
-              'success'
-            )
+              swal(
+                'Ok!',
+                data.message,
+                'error'
+              )
+
+            }
 
           });
 
@@ -121,6 +137,64 @@
       });
 
   });
+
+</script>
+
+<script>
+
+$(".select-jogador").select2({
+  ajax: {
+    type: 'GET',
+    url: $('#jogador-ajax').val(),
+    dataType: 'json',
+    delay: 250,
+    data: function (params) {
+      return {
+        search: params.term
+      };
+    },
+    processResults: function (data, params) {
+
+      return {
+          results: $.map(data, function (item) {
+              return {
+                  text: item.nome,
+                  email: item.email,
+                  categoria: item.categoria,
+                  id: item.id
+              }
+          })
+      };
+    },
+    cache: true
+  },
+  escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+  templateResult: formatRepo,
+  placeholder: 'Selecione um jogador',
+  minimumInputLength: 1
+});
+
+function formatRepo (repo) {
+
+  if (repo.loading) {
+    return repo.text;
+  }
+
+  var markup = "<div class='select2-result-repository clearfix'>" +
+    "<div class='select2-result-repository__meta'>" +
+      "<div class='select2-result-repository__title'>" + repo.text + "</div>";
+
+  markup += "<div class='select2-result-repository__statistics'>" +
+  "<div class='select2-result-repository__forks'><i class=''></i> Categoria: " + repo.categoria + " </div>" +
+  "</div>" +
+  "</div></div>";
+
+  return markup;
+}
+
+function formatRepoSelection (repo) {
+  return repo.full_name || repo.text;
+}
 
 </script>
 

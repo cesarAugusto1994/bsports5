@@ -40,7 +40,8 @@ Route::middleware('loadCache')->group(function() {
 
   Route::get('/image/external', 'ImagensController@image')->name('image');
 
-  Route::get('/partida/{id}remover-jogador/{jogador}', 'PartidasController@removerJogador')->name('remover_jogador_partida');
+  Route::get('/partida/{id}/remover-jogador/{jogador}', 'PartidasController@removerJogador')->name('remover_jogador_partida');
+  Route::get('/partida/{id}/trocar/jogador/{jogador}', 'PartidasController@trocarJogador')->name('trocar_jogador_partida');
 
   Route::group(['middleware' => 'auth'], function () {
 
@@ -86,7 +87,7 @@ Route::middleware('loadCache')->group(function() {
               Route::get('/players/{id}/profile', 'JogadoresController@view')->name('player_profile');
               Route::resource('configs', 'ConfigsController');
               Route::resource('partida', 'PartidasController');
-              //Route::resource('players', 'JogadoresController');
+              Route::resource('jogadores', 'JogadoresController');
               Route::resource('mensalidades', 'JogadorMensalidadesController');
               Route::resource('categorias', 'CategoriasController');
               Route::resource('torneios', 'TorneiosController');
@@ -103,7 +104,13 @@ Route::middleware('loadCache')->group(function() {
 
               Route::get('/appointment/{id}/match', 'PartidasController@agendar')->name('agendar_partida_jogador');
               Route::post('/appointment/{id}/match/store', 'PartidasController@agendarStore')->name('partida_jogador_store');
+
+              Route::post('/partidas/{id}/trocar/jogador', 'PartidasController@trocarJogadorStore')->name('trocar_jogador_store');
+
               Route::get('/appointment/ajax', 'PartidasController@listaPartidasAjax')->name('lista_partidas_ajax');
+
+              Route::post('/joagdores/inativar/em-massa', 'JogadoresController@inativarEmMassa')->name('jogadores_inativar_em_massa');
+
           });
       });
 

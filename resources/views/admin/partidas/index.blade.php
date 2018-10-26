@@ -13,12 +13,85 @@
   <div class="col-md-12">
       <div class="box box-solid">
         <div class="box-header with-border">
+          <h3 class="box-title">Filtros</h3>
+        </div>
+        <div class="box-body">
+
+          <form action="#">
+              <div class="box-body">
+                <div class="row">
+
+                  <div class="col-md-1">
+                    <div class="form-group">
+                      <label for="id">Codigo</label>
+                      <input type="text" class="form-control" id="id" name="id">
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="nome">Nome</label>
+                      <input type="text" class="form-control" id="nome" name="nome">
+                    </div>
+                  </div>
+
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label for="categoria">Quadra</label>
+                      <select class="form-control select2" name="quadra" id="quadra">
+                        <option value=""></option>
+                        @foreach(\App\Models\Quadras::all() as $quadra)
+                            <option value="{{ $quadra->id }}">{{ $quadra->nome }}</option>
+                        @endforeach
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="categoria">Categoria</label>
+                      <select name="categoria" class="form-control" id="categoria">
+                        <option value=""></option>
+                          @foreach(\App\Models\Categoria::where('tipo', 'Simples')->orderBy('nome')->get() as $categoria)
+                              <option value="{{ $categoria->id }}">{{ $categoria->nome }}</option>
+                          @endforeach
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="codigo">Periodo</label>
+                      <div id="sandbox-container">
+                        <div class="input-daterange input-group">
+                          <input type="text" class="form-control date datepicker" name="inicio" />
+                          <span class="input-group-addon">até</span>
+                          <input type="text" class="form-control date datepicker" name="fim" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <button type="submit" class="btn btn-success">Buscar</button>
+                <a href="{{ route('players.create') }}" class="btn btn-primary">Novo Jogador</a>
+              </div>
+          </form>
+
+        </div>
+      </div>
+  </div>
+
+  <div class="col-md-12">
+      <div class="box box-solid">
+        <div class="box-header with-border">
           <h3 class="box-title">Opções</h3>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
 
-          <a href="{{ route('matches.create') }}" class="btn btn-sm btn-info btn-flat pull-left">Nova Partida</a>
+          <a href="{{ route('matches.create') }}" class="btn btn-success">Nova Partida</a>
 
         </div>
       </div>
@@ -37,6 +110,7 @@
               <th>ID</th>
               <th>Horário</th>
               <th>Jogadores</th>
+              <th>Quadra</th>
               <th>Resultado</th>
               <th>Opções</th>
             </tr>
@@ -70,28 +144,26 @@
                         $jogador2Uuid = $partida->jogador2->uuid;
                     }
 
-                    if($partida->inicio > now()) {
-                      $editavel = true;
-                    } else {
-                      $showPlacar = true;
-                    }
+                    $editavel = true;
+                    $showPlacar = true;
 
                   @endphp
 
-                  <td>
+                  <td class="text-center">
                     @if($jogador1Uuid)
                       @if($editavel)
-                        <a class="btn btn-danger btn-xs" href="{{ route('remover_jogador_partida', [$partida->id, $partida->jogador1->id]) }}"><i class="fa fa-trash"></i></a>
+                            <a class="btn btn-danger btn-xs" href="{{ route('remover_jogador_partida', ['id' => $partida->id, 'jogador' => $partida->jogador1->id, 'partida_admin' => '1']) }}"><i class="fa fa-trash"></i></a>
+                            <a class="btn btn-primary btn-xs" href="{{ route('trocar_jogador_partida', ['id' => $partida->id, 'jogador' => $partida->jogador1->id, 'partida_admin' => '1']) }}"><i class="fa fa-refresh"></i></a>
                       @endif
-                        <a href="{{ route('player_profile', $jogador1Uuid) }}">{{ $jogador1 }}</a>
-                      @if($showPlacar)
-                        {{ $jogador1Pontos }}
-                      @endif
+                            <a href="{{ route('player_profile', $jogador1Uuid) }}">{{ $jogador1 }}</a>
+                          @if($showPlacar)
+                            {{ $jogador1Pontos }}
+                          @endif
                     @else
 
-                    @if($editavel)
-                        <a class="btn btn-success btn-xs" target="_blank" href="{{route('agendar_partida_jogador', $partida->id)}}"><i class="fa fa-plus"></i></a>
-                    @endif
+                      @if($editavel)
+                          <a class="btn btn-success btn-xs" target="_blank" href="{{route('agendar_partida_jogador', $partida->id)}}"><i class="fa fa-plus"></i></a>
+                      @endif
 
                         {{ $jogador1 }}
 
@@ -103,7 +175,8 @@
                         @endif
                         <a href="{{ route('player_profile', $jogador2Uuid) }}">{{ $jogador2 }}</a>
                         @if($editavel)
-                            <a class="btn btn-danger btn-xs" href="{{ route('remover_jogador_partida', [$partida->id, $partida->jogador2->id]) }}"><i class="fa fa-trash"></i></a>
+                            <a class="btn btn-danger btn-xs" href="{{ route('remover_jogador_partida', ['id' => $partida->id, 'jogador' => $partida->jogador2->id, 'partida_admin' => '1']) }}"><i class="fa fa-trash"></i></a>
+                            <a class="btn btn-primary btn-xs" href="{{ route('trocar_jogador_partida', ['id' => $partida->id, 'jogador' => $partida->jogador2->id, 'partida_admin' => '1']) }}"><i class="fa fa-refresh"></i></a>
                         @endif
                     @else
                         {{ $jogador2 }}
@@ -115,12 +188,14 @@
                     @endif
                   </td>
                   <td>
+                    {{ $partida->quadra->nome }}
+                  </td>
+                  <td>
                     {{ $jogador1Pontos }} x {{ $jogador2Pontos }}
                   </td>
                   <td>
                     <a class="btn btn-primary btn-sm" href="{{ route('partida_placar', $partida->id) }}"><i class="fa fa-futbol-o"></i></a>
                     <button data-route="{{ route('partida.destroy', ['id' => $partida->id]) }}" class="btn btn-sm btn-danger btnRemoveItem"><i class="fa fa-trash"></i> </button>
-
                   </td>
                 </tr>
               @endforeach
@@ -129,7 +204,6 @@
         </div>
       </div>
       <div class="box-footer clearfix">
-        <a href="{{ route('matches.create') }}" class="btn btn-sm btn-info btn-flat pull-left">Nova Partida</a>
         <span class="pull-right">{{ $partidas->links() }}</span>
       </div>
     </div>

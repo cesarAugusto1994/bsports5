@@ -59,6 +59,10 @@
 
                 <form method="post" action="{{ $route }}">
 
+                  @if(\Request::has($isAdmin))
+                      <input type="hidden" name="is_admin" value="1"/>
+                  @endif
+
                 <div class="match-fixture-thumb">
                   <ul class="fix">
 

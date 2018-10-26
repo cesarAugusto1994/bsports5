@@ -16,11 +16,45 @@ class JogadoresController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-      $jogadores = \App\Models\Pessoa\Jogador::orderByDesc('id')->paginate();
+        $data = $request->request->all();
 
-      return view('admin.jogadores.index', compact('jogadores'));
+        $jogadores = Jogador::orderByDesc('id');
+
+        if ($request->filled('id')) {
+            $jogadores->where('id', $request->get('id'));
+        }
+
+        if ($request->filled('nome')) {
+            $jogadores->where('nome', 'like', '%'.$request->get('nome').'%');
+        }
+
+        if ($request->filled('email')) {
+            $jogadores->where('email', 'like', '%'.$request->get('email').'%');
+        }
+
+        if ($request->filled('categoria')) {
+            $jogadores->where('categoria_id', $request->get('categoria'));
+        }
+
+        if ($request->filled('status')) {
+            $jogadores->where('ativo', $request->get('status'));
+        }
+
+        if (!$request->filled('status')) {
+            $jogadores->where('ativo', true);
+        }
+
+        $quantidade = $jogadores->count();
+
+        $jogadores = $jogadores->paginate();
+
+        foreach ($data as $key => $value) {
+            $jogadores->appends($key, $value);
+        }
+
+        return view('admin.jogadores.index', compact('jogadores', 'quantidade'));
     }
 
     public function create()
@@ -188,5 +222,54 @@ class JogadoresController extends Controller
         flash('Perfil Atualizado com sucesso.')->success()->important();
 
         return redirect()->back();
+    }
+
+    public function inativarEmMassa(Request $request)
+    {
+        if(!$request->has('selecao_jogadores')) {
+          flash('Nenhum jogador selecionado.')->warning()->important();
+          return redirect()->back();
+        }
+
+        foreach ($request->get('selecao_jogadores') as $key => $item) {
+            $jogador = Jogador::findOrFail($item);
+            $jogador->ativo = false;
+            $jogador->save();
+        }
+
+        flash('Jogadores inativados com sucesso.')->success()->important();
+        return redirect()->back();
+    }
+
+    public function destroy($id)
+    {
+        try {
+
+            $jogador = Jogador::findOrFail($id);
+
+            if($jogador->partidas->isNotEmpty() || $jogador->partidas2->isNotEmpty()) {
+              return response()->json([
+                'code' => 501,
+                'message' => 'Este jogador possuí partidas vinculadas a ele.'
+              ]);
+            }
+
+            $jogador->semanas->map(function($semana) {
+                $semana->delete();
+            });
+
+            $jogador->delete();
+
+            return response()->json([
+              'code' => 201,
+              'message' => 'registro removido com sucesso!'
+            ]);
+
+        } catch(Exception $e) {
+            return response()->json([
+              'code' => 501,
+              'message' => $e->getMessage()
+            ]);
+        }
     }
 }

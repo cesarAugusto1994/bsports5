@@ -14,9 +14,60 @@ class PartidasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $partidas = Partida::orderByDesc('id')->paginate();
+        $data = $request->request->all();
+
+        $partidas = Partida::orderByDesc('id');
+
+        if ($request->filled('id')) {
+            $partidas->where('id', $request->get('id'));
+        }
+
+        if ($request->filled('nome')) {
+
+            $nome = $request->get('nome');
+
+            $partidas->whereHas('jogador1', function($query) use($nome) {
+                $query->where('nome', 'like', '%'.$nome.'%');
+            })->orWhereHas('jogador2', function($query2) use($nome) {
+                $query2->where('nome', 'like', '%'.$nome.'%');
+            });
+        }
+
+        if ($request->filled('quadra')) {
+            $partidas->where('quadra_id', $request->get('quadra'));
+        }
+
+        if ($request->filled('categoria')) {
+
+            $categoria = $request->get('categoria');
+
+            $partidas->whereHas('jogador1', function($query) use($categoria) {
+                $query->where('categoria_id', $categoria);
+            })->orWhereHas('jogador2', function($query2) use($categoria) {
+                $query2->where('categoria_id', $categoria);
+            });
+        }
+
+        if ($request->filled('inicio') && $request->filled('fim')) {
+
+            $start = \DateTime::createFromFormat('d/m/Y', $data['inicio']);
+            $end = \DateTime::createFromFormat('d/m/Y', $data['fim']);
+
+            $partidas->where('inicio', '>=', $start->format('Y-m-d') . ' 00:00:00')
+            ->where('fim', '<=', $end->format('Y-m-d') . ' 23:59:59');
+
+        }
+
+        $quantidade = $partidas->count();
+
+        $partidas = $partidas->paginate();
+
+        foreach ($data as $key => $value) {
+            $partidas->appends($key, $value);
+        }
+
         return view('admin.partidas.index', compact('partidas'));
     }
 
@@ -63,11 +114,13 @@ class PartidasController extends Controller
 
         $jogador = null;
 
+        $isAdmin = (boolean)$request->has('partida_admin');
+
         if($request->has('jogador')) {
           $jogador = Jogador::find($jogador);
         }
 
-        return view('pages.agendar', compact('jogador', 'partida'));
+        return view('pages.agendar', compact('jogador', 'partida', 'isAdmin'));
     }
 
     public function agendarStore(Request $request, $id)
@@ -331,7 +384,47 @@ class PartidasController extends Controller
 
         $partida->save();
 
-        flash('Jogadorremovido da partida com sucesso!')->success()->important();
+        flash('Jogador removido da partida com sucesso!')->success()->important();
         return redirect()->back();
+    }
+
+    public function trocarJogador($id, $jogador, Request $request)
+    {
+        $partida = Partida::findOrFail($id);
+
+        if($partida->jogador1_id == $jogador) {
+            $partida->jogador1_id = null;
+        }
+
+        if($partida->jogador2_id == $jogador) {
+            $partida->jogador2_id = null;
+        }
+
+        $partida->save();
+
+        $isAdmin = (boolean)$request->has('partida_admin');
+
+        flash('Jogador removido da partida com sucesso!')->success()->important();
+
+        return view('admin.partidas.trocar', compact('isAdmin', 'partida'));
+    }
+
+    public function trocarJogadorStore(Request $request, $id)
+    {
+        $partida = Partida::findOrFail($id);
+
+        $data = $request->request->all();
+
+        if($request->has('jogador1') && !empty($request->get('jogador1'))) {
+            $partida->jogador1_id = $request->get('jogador1');
+        }
+
+        if($request->has('jogador2') && !empty($request->get('jogador2'))) {
+            $partida->jogador2_id = $request->get('jogador2');
+        }
+
+        $partida->save();
+
+        return redirect()->route('partida.index');
     }
 }

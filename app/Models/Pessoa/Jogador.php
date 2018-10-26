@@ -39,6 +39,11 @@ class Jogador extends Model
     {
         return $this->hasMany(Mensalidade::class, 'jogador_id');
     }
+
+    public function semanas()
+    {
+        return $this->hasMany('App\Models\Semana', 'jogador_id');
+    }
 /*
     public function partidas()
     {

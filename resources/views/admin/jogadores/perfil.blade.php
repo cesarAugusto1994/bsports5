@@ -72,7 +72,14 @@
 
           <strong><i class="fa fa-map-marker margin-r-5"></i> Nascimento</strong>
 
-          <p class="text-muted">{{ $jogador->nascimento }}</p>
+          @php
+
+              $Born = $jogador->nascimento;
+              $Age = $Born->diff(\Carbon\Carbon::now())->format('%y Anos');
+
+          @endphp
+
+          <p class="text-muted">{{ $jogador->nascimento->format('d/m/Y') ?? '' }} ({{$Age}})</p>
 
 
         </div>
