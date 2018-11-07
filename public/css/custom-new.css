@@ -169,7 +169,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#249743', end
 	margin: 0px;
 }
 ul.acbar-right {
-	margin: 0px;
+	margin: 10px;
 	padding: 10px 0;
 	list-style: none;
 	text-align: right;
@@ -467,6 +467,7 @@ div#featured-slider.owl-theme .owl-nav [class*=owl-]:hover {
 .featured-news-block {
 	width: 100%;
 	float: left;
+	background-color: #f6f6f6;
 }
 .fnews-thumb {
 	width: 100%;
@@ -488,8 +489,11 @@ div#featured-slider.owl-theme .owl-nav [class*=owl-]:hover {
 	height: 80%;
 	content: "";
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0+0,0.65+100 */
+	/*
 	background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 100%); /* FF3.6-15 */
+	/*
 	background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 100%); /* Chrome10-25,Safari5.1-6 */
+	/*
 	background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000', GradientType=0 ); /* IE6-9 */
 	opacity: .5;

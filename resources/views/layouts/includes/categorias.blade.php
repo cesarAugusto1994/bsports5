@@ -10,8 +10,29 @@
 
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                       <ul class="nav navbar-nav">
-                        @foreach(\App\Models\MenuCategorias::orderBy('categoria_id')->get() as $item)
-                            <li class="" style="background-color:#1b4465;height:100%"><a class="link-categorias" href="?category={{ $item->categoria->id }}">{{ $item->categoria->nome }}</a></li>
+
+                        @php
+
+                          $itens = [];
+
+                          $categorias = \App\Models\MenuCategorias::orderBy('categoria_id')->get();
+                          $categoriasMenu = $categorias->sortBy('nome');
+
+                          #dd($categorias);
+
+                          foreach($categoriasMenu as $item) {
+                              $itens[$item->categoria->nome] = [
+                                  'id' => $item->categoria->id,
+                                  'nome' => $item->categoria->nome,
+                              ];
+                          }
+
+                          ksort($itens);
+
+                        @endphp
+
+                        @foreach($itens as $item)
+                            <li class="" style="background-color:#1b4465;height:100%"><a class="link-categorias" href="?category={{ $item['id'] }}">{{ $item['nome'] }}</a></li>
                         @endforeach
                       </ul>
                     </div>

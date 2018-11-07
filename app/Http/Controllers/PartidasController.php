@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Partida;
+use App\Models\{Partida,SolicitacaoPartida};
 use App\Models\Pessoa\Jogador;
 use App\Models\Torneio\Resultado;
 
@@ -427,4 +427,24 @@ class PartidasController extends Controller
 
         return redirect()->route('partida.index');
     }
+
+    public function formularioAgenda()
+    {
+        return view('pages.formulario');
+    }
+
+    public function formularioAgendaStore(Request $request)
+    {
+        $data = $request->request->all();
+
+        if($request->has('data')) {
+            $data['data'] = \DateTime::createFromFormat('Y-m-d', $data['data']);
+        }
+
+        SolicitacaoPartida::create($data);
+
+        flash('A sua solicitação foi enviada com sucesso!')->success()->important();
+        return redirect()->back();
+    }
+
 }

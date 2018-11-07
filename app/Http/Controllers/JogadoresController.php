@@ -128,17 +128,6 @@ class JogadoresController extends Controller
 
         $userRole = Role::where('name', '=', 'User')->first();
 
-        $user = new \App\User();
-        $user->name = $data['nome'];
-        $user->email = $data['email'];
-
-        if($request->has('password')) {
-            $user->password = bcrypt($data['password']);
-        }
-
-        $user->save();
-        $user->attachRole($userRole);
-
         $data['ativo'] = $request->has('ativo') ? true : false;
 
         $jogador = new Jogador();
@@ -171,6 +160,16 @@ class JogadoresController extends Controller
         $jogador->ativo = $data['ativo'];
         $jogador->save();
 
+        $user = new \App\User();
+        $user->jogador_id = $jogador->id;
+        $user->name = $data['nome'];
+        $user->email = $data['email'];
+        if($request->has('password')) {
+            $user->password = bcrypt($data['password']);
+        }
+        $user->save();
+        $user->attachRole($userRole);
+
         flash('Perfil Adicionado com sucesso.')->success()->important();
         return redirect()->route('player_profile', $jogador->uuid);
     }
@@ -179,21 +178,22 @@ class JogadoresController extends Controller
     {
         $data = $request->request->all();
 
-        $user = \Auth::user();
-        $user->name = $data['nome'];
-
-        if($request->has('password')) {
-            $user->password = bcrypt($data['password']);
-        }
-
-        $user->save();
-
-        $data['ativo'] = $request->has('ativo') ? true : false;
+        $data['ativo'] = $request->has('ativo');
 
         $jogador = Jogador::findOrFail($id);
         $jogador->nome = $data['nome'];
-        $jogador->email = $data['email'];
+
+        if($request->has('email')) {
+            $jogador->email = $data['email'];
+            $usuario = $jogador->usuario;
+            if($usuario) {
+                $usuario->email = $data['email'];
+                $usuario->save();
+            }
+        }
+
         $jogador->ativo = $data['ativo'];
+        $jogador->categoria_id = $data['categoria'];
 
         if($request->has('telefone')) {
            $jogador->telefone = $data['telefone'];
@@ -218,6 +218,15 @@ class JogadoresController extends Controller
         $jogador->lateralidade = $data['lateralidade'];
         $jogador->ativo = $data['ativo'];
         $jogador->save();
+
+        if($request->filled('password')) {
+          if($jogador->usuario) {
+             $user = $jogador->usuario;
+             $user->password = bcrypt($data['password']);
+             $user->name = $data['nome'];
+             $user->save();
+          }
+        }
 
         flash('Perfil Atualizado com sucesso.')->success()->important();
 

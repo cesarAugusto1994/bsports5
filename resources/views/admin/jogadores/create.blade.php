@@ -21,7 +21,7 @@
       <!-- /.box-header -->
       <div class="box-body">
 
-        <form class="form-horizontal" method="post" action="{{ route('players.store') }}">
+        <form class="form-horizontal" method="post" action="{{ route('players.store') }}" enctype="multipart/form-data">
           {{ csrf_field() }}
           <div class="box-body">
             <div class="form-group">

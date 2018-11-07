@@ -14,6 +14,13 @@
 
 Auth::routes();
 
+Route::group(['namespace' => 'Auth'],function(){
+    Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.reset');
+    Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+    Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset.token');
+    Route::post('password/reset', 'ResetPasswordController@reset');
+});
+
 Route::middleware('loadCache')->group(function() {
 
   Route::get('/home', 'HomeController@index')->name('home');
@@ -28,6 +35,9 @@ Route::middleware('loadCache')->group(function() {
 
   Route::get('/pagina/{slug}/{id}', 'PaginasController@show')->name('pagina');
   Route::get('/paginas', 'PaginasController@index')->name('paginas');
+
+  Route::get('/formulario/agendar', 'PartidasController@formularioAgenda')->name('formulario_agendar');
+  Route::post('/formulario/agendar', 'PartidasController@formularioAgendaStore')->name('formulario_agendar_store');
 
   Route::get('/resultados', 'ResultadosController@index')->name('resultados');
   Route::get('/calendario', 'CalendarioJogosController@index')->name('calendario');
@@ -95,6 +105,8 @@ Route::middleware('loadCache')->group(function() {
               Route::resource('banners', 'BannersController');
               Route::resource('eventos', 'EventoController');
               Route::resource('noticias', 'NoticiasController');
+
+              Route::resource('solicitacao', 'SolicitacaoPartidaController');
 
               Route::get('/partidas/{id}/placar', 'PartidasController@placar')->name('partida_placar');
               Route::get('/partidas/{id}/placar/edit', 'PartidasController@editarPlacar')->name('editar_partida_placar');

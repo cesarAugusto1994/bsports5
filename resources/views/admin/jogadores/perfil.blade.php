@@ -212,6 +212,21 @@
                 </div>
               </div>
 
+              @if(\Auth::user()->isAdmin())
+
+              <div class="form-group">
+                <label for="categoria" class="col-sm-2 control-label">Categoria</label>
+                <div class="col-sm-10">
+                  <select name="categoria" class="form-control" id="categoria" name="categoria" required>
+                      @foreach(\App\Models\Categoria::where('tipo', 'Simples')->orderBy('nome')->get() as $categoria)
+                          <option value="{{ $categoria->id }}" {{ $jogador->categoria_id == $categoria->id ? 'selected' : '' }}>{{ $categoria->nome }}</option>
+                      @endforeach
+                  </select>
+                </div>
+              </div>
+
+              @endif
+
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                   <div class="checkbox">
@@ -219,6 +234,13 @@
                       <input type="checkbox" value="1" {{ $jogador->ativo ? 'checked' : '' }} name="ativo"/> Ativo
                     </label>
                   </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="telefone" class="col-sm-2 control-label">Nova Senha</label>
+                <div class="col-sm-10">
+                  <input type="password" class="form-control" name="password" id="password" placeholder="Deixe em branco caso nãoqueira atualizar a senha.">
                 </div>
               </div>
 

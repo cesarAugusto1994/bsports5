@@ -1,10 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Configurações')
-
-@section('content_header')
-    <h1>Configurações</h1>
-@stop
+@section('title', 'Solicitação de Partidas')
 
 @section('content')
 
@@ -16,26 +12,28 @@
   <div class="col-md-12">
     <div class="box box-solid">
       <div class="box-header with-border">
-        <h3 class="box-title">Configurações</h3>
+        <h3 class="box-title">Solicitação de Partidas</h3>
       </div>
       <div class="box-body">
         <div class="table-responsive">
           <table class="table no-margin">
             <thead>
             <tr>
-              <th>Chave</th>
-              <th>Valor</th>
-              <th>Opções</th>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Telefone</th>
+              <th>Data</th>
+              <th>Horário</th>
             </tr>
             </thead>
             <tbody>
-              @foreach($configs as $config)
+              @foreach($solicitacoes as $solicitacao)
                 <tr>
-                  <td>{{ $config->key }}</td>
-                  <td>{{ $config->value }}</td>
-                  <td>
-                    <a href="{{ route('configs.edit', $config->id) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> </a>
-                  </td>
+                  <td>{{ $solicitacao->nome }}</td>
+                  <td>{{ $solicitacao->email }}</td>
+                  <td>{{ $solicitacao->telefone }}</td>
+                  <td>{{ $solicitacao->data }}</td>
+                  <td>{{ $solicitacao->horario }}</td>
                 </tr>
               @endforeach
 
@@ -44,7 +42,7 @@
         </div>
       </div>
       <div class="box-footer clearfix">
-        <span>{{ $configs->links() }}</span>
+        <span>{{ $solicitacoes->links() }}</span>
       </div>
     </div>
   </div>

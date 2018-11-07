@@ -16,7 +16,7 @@ return [
     'toggle_navigation'           => 'Toggle navigation',
     'login_message'               => 'Sign in to start your session',
     'register_message'            => 'Register a new membership',
-    'password_reset_message'      => 'Reset Password',
-    'reset_password'              => 'Reset Password',
+    'password_reset_message'      => 'Alterar Senha',
+    'reset_password'              => 'Alterar Senha',
     'send_password_reset_link'    => 'Send Password Reset Link',
 ];

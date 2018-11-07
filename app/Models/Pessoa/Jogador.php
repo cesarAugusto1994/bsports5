@@ -54,4 +54,9 @@ class Jogador extends Model
     {
         return $this->belongsTo(Categoria::class, 'categoria_id');
     }
+
+    public function usuario()
+    {
+        return $this->hasOne('App\User', 'jogador_id');
+    }
 }

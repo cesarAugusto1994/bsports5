@@ -172,32 +172,9 @@
     <!--Wrapper Start-->
     <div class="wrapper-full color-option-2">
        <!--Header Start-->
-        <header class="header color-2" id="header">
-            <div class="logo-nav">
-                <div class="container">
-                    <div class="row">
-                        <!--Logo Start-->
-                        <div class="col-md-3 nop">
-                            <div class="logo">
-                                <a href="{{ route('home') }}"> <!--<img src="./images/logo.png" alt="" />--> <h2>BSPORTS</h2></a>
-                            </div>
-                        </div>
-                        <!--Logo End-->
 
-                        <!--Nav Start-->
-                        <div class="col-md-9">
                             @include('layouts.includes.menu')
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            @include('partials.second-menu')
-
-            @if(\App\Helpers\Helper::getConfig('categorias-home'))
-                @yield('categorias')
-            @endif
-        </header>
+                        
 
 				@yield('content')
 
@@ -216,6 +193,10 @@
     <script src="{{ asset('js/custom.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.4/holder.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+
+    <script>
+        $('.telefone').mask('(00) 00000-0000');
+    </script>
 
 
     @yield('js')

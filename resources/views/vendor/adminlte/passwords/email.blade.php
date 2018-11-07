@@ -38,8 +38,7 @@
                 >{{ trans('adminlte::adminlte.send_password_reset_link') }}</button>
             </form>
         </div>
-        <!-- /.login-box-body -->
-    </div><!-- /.login-box -->
+    </div>
 @stop
 
 @section('adminlte_js')

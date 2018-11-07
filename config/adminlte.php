@@ -165,6 +165,10 @@ return [
             'can'         => 'manage-quadras',
         ],
         [
+            'text'        => 'Solicitação Partidas',
+            'url'         => 'admin/solicitacao',
+        ],
+        [
             'text'        => 'Banners',
             'url'         => 'admin/banners',
             'can'         => 'manage-banners',

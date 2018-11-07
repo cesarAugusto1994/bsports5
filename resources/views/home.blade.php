@@ -7,7 +7,7 @@
 @section('content')
 
     <!--Featured News Area Start-->
-    <section class="news-section-wrapper">
+    <section class="news-section-wrapper" style="background: #f6f6f6;">
         <div class="featured-news-block">
             <div class="container">
                 <div class="row">
@@ -103,15 +103,15 @@
                     </div>
 
                     <div class="col-md-3 col-sm-6 p3l">
+                      <a href="{{ \App\Helpers\Helper::getConfig('empresa-banner-principal-link') }}">
                         <div class="fnews-thumb">
                             <div class="fnews-txt"> <span class="gtag c5"></span>
-                                <h3> <a href="{{ \App\Helpers\Helper::getConfig('empresa-banner-principal-link') }}">{{ \App\Helpers\Helper::getConfig('empresa-banner-principal-texto') }}</a> </h3>
                             </div>
                             <!--
                             <img src="{{ \App\Helpers\Helper::getConfig('empresa-banner-principal-imagem') }}" alt="" />
                             -->
                             <img src="{{ asset('images/banner-bsports.jpeg') }}" alt="" />
-                        </div>
+                        </div></a>
                     </div>
                 </div>
             </div>
@@ -123,69 +123,110 @@
     <div class="news-section-wrapper">
         <div class="tab-news">
             <div class="container">
+
+                @php
+
+                  $itens = [];
+
+                  $categorias = \App\Models\MenuCategorias::orderBy('categoria_id')->get();
+                  $categoriasMenu = $categorias->sortBy('nome');
+
+                  #dd($categorias);
+
+                  foreach($categoriasMenu as $item) {
+                      $itens[$item->categoria->nome] = [
+                          'id' => $item->categoria->id,
+                          'nome' => $item->categoria->nome,
+                      ];
+                  }
+
+                  ksort($itens);
+
+                @endphp
+
                 <div class="row proximas-partidas">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <h2 class="section-title"> Próximas Partidas </h2>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-9">
                         <ul class="nav" role="tablist">
-                          @foreach(\App\Models\MenuCategorias::all() as $key => $item)
-                            <li role="presentation" class="{{ $loop->index == 0 ? 'active' : '' }}"><a {{ $loop->index == 0 ? 'style=color:white' : '' }}  class="tab-proximas-partidas" href="#news-tab-{{ $item->categoria->id }}" aria-controls="news-tab1" role="tab" data-toggle="tab">{{ $item->categoria->nome }}</a></li>
+                          @foreach($itens as $key => $item) {{$item['id']}}
+                            <li role="presentation" class="{{ $loop->index == 0 ? 'active' : '' }}">
+                              <a {{ $loop->index == 0 ? 'style=color:white' : '' }}  class="tab-proximas-partidas" href="#news-tab-{{ $loop->index }}" aria-controls="news-tab-{{ $loop->index }}" role="tab" data-toggle="tab">{{ $item['nome'] }}</a></li>
                           @endforeach
                         </ul>
                     </div>
                 </div>
                 <div class="row">
                     <div class="tab-content gallery">
-                      @foreach(\App\Models\MenuCategorias::all() as $key => $item)
-                        <div role="tabpanel" class="tab-pane {{ $loop->index == 0 ? 'active' : '' }}" id="news-tab-{{ $item->categoria->id }}">
+                      @foreach($itens as $key => $item)
+                        <div role="tabpanel" class="tab-pane {{ $loop->index == 0 ? 'active' : '' }}" id="news-tab-{{ $loop->index }}">
 
                           <div class="col-md-12">
                               <div id="ls-slider" class="owl-carousel owl-theme">
 
                                 @php
 
-                                    $categoria = $item->id;
+                                    $categoria = $item['id'];
 
-                                    $itens = [];
+                                    $categoria = \App\Models\Categoria::findOrFail($categoria);
 
-                                    $jogadores = \App\Models\Pessoa\Jogador::where('categoria_id', $categoria)->get();
+                                    $sql = '
+                                        select p.id
+                                        from partidas p
+                                        left join jogadores j1 on (j1.id = p.jogador1_id)
+                                        left join jogadores j2 on (j1.id = p.jogador2_id)
+                                        where p.inicio > now()
+                                        and (j1.categoria_id = '.$categoria->id.'
+                                        or j2.categoria_id = '.$categoria->id.')
+                                        ;
+                                    ';
 
-                                    $itens = $jogadores->map(function($jogador) {
-                                        return $jogador->id;
-                                    });
+                                    $resultado = \DB::select($sql);
 
-                                    $partidas = \App\Models\Partida::whereIn('jogador1_id', $itens)
-                                    ->orWhereIn('jogador2_id', $itens)
-                                    ->where('inicio', '>', now())
-                                    ->orderByDesc('id')
-                                    ->get();
+                                    $partidas = collect();
+
+                                    foreach($resultado as $result) {
+                                      $partida = \App\Models\Partida::findOrFail($result->id);
+                                      $partidas->push($partida);
+                                    }
 
                                 @endphp
 
                                 @foreach($partidas as $partida)
 
-                                  <!--LS Box Start-->
                                   <div class="item">
-
                                     <div class="match-box">
                                         <ul class="match-fixture-inner">
-                                            <li class="team"> <img src="{{ route('image', ['link'=>$partida->jogador1->avatar]) }}" alt="" />
-                                              <strong><a href="{{ route('jogador', $partida->jogador1->uuid) }}">
-                                                {{ substr($partida->jogador1->nome, 0, 12) }}</a></strong>
+
+                                            @php
+
+                                              $j1_avatar = $j2_avatar = 'avatar.png';
+                                              $j1_nome = $j2_nome = 'A definir';
+                                              $j1_link = $j2_link = '#';
+
+                                              if($partida->jogador1) {
+                                                  $j1_nome = $partida->jogador1->nome;
+                                                  $j1_link = route('jogador', $partida->jogador1->uuid);
+                                              }
+
+                                              if($partida->jogador2) {
+                                                  $j2_nome = $partida->jogador2->nome;
+                                                  $j2_link = route('jogador', $partida->jogador2->uuid);
+                                              }
+
+                                            @endphp
+
+                                            <li class="team"> <img src="{{ route('image', ['link'=>$j1_avatar]) }}" alt="" />
+                                              <strong><a href="{{ $j1_link }}">
+                                                {{ substr($j1_nome, 0, 12) }}</a></strong>
                                             </li>
                                             <li class="time-batch"><strong class="m-date">{{  $partida->inicio->format('d.m.Y') }}</strong>
                                               <strong class="m-time">{{  $partida->inicio->format('H:i') }}</strong> <strong class="m-vs">VS</strong></li>
-                                            <li class="team"><img src="{{ route('image', ['link'=>'avatar.png']) }}" alt="" />
+                                            <li class="team"><img src="{{ route('image', ['link'=>$j2_avatar]) }}" alt="" />
                                               <strong>
-                                              @if($partida->jogador2)
-                                              <a href="{{ route('jogador', $partida->jogador2->uuid) }}">
-                                                {{ substr($partida->jogador2->nome, 0, 12) }}</a>
-                                              @else
-
-                                                A definir
-
-                                              @endif
+                                              <a href="{{ $j2_link }}">
+                                                {{ substr($j2_nome, 0, 12) }}</a>
                                               </strong>
                                             </li>
                                         </ul>
