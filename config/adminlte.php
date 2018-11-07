@@ -167,6 +167,7 @@ return [
         [
             'text'        => 'Solicitação Partidas',
             'url'         => 'admin/solicitacao',
+            'can'         => 'manage-solicitacao-partidas'
         ],
         [
             'text'        => 'Banners',

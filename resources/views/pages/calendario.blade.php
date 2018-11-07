@@ -53,11 +53,11 @@
         <div class="container">
             <div class="row">
 
-              <div class="col-md-3">
+              <div class="col-md-{{ \Request::has('date') ? '3' : '12' }}">
                   <div class="calendar"></div>
               </div>
 
-              <div class="col-md-9 table-responsive">
+              <div class="col-md-9 table-responsive" {{ !\Request::has('date') ? 'style=display:none' : "" }}>
                 <div class="tickets-sort"> <a href="#" class="pull-left"><i class="fa fa-map-marker"></i><span> Todas as Partidas </span> <i class="fa fa-angle-right"></i></a>
                   <a href="#" class="pull-right"><i class="fa fa-calendar"></i><span>Calendario</span><i class="fa fa-angle-right"></i></a>
                 </div>
@@ -77,7 +77,6 @@
                           </tr>
                       </thead>
                       <tbody>
-
                         @foreach($partidas as $key => $partida)
                             <tr>
                                 <td>{{ $key }}</td>

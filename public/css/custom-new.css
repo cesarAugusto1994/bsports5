@@ -2833,15 +2833,15 @@ ul.search-form input.submit {
 	border-color: rgba( 255,255,255,0.2);
 	font-family: 'Fira Sans Condensed', serif;
 	text-transform: uppercase;
-	font-weight: 700;
-	font-size: 14px;
+	font-weight: 500;
+	font-size: 12px;
 	color: #fff;
-	line-height: 50px;
-	padding: 0 20px;
+	line-height: 30px;
+	padding: 0 5px;
 	text-align: center;
 }
 .points-listing th:nth-child(2) {
-	text-align: left;
+	text-align: center;
 }
 .points-listing td:nth-child(2) {
 	text-align: left;
