@@ -218,7 +218,7 @@
                 <label for="categoria" class="col-sm-2 control-label">Categoria</label>
                 <div class="col-sm-10">
                   <select name="categoria" class="form-control" id="categoria" name="categoria" required>
-                      @foreach(\App\Models\Categoria::where('tipo', 'Simples')->orderBy('nome')->get() as $categoria)
+                      @foreach($categorias as $categoria)
                           <option value="{{ $categoria->id }}" {{ $jogador->categoria_id == $categoria->id ? 'selected' : '' }}>{{ $categoria->nome }}</option>
                       @endforeach
                   </select>

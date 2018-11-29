@@ -44,12 +44,7 @@ class Jogador extends Model
     {
         return $this->hasMany('App\Models\Semana', 'jogador_id');
     }
-/*
-    public function partidas()
-    {
-        return $this->hasManyThrough(Resultado::class, Partida::class, 'jogador_id', 'partida_id', 'id', 'id');
-    }
-*/
+
     public function categoria()
     {
         return $this->belongsTo(Categoria::class, 'categoria_id');

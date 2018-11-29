@@ -126,21 +126,11 @@
 
                 @php
 
-                  $itens = [];
+                  $categorias = \App\Helpers\Helper::categorias();
 
-                  $categorias = \App\Models\MenuCategorias::orderBy('categoria_id')->get();
-                  $categoriasMenu = $categorias->sortBy('nome');
-
-                  #dd($categorias);
-
-                  foreach($categoriasMenu as $item) {
-                      $itens[$item->categoria->nome] = [
-                          'id' => $item->categoria->id,
-                          'nome' => $item->categoria->nome,
-                      ];
-                  }
-
-                  ksort($itens);
+                  $categorias = $categorias->filter(function($categoria) {
+                      return $categoria->habilitar_menu == true;
+                  });
 
                 @endphp
 
@@ -150,26 +140,22 @@
                     </div>
                     <div class="col-md-9">
                         <ul class="nav" role="tablist">
-                          @foreach($itens as $key => $item) {{$item['id']}}
+                          @foreach($categorias as $key => $categoria)
                             <li role="presentation" class="{{ $loop->index == 0 ? 'active' : '' }}">
-                              <a {{ $loop->index == 0 ? 'style=color:white' : '' }}  class="tab-proximas-partidas" href="#news-tab-{{ $loop->index }}" aria-controls="news-tab-{{ $loop->index }}" role="tab" data-toggle="tab">{{ $item['nome'] }}</a></li>
+                              <a {{ $loop->index == 0 ? 'style=color:white' : '' }}  class="tab-proximas-partidas" href="#news-tab-{{ $loop->index }}" aria-controls="news-tab-{{ $loop->index }}" role="tab" data-toggle="tab">{{ $categoria->nome }}</a></li>
                           @endforeach
                         </ul>
                     </div>
                 </div>
                 <div class="row">
                     <div class="tab-content gallery">
-                      @foreach($itens as $key => $item)
+                      @foreach($categorias as $key => $categoria)
                         <div role="tabpanel" class="tab-pane {{ $loop->index == 0 ? 'active' : '' }}" id="news-tab-{{ $loop->index }}">
 
                           <div class="col-md-12">
                               <div id="ls-slider" class="owl-carousel owl-theme">
 
                                 @php
-
-                                    $categoria = $item['id'];
-
-                                    $categoria = \App\Models\Categoria::findOrFail($categoria);
 
                                     $sql = '
                                         select p.id

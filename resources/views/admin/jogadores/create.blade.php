@@ -55,7 +55,7 @@
               <label for="categoria" class="col-sm-2 control-label">Categoria</label>
               <div class="col-sm-10">
                 <select name="categoria" class="form-control" id="categoria" name="categoria" required>
-                    @foreach(\App\Models\Categoria::where('tipo', 'Simples')->orderBy('tipo')->get() as $categoria)
+                    @foreach($categorias as $categoria)
                         <option value="{{ $categoria->id }}">{{ $categoria->nome }}</option>
                     @endforeach
                 </select>
@@ -116,8 +116,7 @@
           </div>
           <!-- /.box-body -->
           <div class="box-footer">
-            <button type="submit" class="btn btn-default">Cancelar</button>
-            <button type="submit" class="btn btn-info pull-right">Salvar</button>
+            <button type="submit" class="btn btn-success">Salvar</button>
           </div>
           <!-- /.box-footer -->
         </form>

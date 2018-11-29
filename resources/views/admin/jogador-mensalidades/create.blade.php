@@ -43,7 +43,7 @@
 
                         <div class="form-group">
                             <label for="email">Valor Mensalidade</label>
-                            <input type="text" class="form-control money" id="valor" name="valor" value="150.00" placeholder="R$ Valor" required>
+                            <input type="text" class="form-control money" id="valor" name="valor" value="{{\App\Helpers\Helper::getConfig('valor-mensalidade')}}" placeholder="R$ Valor" required>
                         </div>
 
                         <button type="submit" class="btn btn-primary save">

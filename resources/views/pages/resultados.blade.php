@@ -74,7 +74,7 @@
                                         <div class="row">
                                           <div class="col-md-6">
                                             @if($partida->jogador1)
-                                                <a class="jogador1" href="{{route('jogador', $partida->jogador1->uuid)}}"><p>{{ $partida->jogador1->nome }}</p></a>
+                                                <a class="jogador1" href="{{route('jogador', $partida->jogador1->uuid)}}"><p>{{ substr($partida->jogador1->nome, 0, 15) }}</p></a>
                                             @endif
                                           </div>
                                           <div class="col-md-6">
@@ -139,48 +139,6 @@
                     </div>
                 </div>
 
-                <!--<div class="col-md-3">
-                    <div class="sidebar-search-widget">
-
-                        <div class="side-title">
-                            <h3>Pesquisar</h3>
-                        </div>
-                        <form method="get" action="?">
-                        <ul class="search-form">
-                            <li>
-                                <div class="input-group">
-                                    <select name="categoria">
-                                        <option value="">Categoria</option>
-                                        @foreach(\App\Models\Categoria::where('tipo', 'Simples')->orderBy('tipo')->get() as $categoria)
-                                            <option value="{{ $categoria->id }}">{{ $categoria->nome }}</option>
-                                        @endforeach
-                                    </select>
-                                    <i class="fa fa-angle-down"></i>
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="input-group">
-                                  <input class="form-control" type="text" name="jogador" placeholder="Jogador"/>
-                                  <i class="fa fa-angle-down"></i>
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="input-group">
-                                    <input class="form-control date" type="text" name="data" placeholder="Data"/>
-                                    <i class="fa fa-angle-down"></i> </div>
-                            </li>
-
-                            <li>
-                                <input type="submit" class="submit" value="Pesquisar">
-                            </li>
-
-                        </ul>
-                        </form>
-                    </div>
-                </div>
-              -->
             </div>
         </div>
     </div>

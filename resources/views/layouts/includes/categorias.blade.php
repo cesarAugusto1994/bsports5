@@ -13,26 +13,12 @@
 
                         @php
 
-                          $itens = [];
-
-                          $categorias = \App\Models\MenuCategorias::orderBy('categoria_id')->get();
-                          $categoriasMenu = $categorias->sortBy('nome');
-
-                          #dd($categorias);
-
-                          foreach($categoriasMenu as $item) {
-                              $itens[$item->categoria->nome] = [
-                                  'id' => $item->categoria->id,
-                                  'nome' => $item->categoria->nome,
-                              ];
-                          }
-
-                          ksort($itens);
+                          $categorias = \App\Helpers\Helper::categorias();
 
                         @endphp
 
-                        @foreach($itens as $item)
-                            <li class="" style="background-color:#1b4465;height:100%"><a class="link-categorias" href="?category={{ $item['id'] }}">{{ $item['nome'] }}</a></li>
+                        @foreach($categorias as $categoria)
+                            <li class="" style="background-color:#1b4465;height:100%"><a class="link-categorias" href="?category={{ $categoria->id }}">{{ $categoria->nome }}</a></li>
                         @endforeach
                       </ul>
                     </div>

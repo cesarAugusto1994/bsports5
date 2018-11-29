@@ -2,9 +2,6 @@
 
 @section('title', 'Configurações')
 
-@section('content_header')
-    <h1>Editar Configuração</h1>
-@stop
 
 @section('content')
 
@@ -14,15 +11,9 @@
   </div>
 
   <div class="col-md-12">
-    <div class="box box-info">
+    <div class="box box-solid">
       <div class="box-header with-border">
         <h3 class="box-title">Editar Configuração</h3>
-
-        <div class="box-tools pull-right">
-          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-          </button>
-          <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-        </div>
       </div>
 
       <form class="form-horizontal" method="post" action="{{ route('configs.update', $config->id) }}">
@@ -33,15 +24,21 @@
           {{ csrf_field() }}
 
           <div class="form-group">
-            <label for="key" class="col-sm-2 control-label">Chave</label>
+            <label for="key" class="col-sm-2 control-label">Nome</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" value="{{ $config->key }}" name="key" id="key" placeholder="Chave">
+              <input type="text" disabled class="form-control" value="{{ $config->nome }}" name="nome" id="nome" placeholder="Nome">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="key" class="col-sm-2 control-label">Descrição</label>
+            <div class="col-sm-10">
+              <input type="text" disabled class="form-control" value="{{ $config->descricao }}" name="descricao" id="descricao" placeholder="Descrição">
             </div>
           </div>
           <div class="form-group">
             <label for="partidas" class="col-sm-2 control-label">Valor</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="valor" name="value" value="{{ $config->value }}" placeholder="Valor" required>
+              <input type="text" class="form-control" id="valor" name="valor" value="{{ $config->valor }}" placeholder="Valor">
             </div>
           </div>
 

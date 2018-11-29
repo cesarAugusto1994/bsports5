@@ -123,13 +123,16 @@ Route::middleware('loadCache')->group(function() {
 
               Route::post('/joagdores/inativar/em-massa', 'JogadoresController@inativarEmMassa')->name('jogadores_inativar_em_massa');
 
+              Route::get('/joagdores/sem-partida', 'JogadoresController@semPartida')->name('jogadores_sem_partidas_marcadas');
+
+              Route::post('/categorias/{id}/menu', 'CategoriasController@toMenu')->name('categoria_to_menu');
+
           });
       });
 
   //  });
 
   });
-
 
   Route::get('/pagseguro/redirect', 'CheckoutController@redirect')->name('pagseguro.redirect');
 

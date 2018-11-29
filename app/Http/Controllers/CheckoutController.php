@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Jogador\Mensalidade;
 use App\User;
 use laravel\pagseguro\Platform\Laravel5\PagSeguro;
+use App\Models\{Venda, VendaPagSeguro};
 
 class CheckoutController extends Controller
 {
@@ -32,7 +33,7 @@ class CheckoutController extends Controller
         $data = $request->request->all();
 
         $mensalidade = Mensalidade::uuid($data['mensalidade']);
-        $pessoa = $mensalidade->jogador->pessoa;
+        $pessoa = $mensalidade->jogador;
 
         if($request->has('telefone')) {
            $pessoa->telefone = $data['telefone'];
@@ -125,7 +126,7 @@ class CheckoutController extends Controller
         $information = $checkout->send($credentials);
 
         if(!$information) {
-          return redirect()->route('planos')->withErrors(['Ops, Ocorreu um erro ao iniciar transação.']);
+          return redirect()->back()->withErrors(['Ops, Ocorreu um erro ao iniciar transação.']);
         }
 
         return redirect($information->getLink());
@@ -173,6 +174,7 @@ class CheckoutController extends Controller
 
         $pessoa->usuario->notify(new \App\Notifications\CompraPlano($venda));
 
+/*
         if((int)$information->getStatus()->getCode() == 3) {
 
             $plano = Planos::findOrFail((int)$information->getItems()[0]->getId());
@@ -198,6 +200,7 @@ class CheckoutController extends Controller
 
             $pessoa->usuario->notify(new \App\Notifications\ConfirmacaoVendaPlano($venda));
         }
+        */
 
     }
 

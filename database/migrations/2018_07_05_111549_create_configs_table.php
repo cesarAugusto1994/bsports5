@@ -15,8 +15,10 @@ class CreateConfigsTable extends Migration
     {
         Schema::create('configs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('key');
-            $table->string('value');
+            $table->string('nome');
+            $table->string('slug');
+            $table->string('descricao');
+            $table->string('valor')->nullable();
             $table->boolean('ativo')->default(true);
             $table->timestamps();
         });

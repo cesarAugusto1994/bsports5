@@ -169,21 +169,16 @@
 
 <body>
 
-    <!--Wrapper Start-->
     <div class="wrapper-full color-option-2">
-       <!--Header Start-->
 
-                            @include('layouts.includes.menu')
-                        
+        @include('layouts.includes.menu')
 
 				@yield('content')
 
         @include('partials.footer')
 
     </div>
-    <!--Wrapper Div End-->
 
-    <!--Js Files Start-->
     <script src="{{ asset('js/jquery.min.js') }}"></script>
     <script src="{{ asset('js/jquery-migrate-1.4.1.min.js') }}"></script>
     <script src="{{ asset('js/jquery.prettyPhoto.js') }}"></script>

@@ -17,8 +17,8 @@
       </div>
       <div class="box-body">
 
-        <a href="{{ url('admin/mensalidades/create') }}" class="btn btn-sm btn-info btn-flat">Adicionar Mensalidade</a>
-        <a href="{{ route('mensalidade_create_from_categories') }}" class="btn btn-sm btn-danger btn-flat">Adicionar Mensalidade Por categoria</a>
+        <a href="{{ url('admin/mensalidades/create') }}" class="btn btn-success">Adicionar Mensalidade</a>
+        <a href="{{ route('mensalidade_create_from_categories') }}" class="btn btn-danger">Adicionar Mensalidade Por categoria</a>
 
       </div>
     </div>
@@ -54,7 +54,7 @@
                       <td>
                           <p class="name">
                               <a href="{{ route('player_profile', $mensalidade->jogador->uuid) }}">
-                                 {{ $mensalidade->jogador->pessoa->nome }}
+                                 {{ $mensalidade->jogador->nome }}
                               </a>
                           </p>
                       </td>
@@ -90,10 +90,6 @@
           </table>
           <div class="text-center">{{ $mensalidades->links() }}</div>
         </div>
-      </div>
-      <div class="box-footer clearfix">
-        <a href="{{ url('admin/mensalidades/create') }}" class="btn btn-sm btn-info btn-flat">Adicionar Mensalidade</a>
-        <a href="{{ route('mensalidade_create_from_categories') }}" class="btn btn-sm btn-danger btn-flat">Adicionar Mensalidade Por categoria</a>
       </div>
     </div>
   </div>

@@ -74,8 +74,8 @@
                           <li>
                               <div class="input-group">
                                 <select name="category">
-                                    <option value="">Categoria</option>
-                                    @foreach(\App\Models\Categoria::where('tipo', 'Simples')->orderBy('tipo')->get() as $categoria)
+                                    <option value="">Selecione</option>
+                                    @foreach($categorias as $categoria)
                                         <option value="{{ $categoria->id }}">{{ $categoria->nome }}</option>
                                     @endforeach
                                 </select>
@@ -102,18 +102,19 @@
                       <div class="row">
                         @foreach($ranking as $posicao)
                           <!--Team Box Start-->
+                          <a style="color:#D5E904" href="{{route('jogador', $posicao['uuid'])}}">
                           <div class="col-md-4">
                               <div class="team-box">
                                 <div class="player-number">#{{ $posicao['posicao'] }}</div>
-                                <img width="128" src="{{ route('image', ['link'=>$posicao['avatar']]) }}" alt="" />
+                                <img width="128" height="128" src="{{ route('image', ['link'=>$posicao['avatar']]) }}" alt="" />
                                 <div class="player-info">
                                   {{ $posicao['categoria_nome'] }}
                                   <br>
-                                  <strong class="name"><a  style="color:#D5E904" href="{{route('jogador', $posicao['uuid'])}}">{{ $posicao['primeiro_nome'] }}</a></strong>
+                                  <strong class="name"><a style="color:#D5E904" href="{{route('jogador', $posicao['uuid'])}}">{{ $posicao['primeiro_nome'] }}</a></strong>
                                   <br> {{ $posicao['pontos'] }}
                                 </div>
                               </div>
-                          </div>
+                          </div></a>
                           <!--Team Box End-->
                         @endforeach
                       </div>

@@ -40,7 +40,7 @@
                       <label for="categoria">Quadra</label>
                       <select class="form-control select2" name="quadra" id="quadra">
                         <option value=""></option>
-                        @foreach(\App\Models\Quadras::all() as $quadra)
+                        @foreach($quadras as $quadra)
                             <option value="{{ $quadra->id }}">{{ $quadra->nome }}</option>
                         @endforeach
                       </select>
@@ -52,7 +52,7 @@
                       <label for="categoria">Categoria</label>
                       <select name="categoria" class="form-control" id="categoria">
                         <option value=""></option>
-                          @foreach(\App\Models\Categoria::where('tipo', 'Simples')->orderBy('nome')->get() as $categoria)
+                          @foreach($categorias as $categoria)
                               <option value="{{ $categoria->id }}">{{ $categoria->nome }}</option>
                           @endforeach
                       </select>
@@ -104,7 +104,7 @@
       </div>
       <div class="box-body">
         <div class="table-responsive">
-          <table class="table no-margin">
+          <table class="table no-margin table-bordered table-hover">
             <thead>
             <tr>
               <th>ID</th>

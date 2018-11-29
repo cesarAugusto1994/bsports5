@@ -62,7 +62,7 @@
                   </div>
                   <div class="box-body">
                     <div class="row">
-                        @foreach(\App\Models\Quadras::where('ativo', true)->get() as $quadra)
+                        @foreach($quadras as $quadra)
                       <div class="col-sm-4 col-md-4">
                         <p class="text-center">{{ $quadra->nome }}</p>
                         <div class="color-palette-set">
@@ -126,7 +126,7 @@
                                 <label>Quadra</label>
                                 <div class="input-group col-md-12 col-xs-12 col-sm-12">
                                     <select class="form-control select2" multiple name="quadra[]" id="quadra">
-                                      @foreach(\App\Models\Quadras::all() as $quadra)
+                                      @foreach($quadras as $quadra)
                                           <option value="{{ $quadra->id }}">{{ $quadra->nome }}</option>
                                       @endforeach
                                     </select>
@@ -139,7 +139,7 @@
                                 <label>Torneio</label>
                                 <div class="input-group col-md-12 col-xs-12 col-sm-12">
                                     <select class="form-control" name="torneio" id="torneio">
-                                      @foreach(\App\Models\Torneio::all() as $quadra)
+                                      @foreach($torneios as $quadra)
                                           <option value="{{ $quadra->id }}" {{ $loop->last ? 'selected' : '' }}>{{ $quadra->nome }}</option>
                                       @endforeach
                                     </select>
@@ -182,7 +182,7 @@
 
   <script>
 
-  $('.date_time').mask('00/00/0000 00:00:00', {placeholder: "__/__/____ __:__"});
+  $('.date_time').mask('00/00/0000 00:00', {placeholder: "__/__/____ __:__"});
 
   $('.select2').select2();
 

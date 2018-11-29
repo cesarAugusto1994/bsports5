@@ -20,7 +20,7 @@
               <div class="box-body">
                 <div class="row">
 
-                  <div class="col-md-2">
+                  <div class="col-md-1">
                     <div class="form-group">
                       <label for="id">Codigo</label>
                       <input type="text" class="form-control" id="id" name="id">
@@ -46,7 +46,7 @@
                       <label for="categoria">Categoria</label>
                       <select name="categoria" class="form-control" id="categoria">
                         <option value=""></option>
-                          @foreach(\App\Models\Categoria::where('tipo', 'Simples')->orderBy('nome')->get() as $categoria)
+                          @foreach($categorias as $categoria)
                               <option value="{{ $categoria->id }}">{{ $categoria->nome }}</option>
                           @endforeach
                       </select>
@@ -65,11 +65,11 @@
                       </select>
                     </div>
                   </div>
-
                 </div>
 
                 <button type="submit" class="btn btn-success">Buscar</button>
                 <a href="{{ route('players.create') }}" class="btn btn-primary">Novo Jogador</a>
+                <a href="{{ route('jogadores_sem_partidas_marcadas') }}" class="btn btn-warning">Sem partida marcada</a>
               </div>
           </form>
 

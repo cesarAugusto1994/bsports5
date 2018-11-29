@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\{Categoria, MenuCategorias};
+use App\Helpers\Helper;
 
 class CategoriasController extends Controller
 {
@@ -14,25 +15,27 @@ class CategoriasController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->has('adicionar-menu')) {
+        $categorias = Categoria::all();
+        return view('admin.categoria.index', compact('categorias'));
+    }
 
-            $id = $request->get('adicionar-menu');
+    public function toMenu($id)
+    {
+        $categoria = Categoria::findOrFail($id);
 
-            $menuCategoria = MenuCategorias::where('categoria_id', $id)->get();
-
-            if($menuCategoria->isEmpty()) {
-                $menu = new MenuCategorias();
-                $menu->categoria_id = $id;
-                $menu->save();
-            } else {
-              $menuCategoria->first()->delete();
-            }
-
+        if(!$categoria->habilitar_menu) {
+            $categoria->habilitar_menu = true;
+        } else {
+            $categoria->habilitar_menu = false;
         }
 
-        $categorias = Categoria::orderBy('tipo')->paginate(20);
+        $categoria->save();
 
-        return view('admin.categoria.index', compact('categorias'));
+        Helper::drop('categorias');
+
+        flash('Categoria atualizada com sucesso.')->success()->important();
+
+        return redirect()->route('categorias.index');
     }
 
     /**
@@ -55,6 +58,8 @@ class CategoriasController extends Controller
     {
         $data = $request->request->all();
         Categoria::create($data);
+
+        Helper::drop('categorias');
 
         flash('Categoria adicionada com sucesso.')->success()->important();
 
@@ -99,6 +104,8 @@ class CategoriasController extends Controller
         $categoria = Categoria::findOrFail($id);
         $categoria->update($data);
 
+        Helper::drop('categorias');
+
         flash('Categoria atualizada com sucesso.')->success()->important();
 
         return redirect()->route('categorias.index');
@@ -120,6 +127,8 @@ class CategoriasController extends Controller
         }
 
         $categoria->delete();
+
+        Helper::drop('categorias');
 
         flash('Categoria removida com sucesso.')->success()->important();
         return redirect()->route('categorias.index');

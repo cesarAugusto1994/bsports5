@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Config;
+use App\Helpers\Helper;
 
 class ConfigsController extends Controller
 {
@@ -40,6 +41,12 @@ class ConfigsController extends Controller
         $data = $request->request->all();
 
         Config::create($data);
+
+        $configs = Config::all();
+
+        foreach ($configs as $key => $config) {
+            Helper::drop($config->slug);
+        }
 
         flash('Configuração adicionada com sucesso.')->success()->important();
 
@@ -81,8 +88,18 @@ class ConfigsController extends Controller
     {
         $data = $request->request->all();
 
+        if(!$request->filled('valor')) {
+          $data['valor'] = '';
+        }
+
         $config = Config::findOrFail($id);
         $config->update($data);
+
+        $configs = Config::all();
+
+        foreach ($configs as $key => $config) {
+            Helper::drop($config->slug);
+        }
 
         flash('Configuração atualizada com sucesso.')->success()->important();
 
@@ -99,6 +116,12 @@ class ConfigsController extends Controller
     {
         $config = Config::findOrFail($id);
         $config->delete();
+
+        $configs = Config::all();
+
+        foreach ($configs as $key => $config) {
+            Helper::drop($config->slug);
+        }
 
         flash('Configuração removida com sucesso.')->success()->important();
         return redirect()->route('configs.index');

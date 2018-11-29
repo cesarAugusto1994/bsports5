@@ -8,6 +8,7 @@ use App\Models\Pessoa\{Jogador, Telefone};
 use App\Models\Torneio\Resultado;
 use Illuminate\Pagination\{Paginator, LengthAwarePaginator};
 use Illuminate\Support\Collection;
+use App\Helpers\Helper;
 use App\{User, Role};
 
 class HomeController extends Controller
@@ -20,16 +21,16 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         if(Jogador::count() == 0) {
-            $this->importJogadores();
+            //$this->importJogadores();
         }
 
         if(Partida::count() == 0) {
-            $this->importPartidas();
-            $this->importResultados();
+            //$this->importPartidas();
+            //$this->importResultados();
         }
 
         if(Semana::count() == 0) {
-            $this->importSemanas();
+            //$this->importSemanas();
         }
 
         if(Pagina::count() == 0) {
@@ -79,12 +80,6 @@ class HomeController extends Controller
             "url" => $item->url
           ];
         }
-
-        $categorias = Categoria::whereHas('jogadores', function ($query) {
-            $query->whereHas('resultados', function ($query2) {
-              return $query2->with('partida.inicio', '>=', now());
-            });
-        })->get();
 
         return view('home', compact('ranking'));
     }
@@ -166,7 +161,9 @@ class HomeController extends Controller
 
         $ranking = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, ['path'  => $request->url(),'query' => $request->query(),]);
 
-        return view('pages.classificacao', compact('ranking'));
+        $categorias = Helper::categorias();
+
+        return view('pages.classificacao', compact('ranking', 'categorias'));
     }
 
     public function contato()

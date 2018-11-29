@@ -51,16 +51,36 @@
     <div class="footer-bottom">
         <div class="container">
             <div class="col-md-6 col-sm-6">
-                <p>© 2004-2018 Rights Reserved <a href="http://finelayers.net" target="_blank">techlinqs.net</a> Soccer City Sports News Website Theme</p>
+                <p>{{\App\Helpers\Helper::getConfig('empresa-nome-secundario')}} © {{ now()->format('Y') }} Direitos Reservados. Desenvolvido por <a href="www.linkedin.com/in/césar-augusto-sousa-902b5356" target="_blank">César Augusto</a></p>
             </div>
             <div class="col-md-6 col-sm-6">
-                <div class="footer-social text-right"> Follow us on:
+                <div class="footer-social text-right">
                   <!--<a href="#" class="fb"><i class="fa fa-facebook"></i></a>
                   <a href="#" class="tw"><i class="fa fa-twitter"></i></a>
                   <a href="#" class="ytp"><i class="fa fa-youtube-play"></i></a>
                   <a href="#" class="vim"><i class="fa fa-vimeo"></i></a>
                   <a href="#" class="gp"><i class="fa fa-google-plus"></i></a>
                 -->
+
+                @if(\App\Helpers\Helper::getConfig('empresa-facebook'))
+                    <a href="{{ \App\Helpers\Helper::getConfig('empresa-facebook') }}" class="fb-icon"><i class="fa fa-facebook"></i></a>
+                @endif
+                @if(\App\Helpers\Helper::getConfig('empresa-twitter'))
+                    <a href="{{ \App\Helpers\Helper::getConfig('empresa-twitter') }}" class="tw-icon"><i class="fa fa-twitter"></i></a>
+                @endif
+                @if(\App\Helpers\Helper::getConfig('empresa-google'))
+                    <a href="{{ \App\Helpers\Helper::getConfig('empresa-google') }}" class="lin-icon"><i class="fa fa-google-plus"></i></a>
+                @endif
+                @if(\App\Helpers\Helper::getConfig('empresa-vimeo'))
+                    <a href="{{ \App\Helpers\Helper::getConfig('empresa-vimeo') }}" class="lin-icon"><i class="fa fa-vimeo"></i></a>
+                @endif
+                @if(\App\Helpers\Helper::getConfig('empresa-linkedin'))
+                    <a href="{{ \App\Helpers\Helper::getConfig('empresa-linkedin') }}" class="lin-icon"><i class="fa fa-linkedin"></i></a>
+                @endif
+                @if(\App\Helpers\Helper::getConfig('empresa-youtube'))
+                    <a href="{{ \App\Helpers\Helper::getConfig('empresa-youtube') }}" class="yt-icon"><i class="fa fa-youtube"></i></a>
+                @endif
+
                 </div>
             </div>
         </div>

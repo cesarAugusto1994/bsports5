@@ -16,8 +16,7 @@ class CreateCategoriasTable extends Migration
         Schema::create('categorias', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nome');
-            $table->integer('numero')->nullable();
-            $table->enum('tipo', ['Simples', 'Duplas'])->default('Simples');
+            $table->boolean('habilitar_menu')->default(false);
             $table->boolean('ativo')->default(true);
             $table->timestamps();
             $table->softDeletes();

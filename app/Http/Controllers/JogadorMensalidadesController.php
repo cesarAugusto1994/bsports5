@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Jogador\Mensalidade;
 use App\Models\Pessoa\Jogador;
 use laravel\pagseguro\Platform\Laravel5\PagSeguro;
+use Notification;
+use App\Helpers\Helper;
+
+use App\Notifications\CreateMensalidade;
 
 class JogadorMensalidadesController extends Controller
 {
@@ -35,18 +39,20 @@ class JogadorMensalidadesController extends Controller
     {
 
         $jogadores = [];
+        $quantidade = 0;
 
         if($request->has('categoria')) {
 
           $categoria = $request->get('categoria');
 
-          $jogadores = Jogador::whereHas('categoria', function($query) use ($categoria) {
-            return $query->where('id', $categoria);
-          })->get();
+          $jogadores = Jogador::where('categoria_id', $categoria)->where('ativo', true)->get();
+          $quantidade = $jogadores->count();
 
         }
 
-        return view('admin.jogador-mensalidades.create-from-categorias', compact('jogadores'));
+        $categorias = Helper::categorias();
+
+        return view('admin.jogador-mensalidades.create-from-categorias', compact('jogadores', 'quantidade', 'categorias'));
     }
 
     /**
@@ -61,7 +67,7 @@ class JogadorMensalidadesController extends Controller
 
         $meses = explode(', ', $data['mes']);
         $jogadores = $data['jogador'];
-        $valor = (float)$data['valor'] ?? 0;
+        $valor = (float)$data['valor'] ?? 265.00;
 
         foreach ($jogadores as $key => $jogador) {
 
@@ -74,7 +80,6 @@ class JogadorMensalidadesController extends Controller
                 $existeMensalidade = Mensalidade::where('referencia', "$jogador:$dataMes")->get();
 
                 if($existeMensalidade->isEmpty()) {
-                  foreach($mesesCobrarMensalidade as $mes) {
                       $mensalidade = new Mensalidade();
                       $dataMes = (\DateTime::createFromFormat('m/Y', $mes));
                       $mensalidade->mes = $dataMes->format('m/Y');
@@ -85,10 +90,25 @@ class JogadorMensalidadesController extends Controller
                       $mensalidade->vencimento = $dataVencimento;
                       $mensalidade->status_id = 1;
                       $mensalidade->save();
-                  }
+
+                      if((boolean)\App\Helpers\Helper::getConfig('notificacao-nova-mensalidade') == true) {
+
+                          if($mensalidade->jogador->usuario()) {
+
+                            $user = $mensalidade->jogador->usuario()->get()->first();
+
+                            if($user) {
+                                Notification::send($user, new CreateMensalidade($mensalidade));
+                            }
+
+                          }
+
+                      }
                 }
             }
         }
+
+        //$request->user()->notify(new CreateMensalidade());
 
         return redirect()->route('mensalidades.index');
     }

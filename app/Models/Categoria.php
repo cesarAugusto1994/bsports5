@@ -13,9 +13,4 @@ class Categoria extends Model
     {
         return $this->hasMany(Jogador::class, 'categoria_id');
     }
-
-    public function menu()
-    {
-        return $this->hasMany(MenuCategorias::class, 'categoria_id');
-    }
 }

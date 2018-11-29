@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
       $this->call(TorneiosTableSeeder::class);
       $this->call(PontuacoesTableSeeder::class);
       $this->call(ConfigsTableSeeder::class);
-      $this->call(UsersTableSeeder::class);
+      //$this->call(UsersTableSeeder::class);
 
       $this->call(GatewayTableSeeder::class);
       $this->call(StatusVendaPagSeguroTableSeeder::class);

@@ -11,23 +11,25 @@
 <div class="row">
 
   <div class="col-md-12">
+    <div class="box box-solid">
+      <div class="box-header with-border">
+        <h3 class="box-title">Opções</h3>
+      </div>
+      <div class="box-body">
+          <a href="{{ route('torneios.create') }}" class="btn btn-success">Novo Torneio</a>
+      </div>
+    </div>
   </div>
 
   <div class="col-md-12">
-    <div class="box box-info">
+    <div class="box box-solid">
       <div class="box-header with-border">
-        <h3 class="box-title">Torneios</h3>
-
-        <div class="box-tools pull-right">
-          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-          </button>
-          <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-        </div>
+        <h3 class="box-title">Lista</h3>
       </div>
       <!-- /.box-header -->
       <div class="box-body">
         <div class="table-responsive">
-          <table class="table no-margin">
+          <table class="table no-margin table-bordered table-striped">
             <thead>
             <tr>
               <th>ID</th>
@@ -45,11 +47,11 @@
                   <td>{{ number_format($torneio->valor, 2) }}</td>
                   <td>{{ $torneio->ativo ? 'Ativo' : 'Inativo' }}</td>
                   <td>
-                    <a href="{{ route('torneios.edit', $torneio->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Editar</a>
+                    <a href="{{ route('torneios.edit', $torneio->id) }}" class="btn btn-primary"><i class="fa fa-edit"></i> </a>
                     <form style="display:inline-block" method="post" action="{{ route('torneios.destroy', ['id' => $torneio->id]) }}">
                         {{ method_field('DELETE') }}
                         {{ csrf_field() }}
-                        <button class="btn btn-xs btn-danger"><i class="fa fa-trash"></i> Remover</button>
+                        <button class="btn btn-danger"><i class="fa fa-trash"></i> </button>
                     </form>
                   </td>
                 </tr>
@@ -62,7 +64,7 @@
       </div>
       <!-- /.box-body -->
       <div class="box-footer clearfix">
-        <a href="{{ route('torneios.create') }}" class="btn btn-sm btn-info btn-flat pull-left">Novo Torneio</a>
+
         <span class="pull-right">{{ $torneios->links() }}</span>
       </div>
       <!-- /.box-footer -->

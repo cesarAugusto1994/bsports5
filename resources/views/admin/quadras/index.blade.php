@@ -11,7 +11,6 @@
 <div class="row">
 
   <div class="col-md-12">
-
     <div class="box box-solid">
       <div class="box-header with-border">
         <h3 class="box-title">Opções</h3>
@@ -25,12 +24,12 @@
   <div class="col-md-12">
     <div class="box box-solid">
       <div class="box-header with-border">
-        <h3 class="box-title">Quadras</h3>
+        <h3 class="box-title">Lista</h3>
       </div>
       <!-- /.box-header -->
       <div class="box-body">
         <div class="table-responsive">
-          <table class="table no-margin">
+          <table class="table no-margin table-bordered table-hover">
             <thead>
             <tr>
               <th>Nome</th>
@@ -63,8 +62,6 @@
       </div>
       <!-- /.box-body -->
       <div class="box-footer clearfix">
-
-        <span class="pull-right">{{ $quadras->links() }}</span>
       </div>
       <!-- /.box-footer -->
     </div>

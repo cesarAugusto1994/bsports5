@@ -28,13 +28,12 @@
                   <form class="form-edit-add" role="form"
                        action="?"
                        method="get" autocomplete="off">
-                     <!-- PUT Method if we are editing -->
 
                        <div class="form-group">
                            <label for="email">Categoria</label>
                            <select name="categoria" class="form-control" id="categoria" name="categoria" required>
-                               @foreach(\App\Models\Categoria::where('tipo', 'Simples')->orderBy('tipo')->get() as $categoria)
-                                   <option value="{{ $categoria->id }}">{{ $categoria->nome }}</option>
+                               @foreach($categorias as $categoria)
+                                   <option value="{{ $categoria->id }}" {{ \Request::has('categoria') && \Request::get('categoria') == $categoria->id ? 'selected' : '' }}>{{ $categoria->nome }}</option>
                                @endforeach
                            </select>
                        </div>
@@ -71,26 +70,24 @@
 
                         @if(!empty($jogadores) && $jogadores->isNotEmpty())
                         <div class="form-group">
-                            <label for="email">Jogadores</label>
+                            <label for="email">Jogadores ({{$quantidade}})</label>
 
-                            <div style="min-height:300px;max-height:300px;overflow: auto;">
+                            <div style="">
 
-                              <table class="table">
+                              <table class="table table-bordered table-hover" data-toggle="table" data-pagination="true" data-search="true">
                                 <thead>
                                   <tr>
-                                     <th>Opções</th>
+                                     <th><input type="checkbox" id="checkall"></th>
                                      <th>Nome</th>
                                      <th>Email</th>
-                                     <th>Pontos</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                   @foreach($jogadores as $jogador)
                                   <tr>
-                                     <td><input type="checkbox" name="jogador[]" value="{{ $jogador->id }}"></td>
-                                     <td>{{ $jogador->pessoa->nome }}</td>
-                                     <td>{{ $jogador->pessoa->email }}</td>
-                                     <td>{{ $jogador->resultados->sum('pontos') + $jogador->resultados->sum('bonus') }}</td>
+                                     <td><input type="checkbox" name="jogador[]" value="{{ $jogador->id }}" class="checkbox-jogador"></td>
+                                     <td>{{ $jogador->nome }}</td>
+                                     <td>{{ $jogador->email }}</td>
                                   </tr>
                                   @endforeach
                                 </tbody>
@@ -108,7 +105,7 @@
 
                         <div class="form-group">
                             <label for="email">Valor Mensalidade</label>
-                            <input type="text" class="form-control money" id="valor" name="valor" value="150.00" placeholder="R$ Valor" required>
+                            <input type="text" class="form-control money" id="valor" name="valor" value="{{\App\Helpers\Helper::getConfig('valor-mensalidade')}}" placeholder="R$ Valor" required>
                         </div>
 
                         <button type="submit" class="btn btn-primary save">
@@ -143,6 +140,25 @@
         $('.money').mask('000.000.000.000.000,00', {reverse: true});
 
         var datesToDisable = $('#datepicker1').data("datesDisabled").split(',');
+
+        $("#checkall").change(function() {
+
+            var self = $(this);
+            var checked = self.is(':checked');
+
+            var elements = $(".checkbox-jogador");
+
+            if(checked) {
+
+                elements.attr('checked', true);
+
+            } else {
+
+                elements.attr('checked', false);
+
+            }
+
+        });
 
         $('.datetime').datepicker({
             format: "mm/yyyy",

@@ -5,7 +5,7 @@
                 <!--Logo Start-->
                 <div class="col-md-3 nop">
                     <div class="logo">
-                        <a href="{{ route('home') }}"> <!--<img src="./images/logo.png" alt="" />--> <h2>BSPORTS</h2></a>
+                        <a href="{{ route('home') }}"> <!--<img src="./images/logo.png" alt="" />--> <h2>{{\App\Helpers\Helper::getConfig('empresa-nome')}}</h2></a>
                     </div>
                 </div>
                 <!--Logo End-->
@@ -53,22 +53,7 @@
                                           <a href="{{ \App\Helpers\Helper::getConfig('empresa-youtube') }}" class="yt-icon"><i class="fa fa-youtube"></i></a>
                                       @endif
                                     </li>
-                                    <li>
-                                        <div class="dropdown">
-                                            <button type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> <img src="./images/eng.jpg" alt="" /> ENG </button>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                                <li>
-                                                    <a href="#"><img src="./images/eng.jpg" alt="" /> AR</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#"><img src="./images/eng.jpg" alt="" /> FR</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#"><img src="./images/eng.jpg" alt="" /> ENG</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
+
                                     @if(\App\Helpers\Helper::getConfig('pagina-regulamento'))
 
                                       <li>
@@ -101,7 +86,7 @@
 
                                         @endphp
 
-                                        <a href="{{ url($defaultRoute) }}" class="login-btn"> <i class="fa fa-user"></i> Área do Jogador</a>
+                                        <a target="_blank" href="{{ url($defaultRoute) }}" class="login-btn"> <i class="fa fa-user"></i> Área do Jogador</a>
                                     </li>
                                 </ul>
 
@@ -122,28 +107,17 @@
                           <ul class="nav navbar-nav">
 
                             @php
+                              $categorias = \App\Helpers\Helper::categorias();
 
-                              $itens = [];
-
-                              $categorias = \App\Models\MenuCategorias::orderBy('categoria_id')->get();
-                              $categoriasMenu = $categorias->sortBy('nome');
-
-                              #dd($categorias);
-
-                              foreach($categoriasMenu as $item) {
-                                  $itens[$item->categoria->nome] = [
-                                      'id' => $item->categoria->id,
-                                      'nome' => $item->categoria->nome,
-                                  ];
-                              }
-
-                              ksort($itens);
-
+                              $categorias = $categorias->filter(function($categoria) {
+                                  return $categoria->habilitar_menu;
+                              });
                             @endphp
 
-                            @foreach($itens as $item)
-                                <li class="" style="background-color:#1b4465;height:100%"><a class="link-categorias" href="?category={{ $item['id'] }}">{{ $item['nome'] }}</a></li>
+                            @foreach($categorias as $categoria)
+                                <li class="" style="background-color:#1b4465;height:100%"><a class="link-categorias" href="?category={{ $categoria->id }}">{{ $categoria->nome }}</a></li>
                             @endforeach
+
                           </ul>
                         </div>
 

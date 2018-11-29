@@ -13,7 +13,6 @@ class CreateVendasTable extends Migration
      */
     public function up()
     {
-
         Schema::create('gateway', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nome');

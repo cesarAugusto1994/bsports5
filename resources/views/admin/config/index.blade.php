@@ -20,10 +20,11 @@
       </div>
       <div class="box-body">
         <div class="table-responsive">
-          <table class="table no-margin">
+          <table class="table no-margin table-bordered table-hover">
             <thead>
             <tr>
-              <th>Chave</th>
+              <th>Nome</th>
+              <th>Descrição</th>
               <th>Valor</th>
               <th>Opções</th>
             </tr>
@@ -31,8 +32,9 @@
             <tbody>
               @foreach($configs as $config)
                 <tr>
-                  <td>{{ $config->key }}</td>
-                  <td>{{ $config->value }}</td>
+                  <td>{{ $config->nome }}</td>
+                  <td>{{ $config->descricao }}</td>
+                  <td>{{ $config->valor }}</td>
                   <td>
                     <a href="{{ route('configs.edit', $config->id) }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> </a>
                   </td>

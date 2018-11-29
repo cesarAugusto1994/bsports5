@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Quadras;
+use App\Helpers\Helper;
 
 class QuadrasController extends Controller
 {
@@ -14,7 +15,7 @@ class QuadrasController extends Controller
      */
     public function index()
     {
-        $quadras = Quadras::paginate();
+        $quadras = Helper::quadras();
         return view('admin.quadras.index', compact('quadras'));
     }
 
@@ -39,6 +40,8 @@ class QuadrasController extends Controller
         $data = $request->request->all();
 
         Quadras::create($data);
+
+        Helper::drop('quadras');
 
         flash('Quadra adicionada com sucesso.')->success()->important();
 
@@ -78,10 +81,12 @@ class QuadrasController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->request->all();
-        
+
         $quadra = Quadras::findOrFail($id);
         $data['ativo'] = $request->has('ativo') ? true : false;
         $quadra->update($data);
+
+        Helper::drop('quadras');
 
         flash('Quadra atualizada com sucesso.')->success()->important();
 
@@ -98,6 +103,7 @@ class QuadrasController extends Controller
     {
         $quadra = Quadras::findOrFail($id);
         $quadra->delete();
+        Helper::drop('quadras');
         flash('Quadra removida com sucesso.')->success()->important();
         return redirect()->route('quadras.index');
     }

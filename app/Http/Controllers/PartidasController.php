@@ -6,6 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\{Partida,SolicitacaoPartida};
 use App\Models\Pessoa\Jogador;
 use App\Models\Torneio\Resultado;
+use App\Models\Quadras;
+use App\Models\Categoria;
+use Notification;
+use App\Helpers\Helper;
+
+use App\Notifications\CreatePartida;
 
 class PartidasController extends Controller
 {
@@ -68,7 +74,10 @@ class PartidasController extends Controller
             $partidas->appends($key, $value);
         }
 
-        return view('admin.partidas.index', compact('partidas'));
+        $quadras = Helper::quadras();
+        $categorias = Helper::categorias();
+
+        return view('admin.partidas.index', compact('partidas', 'quadras', 'categorias'));
     }
 
     public function placar($id)
@@ -138,6 +147,24 @@ class PartidasController extends Controller
         }
 
         $partida->save();
+
+        if((boolean)\App\Helpers\Helper::getConfig('notificacao-nova-partida') == true) {
+
+          if($partida->jogador1) {
+            if($partida->jogador1->usuario) {
+              $user = $partida->jogador1->usuario;
+              Notification::send($user, new CreatePartida($partida));
+            }
+          }
+
+          if($partida->jogador2) {
+            if($partida->jogador2->usuario) {
+              $user = $partida->jogador2->usuario;
+              Notification::send($user, new CreatePartida($partida));
+            }
+          }
+
+        }
 
         flash('Partida marcada com sucesso!')->success()->important();
 
@@ -283,7 +310,9 @@ class PartidasController extends Controller
      */
     public function create()
     {
-        return view('admin.partidas.create');
+        $quadras = Helper::quadras();
+        $torneios = Helper::torneios();
+        return view('admin.partidas.create',compact('quadras', 'torneios'));
     }
 
     /**

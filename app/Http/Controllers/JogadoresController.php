@@ -7,6 +7,7 @@ use App\Models\Pessoa\Jogador;
 use App\Models\Pessoa;
 use App\Models\Jogador\Mensalidade;
 use Auth;
+use App\Helpers\Helper;
 use jeremykenedy\LaravelRoles\Models\Role;
 
 class JogadoresController extends Controller
@@ -54,25 +55,71 @@ class JogadoresController extends Controller
             $jogadores->appends($key, $value);
         }
 
-        return view('admin.jogadores.index', compact('jogadores', 'quantidade'));
+        $categorias = Helper::categorias();
+
+        return view('admin.jogadores.index', compact('jogadores', 'quantidade', 'categorias'));
+    }
+
+    public function semPartida(Request $request)
+    {
+        $data = $request->request->all();
+
+        $jogadores = Jogador::where('ativo',true)->orderByDesc('id');
+
+        $start = now()->modify('monday this week');
+        $end = now()->modify('sunday this week');
+
+        #dd([$start,$end]);
+
+        if($request->has('start') && $request->has('end')) {
+          $start = \DateTime::createFromFormat('d/m/Y', $data['start']);
+          $end = \DateTime::createFromFormat('d/m/Y', $data['end']);
+        }
+/*
+        if(!empty($data['start']) && !empty($data['end'])) {
+
+            $start = \DateTime::createFromFormat('d/m/Y', $data['start']);
+            $end = \DateTime::createFromFormat('d/m/Y', $data['end']);
+
+            $chamados->where('created_at', '>=', $start->format('Y-m-d') . ' 00:00:00')
+            ->where('created_at', '<=', $end->format('Y-m-d') . ' 23:59:59');
+
+        }*/
+
+        $jogadores->whereDoesntHave('partidas', function($query) use($start, $end) {
+              $query->where('inicio', '>', $start);
+              $query->where('fim', '<', $end);
+        });
+
+        $quantidade = $jogadores->count();
+
+        $jogadores = $jogadores->paginate();
+
+        foreach ($data as $key => $value) {
+            $jogadores->appends($key, $value);
+        }
+
+        return view('admin.jogadores.sem_partidas', compact('jogadores', 'quantidade', 'start', 'end'));
     }
 
     public function create()
     {
-        return view('admin.jogadores.create');
+        $categorias = Helper::categorias();
+        return view('admin.jogadores.create',compact('categorias'));
     }
 
     public function show($id)
     {
         $jogador = Jogador::uuid($id);
-
-        return view('pages.jogador', compact('jogador'));
+        $categorias = Helper::categorias();
+        return view('pages.jogador', compact('jogador', 'categorias'));
     }
 
     public function view($id)
     {
         $jogador = Jogador::uuid($id);
-        return view('admin.jogadores.perfil', compact('jogador'));
+        $categorias = Helper::categorias();
+        return view('admin.jogadores.perfil', compact('jogador', 'categorias'));
     }
 
     public function toAjax(Request $request)
