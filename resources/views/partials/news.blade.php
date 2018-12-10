@@ -1,117 +1,4 @@
 <!--League Schedule Slider Start-->
-<section class="news-section-wrapper">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h2 class="section-title"> League Schedule </h2>
-            </div>
-            <div class="col-md-12">
-                <div id="ls-slider" class="owl-carousel owl-theme">
-
-                    <!--LS Box Start-->
-                    <div class="item">
-                        <div class="schedule-box">
-                            <div class="sdate"> <strong>24</strong> Mar </div>
-                            <div class="steams">
-                                <div class="matches"> <strong class="count">1-7</strong> <strong class="win">Win</strong> </div>
-                                <div class="teams-vs"> <strong class="t1"><img src="./images/tlogos/tl1.png" alt="" /> Blu</strong> <strong class="vs">vs</strong> <strong class="t2">Eag <img src="./images/tlogos/tl2.png" alt="" /></strong> </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--LS Box End-->
-
-                    <!--LS Box Start-->
-                    <div class="item">
-                        <div class="schedule-box">
-                            <div class="sdate"> <strong>24</strong> Mar </div>
-                            <div class="steams">
-                                <div class="matches"> <strong class="count">1-7</strong> <strong class="win">Win</strong> </div>
-                                <div class="teams-vs"> <strong class="t1"><img src="./images/tlogos/tl3.png" alt="" /> Blu</strong> <strong class="vs">vs</strong> <strong class="t2">Eag <img src="./images/tlogos/tl4.png" alt="" /></strong> </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--LS Box End-->
-
-                    <!--LS Box Start-->
-                    <div class="item">
-                        <div class="schedule-box">
-                            <div class="sdate"> <strong>24</strong> Mar </div>
-                            <div class="steams">
-                                <div class="matches"> <strong class="count">1-7</strong> <strong class="win">Win</strong> </div>
-                                <div class="teams-vs"> <strong class="t1"><img src="./images/tlogos/tl5.png" alt="" /> Blu</strong> <strong class="vs">vs</strong> <strong class="t2">Eag <img src="./images/tlogos/tl6.png" alt="" /></strong> </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--LS Box End-->
-
-                    <!--LS Box Start-->
-                    <div class="item">
-                        <div class="schedule-box">
-                            <div class="sdate"> <strong>24</strong> Mar </div>
-                            <div class="steams">
-                                <div class="matches"> <strong class="count">1-7</strong> <strong class="win">Win</strong> </div>
-                                <div class="teams-vs"> <strong class="t1"><img src="./images/tlogos/tl7.png" alt="" /> Blu</strong> <strong class="vs">vs</strong> <strong class="t2">Eag <img src="./images/tlogos/tl8.png" alt="" /></strong> </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--LS Box End-->
-
-                    <!--LS Box Start-->
-                    <div class="item">
-                        <div class="schedule-box">
-                            <div class="sdate"> <strong>24</strong> Mar </div>
-                            <div class="steams">
-                                <div class="matches"> <strong class="count">1-7</strong> <strong class="win">Win</strong> </div>
-                                <div class="teams-vs"> <strong class="t1"><img src="./images/tlogos/tl1.png" alt="" /> Blu</strong> <strong class="vs">vs</strong> <strong class="t2">Eag <img src="./images/tlogos/tl2.png" alt="" /></strong> </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--LS Box End-->
-
-                    <!--LS Box Start-->
-                    <div class="item">
-                        <div class="schedule-box">
-                            <div class="sdate"> <strong>24</strong> Mar </div>
-                            <div class="steams">
-                                <div class="matches"> <strong class="count">1-7</strong> <strong class="win">Win</strong> </div>
-                                <div class="teams-vs"> <strong class="t1"><img src="./images/tlogos/tl3.png" alt="" /> Blu</strong> <strong class="vs">vs</strong> <strong class="t2">Eag <img src="./images/tlogos/tl4.png" alt="" /></strong> </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--LS Box End-->
-
-                    <!--LS Box Start-->
-                    <div class="item">
-                        <div class="schedule-box">
-                            <div class="sdate"> <strong>24</strong> Mar </div>
-                            <div class="steams">
-                                <div class="matches"> <strong class="count">1-7</strong> <strong class="win">Win</strong> </div>
-                                <div class="teams-vs"> <strong class="t1"><img src="./images/tlogos/tl5.png" alt="" /> Blu</strong> <strong class="vs">vs</strong> <strong class="t2">Eag <img src="./images/tlogos/tl6.png" alt="" /></strong> </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--LS Box End-->
-
-                    <!--LS Box Start-->
-                    <div class="item">
-                        <div class="schedule-box">
-                            <div class="sdate"> <strong>24</strong> Mar </div>
-                            <div class="steams">
-                                <div class="matches"> <strong class="count">1-7</strong> <strong class="win">Win</strong> </div>
-                                <div class="teams-vs"> <strong class="t1"><img src="./images/tlogos/tl7.png" alt="" /> Blu</strong> <strong class="vs">vs</strong> <strong class="t2">Eag <img src="./images/tlogos/tl8.png" alt="" /></strong> </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--LS Box End-->
-
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!--League Schedule Slider End-->
-
-<!--League Schedule Slider Start-->
 <div class="news-section-wrapper gallery">
     <div class="container">
         <div class="row">
@@ -142,7 +29,7 @@
         <br/>
         <div class="row">
             <div class="col-md-8">
-                <div class="banner-ad m30"> <img src="./images/banner-ad.jpg" alt="" /> </div>
+                <div class="banner-ad m30"> <a href="{{ route('formulario_clube') }}"><img src="./images/banner-ad.jpg" alt="" /></a> </div>
                 <div class="newsblock-grid1">
                     <div class="row">
                         <div class="col-md-12">

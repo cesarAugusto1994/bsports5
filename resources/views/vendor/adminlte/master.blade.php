@@ -24,11 +24,6 @@
     <link rel="stylesheet"  href="{{ asset('css/app.css') }}"/>
     <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css"/>
 
-    @if(config('adminlte.plugins.datatables'))
-        <!-- DataTables with bootstrap 3 style -->
-        <link rel="stylesheet" href="//cdn.datatables.net/v/bs/dt-1.10.18/datatables.min.css">
-    @endif
-
     @yield('adminlte_css')
 
     <!--[if lt IE 9]>
@@ -44,10 +39,7 @@
 
 @yield('body')
 
-<script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
+<script src="{{ asset('js/jquery-2.1.4.min.js') }}"></script>
 <script src="{{ asset('vendor/adminlte/vendor/jquery/dist/jquery.slimscroll.min.js') }}"></script>
 <script src="{{ asset('vendor/adminlte/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 
@@ -67,8 +59,12 @@
 @yield('adminlte_js')
 
 <script>
+
+  $(document).ready(function() {
+
     $('.money').mask('000.000.000.000.000,00', {reverse: true});
     $('.date').mask('00/00/0000');
+    $('.time').mask('00:00:00');
 
     $('.datepicker').datepicker({
       format: "dd/mm/yyyy",
@@ -79,6 +75,10 @@
       autoclose: true,
       todayHighlight: true
     });
+
+  })
+
+
 
 </script>
 

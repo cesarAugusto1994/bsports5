@@ -21,7 +21,6 @@ class JogadorMensalidadesController extends Controller
     public function index()
     {
         $mensalidades = Mensalidade::orderBy('mes')->paginate(10);
-
         return view('admin.jogador-mensalidades.index', compact('mensalidades'));
     }
 
@@ -45,7 +44,7 @@ class JogadorMensalidadesController extends Controller
 
           $categoria = $request->get('categoria');
 
-          $jogadores = Jogador::where('categoria_id', $categoria)->where('ativo', true)->get();
+          $jogadores = Jogador::where('categoria_id', $categoria)->where('ativo', true)->orderBy('nome')->get();
           $quantidade = $jogadores->count();
 
         }
@@ -65,7 +64,23 @@ class JogadorMensalidadesController extends Controller
     {
         $data = $request->request->all();
 
+        if(!$request->has('jogador')) {
+          flash('O jogador deve ser informado.')->error()->important();
+          return back();
+        }
+
+        if(empty($data['mes'])) {
+          flash('O mês referência da mensalidade deve ser informado.')->error()->important();
+          return back();
+        }
+
+        if(empty($data['valor'])) {
+          flash('O valor da mensalidade deve ser informado.')->error()->important();
+          return back();
+        }
+
         $meses = explode(', ', $data['mes']);
+
         $jogadores = $data['jogador'];
         $valor = (float)$data['valor'] ?? 265.00;
 

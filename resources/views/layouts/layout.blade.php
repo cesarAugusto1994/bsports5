@@ -17,6 +17,8 @@
     <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/prettyPhoto.css') }}" rel="stylesheet" />
 
+    <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css"/>
+
     <style>
 
 		html body {
@@ -189,8 +191,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.4/holder.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.pt-BR.min.js"></script>
+
     <script>
         $('.telefone').mask('(00) 00000-0000');
+        $('.money').mask('000.000.000.000.000,00', {reverse: true});
+        $('.date').mask('00/00/0000');
+        $('.time').mask('00:00:00');
+        $('.int').mask('00');
+
+        $('.datepicker').datepicker({
+          startDate: "today",
+          format: "dd/mm/yyyy",
+          clearBtn: true,
+          todayBtn: "linked",
+          language: "pt-BR",
+          calendarWeeks: true,
+          autoclose: true,
+          todayHighlight: true
+        });
     </script>
 
 

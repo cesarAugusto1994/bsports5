@@ -2,10 +2,6 @@
 
 @section('title', 'Configurações')
 
-@section('content_header')
-    <h1>Configurações</h1>
-@stop
-
 @section('content')
 
 <div class="row">

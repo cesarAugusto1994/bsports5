@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Pessoa, Partida, Semana, Categoria, Pagina};
+use App\Models\{Pessoa, Partida, Semana, Categoria, Pagina, Clube};
 use App\Models\Pessoa\{Jogador, Telefone};
 use App\Models\Torneio\Resultado;
 use Illuminate\Pagination\{Paginator, LengthAwarePaginator};
@@ -21,16 +21,16 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         if(Jogador::count() == 0) {
-            //$this->importJogadores();
+            $this->importJogadores();
         }
 
         if(Partida::count() == 0) {
-            //$this->importPartidas();
+            $this->importPartidas();
             //$this->importResultados();
         }
 
         if(Semana::count() == 0) {
-            //$this->importSemanas();
+            $this->importSemanas();
         }
 
         if(Pagina::count() == 0) {
@@ -379,10 +379,6 @@ class HomeController extends Controller
     {
         $user = \Auth::user();
 
-        if($user->role_id == 1){
-            //return Voyager::view('voyager::index');
-        }
-
         $pessoa = Pessoa::where('email', $user->email)->get()->first();
         $jogador = [];
 
@@ -391,5 +387,21 @@ class HomeController extends Controller
         }
 
         return view('jogador.dashboard', compact('jogador'));
+    }
+
+    public function formularioClube()
+    {
+        return view('pages.clube-vantagem');
+    }
+
+    public function formularioClubeStore(Request $request)
+    {
+        $data = $request->request->all();
+
+        Clube::create($data);
+
+        flash('A sua solicitação foi enviada com sucesso.')->success()->important();
+
+        return redirect()->back();
     }
 }

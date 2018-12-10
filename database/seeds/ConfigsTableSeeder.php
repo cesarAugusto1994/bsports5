@@ -158,6 +158,13 @@ class ConfigsTableSeeder extends Seeder
                 'descricao' => 'Valor Mensalidade',
                 'valor' => '256,00'
             ],
+
+            [
+                'nome' => 'Dias vencimento débito',
+                'slug' => 'dias-vencimento-debito',
+                'descricao' => 'Dias vencimento débito',
+                'valor' => '5'
+            ],
         ];
 
         foreach ($itens as $key => $item) {

@@ -57,7 +57,7 @@
                                     @if(\App\Helpers\Helper::getConfig('pagina-regulamento'))
 
                                       <li>
-                                          <a href="{{ \App\Helpers\Helper::getConfig('pagina-regulamento') }}" class="login-btn"> <i class="fa fa-file-0"></i> Regularmento</a>
+                                          <a href="{{ \App\Helpers\Helper::getConfig('pagina-regulamento') }}" class="login-btn"> <i class="fa fa-file-0"></i> Regulamento</a>
                                       </li>
 
                                     @endif

@@ -103,7 +103,7 @@
                     </div>
 
                     <div class="col-md-3 col-sm-6 p3l">
-                      <a href="{{ \App\Helpers\Helper::getConfig('empresa-banner-principal-link') }}">
+                      <a href="{{ route('formulario_agendar') }}">
                         <div class="fnews-thumb">
                             <div class="fnews-txt"> <span class="gtag c5"></span>
                             </div>

@@ -39,6 +39,9 @@ Route::middleware('loadCache')->group(function() {
   Route::get('/formulario/agendar', 'PartidasController@formularioAgenda')->name('formulario_agendar');
   Route::post('/formulario/agendar', 'PartidasController@formularioAgendaStore')->name('formulario_agendar_store');
 
+  Route::get('/formulario/clube', 'HomeController@formularioClube')->name('formulario_clube');
+  Route::post('/formulario/clube', 'HomeController@formularioClubeStore')->name('formulario_clube_store');
+
   Route::get('/resultados', 'ResultadosController@index')->name('resultados');
   Route::get('/calendario', 'CalendarioJogosController@index')->name('calendario');
 
