@@ -9,6 +9,8 @@ use laravel\pagseguro\Platform\Laravel5\PagSeguro;
 use Notification;
 use App\Helpers\Helper;
 
+use App\Models\Mensalidade\Log;
+
 use App\Notifications\CreateMensalidade;
 
 class JogadorMensalidadesController extends Controller
@@ -104,7 +106,15 @@ class JogadorMensalidadesController extends Controller
                       $dataVencimento = (\DateTime::createFromFormat('m/Y', $mes)->modify('+1 month'));
                       $mensalidade->vencimento = $dataVencimento;
                       $mensalidade->status_id = 1;
+                      $mensalidade->criado_por = \Auth::user()->id;
                       $mensalidade->save();
+
+                      $log = new Log();
+                      $log->mensalidade_id = $mensalidade->id;
+                      $log->status_anterior_id = 1;
+                      $log->status_atual_id = 1;
+                      $log->mensagem = 'Mensalidade criada';
+                      $log->save();
 
                       if((boolean)\App\Helpers\Helper::getConfig('notificacao-nova-mensalidade') == true) {
 

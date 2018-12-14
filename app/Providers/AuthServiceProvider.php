@@ -29,6 +29,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('player-panel', 'App\Policies\UserPolicy@index');
         Gate::define('admin-panel', 'App\Policies\UserPolicy@adminPanel');
         Gate::define('manage-mensalidades', 'App\Policies\UserPolicy@mensalidades');
+        Gate::define('manage-pagamentos', 'App\Policies\UserPolicy@pagamentos');
         Gate::define('manage-perfil', 'App\Policies\UserPolicy@perfil');
         Gate::define('manage-players', 'App\Policies\UserPolicy@players');
         Gate::define('manage-categorias', 'App\Policies\UserPolicy@categorias');
@@ -40,6 +41,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('manage-noticias', 'App\Policies\UserPolicy@noticias');
         Gate::define('manage-quadras', 'App\Policies\UserPolicy@quadras');
         Gate::define('manage-solicitacao-partidas', 'App\Policies\UserPolicy@solicitacaoPartidas');
+        Gate::define('manage-midias', 'App\Policies\UserPolicy@midias');
+
+
 
         //
     }

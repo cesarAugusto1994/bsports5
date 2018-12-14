@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\SolicitacaoPartida;
+use App\Models\Clube;
 
 class SolicitacaoPartidaController extends Controller
 {
@@ -14,7 +14,7 @@ class SolicitacaoPartidaController extends Controller
      */
     public function index()
     {
-        $solicitacoes = SolicitacaoPartida::paginate();
+        $solicitacoes = Clube::paginate();
         return view('admin.solicitacao.index', compact('solicitacoes'));
     }
 

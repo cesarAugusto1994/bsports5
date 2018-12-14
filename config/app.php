@@ -179,7 +179,8 @@ return [
         JeroenNoten\LaravelAdminLte\ServiceProvider::class,
         Emadadly\LaravelUuid\LaravelUuidServiceProvider::class,
         Creativeorange\Gravatar\GravatarServiceProvider::class,
-        laravel\pagseguro\Platform\Laravel5\ServiceProvider::class
+        laravel\pagseguro\Platform\Laravel5\ServiceProvider::class,
+        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
 
     ],
 

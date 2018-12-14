@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Jogador\Mensalidade;
 use App\User;
+use App\Models\Pessoa\Jogador;
 use laravel\pagseguro\Platform\Laravel5\PagSeguro;
 use App\Models\{Venda, VendaPagSeguro};
+
+use App\Models\Mensalidade\Log;
 
 class CheckoutController extends Controller
 {
@@ -99,7 +102,7 @@ class CheckoutController extends Controller
                     'id' => $mensalidade->uuid,
                     'description' => 'BSports: Assinatura mensal de sócio',
                     'quantity' => '1',
-                    'amount' => 150,
+                    'amount' => $mensalidade->valor,
                     'weight' => '0',
                     'shippingCost' => '0',
                     'width' => '0',
@@ -125,11 +128,36 @@ class CheckoutController extends Controller
         $credentials = PagSeguro::credentials()->get();
         $information = $checkout->send($credentials);
 
+        #print_r($information);exit;
+
+        $mensalidade->gateway_referencia = $information->getCode();
+        $mensalidade->save();
+
         if(!$information) {
           return redirect()->back()->withErrors(['Ops, Ocorreu um erro ao iniciar transação.']);
         }
 
         return redirect($information->getLink());
+    }
+
+    public static function mask($val, $mask)
+    {
+       $maskared = '';
+       $k = 0;
+       for($i = 0; $i<=strlen($mask)-1; $i++)
+       {
+         if($mask[$i] == '#')
+         {
+           if(isset($val[$k]))
+           $maskared .= $val[$k++];
+         }
+         else
+         {
+           if(isset($mask[$i]))
+           $maskared .= $mask[$i];
+         }
+       }
+       return $maskared;
     }
 
     public static function saveSell($information)
@@ -138,16 +166,27 @@ class CheckoutController extends Controller
 
         $documento = $information->getSender()->getDocuments()[0]->getNumber();
 
-        $pessoa = Pessoas::where('cpf', $documento)->get();
+        $cpf = self::mask($documento,'###.###.###-##');
+
+        $pessoa = Jogador::where('cpf', $cpf)->get();
+
+        if($pessoa->isEmpty()) {
+
+            return response()->json([
+              'success' => false,
+              'message' => 'Usuário não encontrado: ' . $documento
+            ], 401);
+
+        }
+
         $pessoa = $pessoa->first();
 
         if($vendaPS->isEmpty()) {
 
             $venda = new Venda();
-            $venda->pessoa_id = $pessoa->id;
+            $venda->jogador_id = $pessoa->id;
             $venda->gateway_id = 1;
             $venda->status_id = (int)$information->getStatus()->getCode();
-            $venda->plano_id = (int)$information->getItems()[0]->getId();
             $venda->referencia = $information->getReference();
             $venda->tipo = (int)$information->getType();
             $venda->meio_pagamento_tipo_id = (int)$information->getPaymentMethod()->getType();
@@ -161,6 +200,7 @@ class CheckoutController extends Controller
             $vendaPS->codigo = $information->getCode();
             $vendaPS->data = $information->getDate();
             $vendaPS->save();
+
         } else {
 
             $vendaPS = $vendaPS->first();
@@ -172,35 +212,36 @@ class CheckoutController extends Controller
 
         }
 
-        $pessoa->usuario->notify(new \App\Notifications\CompraPlano($venda));
+        if((int)$information->getStatus()->getCode()) {
 
-/*
-        if((int)$information->getStatus()->getCode() == 3) {
+            $uuid = $information->getItems()[0]->getId();
 
-            $plano = Planos::findOrFail((int)$information->getItems()[0]->getId());
+            $mensalidade = Mensalidade::uuid($uuid);
 
-            $date = new \DateTime();
-            $fim = $date->modify($plano->periodo);
+            $atualStatus = $mensalidade->status_id;
+            $mensalidade->status_id = (int)$information->getStatus()->getCode();
+            $mensalidade->save();
 
-            $usuarios = User::where('pessoa_id', $pessoa->id)->get();
+            $log = new Log();
+            $log->mensalidade_id = $mensalidade->id;
+            $log->status_anterior_id = $atualStatus;
+            $log->status_atual_id = (int)$information->getStatus()->getCode();
+            $log->mensagem = $mensalidade->status->nome;
+            $log->save();
 
-            foreach ($usuarios as $key => $usuario) {
+            $vendaPS = $vendaPS->first();
+            $venda = Venda::findOrFail($vendaPS->venda_id);
+            $venda->status_id = (int)$information->getStatus()->getCode();
+            $vendaPS->status_id = (int)$information->getStatus()->getCode();
+            $venda->save();
 
-                $plano = new PlanosUsuarios();
-                $plano->usuario_id = $usuario->id;
-                $plano->profissional_id = $pessoa->id;
-                $plano->plano_id = (int)$information->getItems()[0]->getId();
-                $plano->inicio = new \DateTime();
-                $plano->fim = $fim;
-                $plano->save();
-
-                \App\Jobs\EmailVenda::dispatch($pessoa, $venda);
-
-            }
-
-            $pessoa->usuario->notify(new \App\Notifications\ConfirmacaoVendaPlano($venda));
         }
-        */
+
+        return response()->json([
+          'success' => true,
+          'message' => 'Notificação recebida com sucesso'
+        ], 200);
+
 
     }
 

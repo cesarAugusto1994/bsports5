@@ -150,9 +150,19 @@ return [
             'can'         => 'manage-mensalidades',
         ],
         [
+            'text'        => 'Pagamentos',
+            'url'         => 'admin/pagamentos',
+            'can'         => 'manage-pagamentos',
+        ],
+        [
             'text'        => 'Categorias',
             'url'         => 'admin/categorias',
             'can'         => 'manage-categorias',
+        ],
+        [
+            'text'        => 'Mídias',
+            'url'         => 'admin/midias',
+            'can'         => 'manage-midias',
         ],
         [
             'text'        => 'Torneios',

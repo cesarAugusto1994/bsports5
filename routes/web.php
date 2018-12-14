@@ -110,6 +110,11 @@ Route::middleware('loadCache')->group(function() {
               Route::resource('noticias', 'NoticiasController');
 
               Route::resource('solicitacao', 'SolicitacaoPartidaController');
+              Route::resource('midias', 'MidiasController');
+
+              Route::resource('pagamentos', 'PagamentosController');
+
+              Route::post('/pagamentos/{id}/informe-pagamento', 'PagamentosController@informe')->name('informe_pagamento');
 
               Route::get('/partidas/{id}/placar', 'PartidasController@placar')->name('partida_placar');
               Route::get('/partidas/{id}/placar/edit', 'PartidasController@editarPlacar')->name('editar_partida_placar');
@@ -129,6 +134,8 @@ Route::middleware('loadCache')->group(function() {
               Route::get('/joagdores/sem-partida', 'JogadoresController@semPartida')->name('jogadores_sem_partidas_marcadas');
 
               Route::post('/categorias/{id}/menu', 'CategoriasController@toMenu')->name('categoria_to_menu');
+
+              Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
           });
       });

@@ -27,6 +27,15 @@
                                           <li><a href="{{ route('calendario') }}">Calendário de jogos</a></li>
                                           <li><a href="{{ route('resultados') }}">Resultados de Jogos</a></li>
                                           <li><a href="{{ route('classificacao') }}">Classificação</a></li>
+
+                                          @if(\App\Helpers\Helper::getConfig('pagina-regulamento'))
+
+                                            <li>
+                                                <a href="{{ \App\Helpers\Helper::getConfig('pagina-regulamento') }}">Regulamento</a>
+                                            </li>
+
+                                          @endif
+
                                         </ul>
                                     </li>
 
@@ -54,13 +63,7 @@
                                       @endif
                                     </li>
 
-                                    @if(\App\Helpers\Helper::getConfig('pagina-regulamento'))
 
-                                      <li>
-                                          <a href="{{ \App\Helpers\Helper::getConfig('pagina-regulamento') }}" class="login-btn"> <i class="fa fa-file-0"></i> Regulamento</a>
-                                      </li>
-
-                                    @endif
 
                                     @php
 

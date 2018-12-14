@@ -8,5 +8,5 @@ class Clube extends Model
 {
     protected $table = 'aula_experimental';
 
-    protected $fillable = ['nome', 'telefone', 'celular', 'email', 'idade', 'categoria'];
+    protected $fillable = ['nome', 'telefone', 'celular', 'email', 'idade', 'categoria', 'classificacao'];
 }

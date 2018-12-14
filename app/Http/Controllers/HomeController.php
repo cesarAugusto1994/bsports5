@@ -49,6 +49,8 @@ class HomeController extends Controller
                 jg.nome,
                 categoria_id categoria,
                 sum(partida.jogador1_pontos) - SUM(partida.jogador1_bonus) as pontos,
+
+
                 '' link,
                 '' url
                 from partidas partida
@@ -56,7 +58,38 @@ class HomeController extends Controller
                 where jg.categoria_id = ?
                 group by jg.id, jg.uuid, jg.nome, jg.categoria_id
                 order by pontos DESC
-                limit 5";
+                limit 1";
+
+        $sql = "
+
+        select jg.id, jg.nome, count(p.id) as partidas, jg.uuid, jg.categoria_id categoria, '' link, '' url,
+          sum(
+          p.jogador1_pontos/
+          (
+          select count(p2.id) as i
+          from partidas p2
+          where p2.semana = p.semana AND (p2.jogador1_id = p.jogador1_id OR p2.jogador2_id = p.jogador2_id)
+
+          ) +
+
+          p.jogador2_pontos/
+          (
+          select count(p2.id) as i
+          from partidas p2
+          where p2.semana = p.semana AND (p2.jogador1_id = p.jogador1_id OR p2.jogador2_id = p.jogador2_id)
+
+          )) as pontos
+
+        from jogadores jg
+        left join partidas p ON(jg.id = p.jogador1_id OR jg.id = p.jogador2_id)
+        where jg.ativo = 1
+        and jg.categoria_id = ?
+        group by jg.id, jg.nome, jg.uuid, jg.categoria_id
+        #having pontos > 0
+        order by pontos desc
+        limit 5;
+
+        ";
 
         $resultado = \DB::select($sql, [$id]);
 
@@ -75,7 +108,7 @@ class HomeController extends Controller
             "primeiro_nome" => $primeiroNome,
             "ultimo_nome" => $ultimoNome,
             "categoria" => $item->categoria,
-            "pontos" => $item->pontos,
+            "pontos" => floor($item->pontos),
             "link" => $item->link,
             "url" => $item->url
           ];
@@ -118,12 +151,49 @@ class HomeController extends Controller
                 where jg.categoria_id = ?
                 ";
 
+        $sql = "
+
+          select jg.id,
+            jg.nome,
+            count(p.id) as partidas,
+            jg.uuid, jg.categoria_id categoria,
+            jg.avatar avatar,
+            ca.nome categoria_nome, '' link, '' url,
+            sum(
+            p.jogador1_pontos/
+            (
+            select count(p2.id) as i
+            from partidas p2
+            where p2.semana = p.semana AND (p2.jogador1_id = p.jogador1_id OR p2.jogador2_id = p.jogador2_id)
+
+            ) +
+
+            p.jogador2_pontos/
+            (
+            select count(p2.id) as i
+            from partidas p2
+            where p2.semana = p.semana AND (p2.jogador1_id = p.jogador1_id OR p2.jogador2_id = p.jogador2_id)
+
+            )) as pontos
+
+          from jogadores jg
+          left join partidas p ON(jg.id = p.jogador1_id OR jg.id = p.jogador2_id)
+          inner join categorias ca ON(ca.id = jg.categoria_id)
+          where jg.ativo = 1
+          and jg.categoria_id = ?
+          group by jg.id, jg.nome, jg.avatar, jg.uuid, jg.categoria_id, ca.nome
+          #having pontos > 0
+          order by pontos desc
+          limit 5;
+
+        ";
+/*
         if($jogador) {
           $sql .= " AND jg.nome like '%$jogador%' ";
         }
 
         $sql .= "group by jg.id, jg.uuid, jg.nome, jg.categoria_id, ca.nome, jg.avatar
-        order by pontos DESC";
+        order by pontos DESC";*/
 
         $resultado = \DB::select($sql, [$id]);
 
@@ -146,7 +216,7 @@ class HomeController extends Controller
             "ultimo_nome" => $ultimoNome,
             "categoria" => $item->categoria,
             "categoria_nome" => $item->categoria_nome,
-            "pontos" => $item->pontos,
+            "pontos" => floor($item->pontos),
             "posicao" => $key+1,
             "link" => $item->link,
             "url" => $item->url,

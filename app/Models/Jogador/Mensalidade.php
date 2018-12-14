@@ -12,7 +12,7 @@ class Mensalidade extends Model
 {
     use Uuids;
 
-    protected $dates = ['vencimento'];
+    protected $dates = ['vencimento', 'data_pagamento'];
 
     public function jogador()
     {
@@ -22,5 +22,10 @@ class Mensalidade extends Model
     public function status()
     {
         return $this->belongsTo(Status::class, 'status_id');
+    }
+
+    public function log()
+    {
+        return $this->hasMany('App\Models\Mensalidade\Log', 'mensalidade_id');
     }
 }

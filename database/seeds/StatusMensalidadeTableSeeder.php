@@ -12,7 +12,20 @@ class StatusMensalidadeTableSeeder extends Seeder
      */
     public function run()
     {
-        $itens = ['Em Aberto','Pago'];
+        $itens = ['Em Aberto','Pago', 'Informe de Pagamento'];
+
+        $itens = [
+          'Aguardando pagamento',
+          'Em Análise',
+          'Paga',
+          'Disponível',
+          'Em Disputa',
+          'Devolvida',
+          'Cancelada',
+          'Chargeback denitado',
+          'Em Contestação',
+          'Informe de Pagamento'
+        ];
 
         foreach ($itens as $key => $item) {
           Status::create(['nome' => $item, 'label' => str_slug($item)]);

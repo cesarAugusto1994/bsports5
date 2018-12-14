@@ -21,6 +21,7 @@ class CreateClubesTable extends Migration
             $table->string('email')->nallable();
             $table->string('idade')->nallable();
             $table->string('categoria')->nallable();
+            $table->string('classificacao')->nallable();
 
             $table->timestamps();
         });

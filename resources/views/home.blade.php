@@ -167,7 +167,7 @@
                                         or j2.categoria_id = '.$categoria->id.')
                                         ;
                                     ';
-
+                                    
                                     $resultado = \DB::select($sql);
 
                                     $partidas = collect();

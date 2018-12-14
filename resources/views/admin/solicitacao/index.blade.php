@@ -21,9 +21,10 @@
             <tr>
               <th>Nome</th>
               <th>Email</th>
-              <th>Telefone</th>
-              <th>Data</th>
-              <th>Horário</th>
+              <th>Celular</th>
+              <th>Idade</th>
+              <th>Categoria</th>
+              <th>Classificação</th>
             </tr>
             </thead>
             <tbody>
@@ -31,9 +32,10 @@
                 <tr>
                   <td>{{ $solicitacao->nome }}</td>
                   <td>{{ $solicitacao->email }}</td>
-                  <td>{{ $solicitacao->telefone }}</td>
-                  <td>{{ $solicitacao->data }}</td>
-                  <td>{{ $solicitacao->horario }}</td>
+                  <td>{{ $solicitacao->celular }}</td>
+                  <td>{{ $solicitacao->idade }}</td>
+                  <td>{{ $solicitacao->categoria }}</td>
+                  <td>{{ $solicitacao->classificacao }}</td>
                 </tr>
               @endforeach
 

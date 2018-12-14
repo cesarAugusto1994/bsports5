@@ -79,6 +79,16 @@ class UserPolicy
         return $user->isAdmin();
     }
 
+    public function pagamentos(User $user)
+    {
+        return $user->isAdmin();
+    }
+
+    public function midias(User $user)
+    {
+        return $user->isAdmin();
+    }
+
     /**
      * Determine whether the user can view the model.
      *
