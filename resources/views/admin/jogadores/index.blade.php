@@ -100,6 +100,7 @@
                   <th>Categoria</th>
                   <th>Email</th>
                   <th>Pontos</th>
+                  <th>Aluno</th>
                   <th>Ativo</th>
                   <th>Opções</th>
                 </tr>
@@ -115,6 +116,13 @@
                       <td>{{ $jogador->email }}</td>
                       <td>{{ $jogador->partidas->sum('jogador1_pontos') - $jogador->partidas->sum('jogador1_bonus') +
                         $jogador->partidas2->sum('jogador2_pontos') - $jogador->partidas2->sum('jogador2_bonus') }}</td>
+                      <td>
+                        @if($jogador->aluno)
+                        <span class="badge bg-green">Sim</span>
+                        @else
+                        <span class="badge bg-red">Não</span>
+                        @endif
+                      </td>
                       <td>
                         @if($jogador->ativo)
                         <span class="badge bg-green">Ativo</span>

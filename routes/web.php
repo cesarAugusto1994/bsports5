@@ -28,6 +28,8 @@ Route::middleware('loadCache')->group(function() {
   Route::get('/contato', 'HomeController@contato')->name('contato');
   Route::get('/classificacao', 'HomeController@classificacao')->name('classificacao');
 
+  Route::get('/galeria/{id}', 'MidiasController@galeria')->name('galeria');
+
   Route::get('/evento/{id}/{titulo}', 'EventoController@show')->name('evento');
   Route::get('/noticia/{id}/{titulo}', 'NoticiasController@show')->name('noticia');
 
@@ -108,6 +110,8 @@ Route::middleware('loadCache')->group(function() {
               Route::resource('banners', 'BannersController');
               Route::resource('eventos', 'EventoController');
               Route::resource('noticias', 'NoticiasController');
+
+              Route::resource('campeoes', 'CampeoesController');
 
               Route::resource('solicitacao', 'SolicitacaoPartidaController');
               Route::resource('midias', 'MidiasController');

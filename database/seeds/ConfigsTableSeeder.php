@@ -160,6 +160,27 @@ class ConfigsTableSeeder extends Seeder
             ],
 
             [
+                'nome' => 'Valor Mensalidade Aluno',
+                'slug' => 'valor-mensalidade-aluno',
+                'descricao' => 'Valor Mensalidade Aluno',
+                'valor' => '150,00'
+            ],
+
+            [
+                'nome' => 'Multa Mensalidade',
+                'slug' => 'multa-mensalidade',
+                'descricao' => 'Multa Mensalidade',
+                'valor' => '2,00%'
+            ],
+
+            [
+                'nome' => 'Juros Mensalidade',
+                'slug' => 'juros-mensalidade',
+                'descricao' => 'Juros Mensalidade',
+                'valor' => '10,00%'
+            ],
+
+            [
                 'nome' => 'Dias vencimento débito',
                 'slug' => 'dias-vencimento-debito',
                 'descricao' => 'Dias vencimento débito',

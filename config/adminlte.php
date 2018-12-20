@@ -180,11 +180,15 @@ return [
             'can'         => 'manage-solicitacao-partidas'
         ],
         [
+            'text'        => 'Galeria de Campeões',
+            'url'         => 'admin/campeoes',
+            'can'         => 'manage-campeoes'
+        ],
+        [
             'text'        => 'Banners',
             'url'         => 'admin/banners',
             'can'         => 'manage-banners',
         ],
-
 
 
         'Configurações da conta',

@@ -238,6 +238,16 @@
               </div>
 
               <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" value="1" {{ $jogador->aluno ? 'checked' : '' }} name="aluno"/> Aluno
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
                 <label for="telefone" class="col-sm-2 control-label">Nova Senha</label>
                 <div class="col-sm-10">
                   <input type="password" class="form-control" name="password" id="password" placeholder="Deixe em branco caso nãoqueira atualizar a senha.">

@@ -42,8 +42,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('manage-quadras', 'App\Policies\UserPolicy@quadras');
         Gate::define('manage-solicitacao-partidas', 'App\Policies\UserPolicy@solicitacaoPartidas');
         Gate::define('manage-midias', 'App\Policies\UserPolicy@midias');
-
-
+        Gate::define('manage-campeoes', 'App\Policies\UserPolicy@campeoes');
 
         //
     }

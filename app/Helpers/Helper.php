@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Models\{Categoria, Quadras, Config, Torneio};
+use App\Models\{Categoria, Quadras, Config, Torneio, Midia, Campeoes};
 use Session;
 use Auth;
 
@@ -94,6 +94,48 @@ class Helper
         $torneios = Torneio::where('ativo', true)->get();
 
         self::set($key, $torneios);
+        return self::get($key);
+    }
+
+    public static function imagens()
+    {
+        $key = 'imagens';
+
+        if(self::has($key)) {
+            return self::get($key);
+        }
+
+        $midias = Midia::where('tipo', 'imagem')->where('ativo', true)->get();
+
+        self::set($key, $midias);
+        return self::get($key);
+    }
+
+    public static function videos()
+    {
+        $key = 'videos';
+
+        if(self::has($key)) {
+            return self::get($key);
+        }
+
+        $midias = Midia::where('tipo', 'video')->where('ativo', true)->get();
+
+        self::set($key, $midias);
+        return self::get($key);
+    }
+
+    public static function campeoes()
+    {
+        $key = 'campeoes';
+
+        if(self::has($key)) {
+            return self::get($key);
+        }
+
+        $campeoes = Campeoes::all();
+
+        self::set($key, $campeoes);
         return self::get($key);
     }
 

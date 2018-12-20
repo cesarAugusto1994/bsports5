@@ -43,7 +43,10 @@
 
                         <div class="form-group">
                             <label for="email">Valor Mensalidade</label>
-                            <input type="text" class="form-control money" id="valor" name="valor" value="{{\App\Helpers\Helper::getConfig('valor-mensalidade')}}" placeholder="R$ Valor" required>
+                            <select class="form-control" name="valor">
+                                <option value="{{\App\Helpers\Helper::getConfig('valor-mensalidade')}}"> Ranking {{\App\Helpers\Helper::getConfig('valor-mensalidade')}}</option>
+                                <option value="{{\App\Helpers\Helper::getConfig('valor-mensalidade-aluno')}}"> Aluno {{\App\Helpers\Helper::getConfig('valor-mensalidade-aluno')}}</option>
+                            </select>
                         </div>
 
                         <button type="submit" class="btn btn-primary save">

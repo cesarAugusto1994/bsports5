@@ -205,6 +205,7 @@ class JogadoresController extends Controller
         $jogador->categoria_id = $data['categoria'];
         $jogador->lateralidade = $data['lateralidade'];
         $jogador->ativo = $data['ativo'];
+        $jogador->aluno = $request->has('aluno');
         $jogador->save();
 
         $user = new \App\User();
@@ -264,6 +265,7 @@ class JogadoresController extends Controller
 
         $jogador->lateralidade = $data['lateralidade'];
         $jogador->ativo = $data['ativo'];
+        $jogador->aluno = $request->has('aluno');
         $jogador->save();
 
         if($request->filled('password')) {

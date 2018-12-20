@@ -19,6 +19,12 @@ class MidiasController extends Controller
         return view('admin.midias.index', compact('midias'));
     }
 
+    public function galeria($id)
+    {
+        $midia = Midia::findOrFail($id);
+        return view('pages.galeria', compact('midia'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -81,6 +87,9 @@ class MidiasController extends Controller
 
         }
 
+        session()->forget('imagens');
+        session()->forget('videos');
+
         flash('Midia adicionada com sucesso.')->success()->important();
 
         return redirect()->route('midias.index');
@@ -134,10 +143,18 @@ class MidiasController extends Controller
             $midia = Midia::findOrFail($id);
 
             $midia->links->map(function($link) {
+
+                if(\Storage::exists($link->link)) {
+                  \Storage::delete($link->link);
+                }
+
                 $link->delete();
             });
 
             $midia->delete();
+
+            session()->forget('imagens');
+            session()->forget('videos');
 
             return response()->json([
               'code' => 201,
