@@ -62,6 +62,8 @@ Route::middleware('loadCache')->group(function() {
 
   //  Route::group(['middleware' => 'checkrole'], function () {
 
+  Route::get('/cep', 'JogadoresController@cep')->name('cep');
+
       Route::group(['middleware' => 'role:user|admin'], function () {
         Route::group(['prefix' => 'player'], function () {
             Route::get('/dashboard', 'PlayerController@index')->name('player_dashboard');
@@ -112,6 +114,7 @@ Route::middleware('loadCache')->group(function() {
               Route::resource('noticias', 'NoticiasController');
 
               Route::resource('campeoes', 'CampeoesController');
+              Route::resource('semestres', 'SemestreController');
 
               Route::resource('solicitacao', 'SolicitacaoPartidaController');
               Route::resource('midias', 'MidiasController');

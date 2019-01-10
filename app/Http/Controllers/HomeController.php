@@ -25,12 +25,12 @@ class HomeController extends Controller
         }
 
         if(Partida::count() == 0) {
-            $this->importPartidas();
+            //$this->importPartidas();
             //$this->importResultados();
         }
 
         if(Semana::count() == 0) {
-            $this->importSemanas();
+            //$this->importSemanas();
         }
 
         if(Pagina::count() == 0) {
@@ -43,55 +43,46 @@ class HomeController extends Controller
             $id = $request->get('category');
         }
 
-        $sql = "select
-                jg.id,
-                jg.uuid,
-                jg.nome,
-                categoria_id categoria,
-                sum(partida.jogador1_pontos) - SUM(partida.jogador1_bonus) as pontos,
-
-
-                '' link,
-                '' url
-                from partidas partida
-                inner join jogadores jg ON(jg.id = partida.jogador1_id)
-                where jg.categoria_id = ?
-                group by jg.id, jg.uuid, jg.nome, jg.categoria_id
-                order by pontos DESC
-                limit 1";
-
         $sql = "
 
-        select jg.id, jg.nome, count(p.id) as partidas, jg.uuid, jg.categoria_id categoria, '' link, '' url,
-          sum(
-          p.jogador1_pontos/
-          (
-          select count(p2.id) as i
-          from partidas p2
-          where p2.semana = p.semana AND (p2.jogador1_id = p.jogador1_id OR p2.jogador2_id = p.jogador2_id)
+          select
+           jg.id,
+           jg.nome,
+           count(p.id) as partidas,
+           jg.uuid,
+           jg.categoria_id categoria,
+           '' link,
+           '' url,
+            sum(p.jogador1_pontos/
+            (select count(p2.id) as i
+            from partidas p2
+            where p2.semana = p.semana AND (p2.jogador1_id = p.jogador1_id OR p2.jogador2_id = p.jogador2_id)) +
 
-          ) +
+            p.jogador2_pontos/
+            (
+            select count(p2.id) as i
+            from partidas p2
+            where p2.semana = p.semana AND (p2.jogador1_id = p.jogador1_id OR p2.jogador2_id = p.jogador2_id)
 
-          p.jogador2_pontos/
-          (
-          select count(p2.id) as i
-          from partidas p2
-          where p2.semana = p.semana AND (p2.jogador1_id = p.jogador1_id OR p2.jogador2_id = p.jogador2_id)
+            )) as pontos,
+            jg.avatar avatar
 
-          )) as pontos
-
-        from jogadores jg
-        left join partidas p ON(jg.id = p.jogador1_id OR jg.id = p.jogador2_id)
-        where jg.ativo = 1
-        and jg.categoria_id = ?
-        group by jg.id, jg.nome, jg.uuid, jg.categoria_id
-        #having pontos > 0
-        order by pontos desc
-        limit 5;
+          from jogadores jg
+          left join partidas p ON(jg.id = p.jogador1_id OR jg.id = p.jogador2_id)
+          where jg.ativo = 1
+          and jg.categoria_id = ?
+          group by jg.id, jg.nome, jg.uuid, jg.categoria_id, jg.avatar
+          #having pontos > 0
+          order by pontos desc
+          limit 5;
 
         ";
 
+        //print_r($sql);exit;
+
         $resultado = \DB::select($sql, [$id]);
+
+        //dd($resultado);
 
         $ranking = [];
 
@@ -110,7 +101,8 @@ class HomeController extends Controller
             "categoria" => $item->categoria,
             "pontos" => floor($item->pontos),
             "link" => $item->link,
-            "url" => $item->url
+            "url" => $item->url,
+            "avatar" => $item->avatar
           ];
         }
 
@@ -177,7 +169,7 @@ class HomeController extends Controller
             )) as pontos
 
           from jogadores jg
-          left join partidas p ON(jg.id = p.jogador1_id OR jg.id = p.jogador2_id)
+          inner join partidas p ON(jg.id = p.jogador1_id OR jg.id = p.jogador2_id)
           inner join categorias ca ON(ca.id = jg.categoria_id)
           where jg.ativo = 1
           and jg.categoria_id = ?

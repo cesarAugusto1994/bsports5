@@ -94,6 +94,11 @@ class UserPolicy
         return $user->isAdmin();
     }
 
+    public function semestres(User $user)
+    {
+        return $user->isAdmin();
+    }
+
     /**
      * Determine whether the user can view the model.
      *

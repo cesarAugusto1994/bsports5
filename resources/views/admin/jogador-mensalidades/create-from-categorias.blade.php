@@ -80,6 +80,7 @@
                                      <th><input type="checkbox" id="checkall"></th>
                                      <th>Nome</th>
                                      <th>Email</th>
+                                     <th>Aluno</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -88,6 +89,7 @@
                                      <td><input type="checkbox" name="jogador[]" value="{{ $jogador->id }}" class="checkbox-jogador"></td>
                                      <td>{{ $jogador->nome }}</td>
                                      <td>{{ $jogador->email }}</td>
+                                     <td>{{ $jogador->aluno ? 'Sim' : 'Não' }}</td>
                                   </tr>
                                   @endforeach
                                 </tbody>
@@ -102,7 +104,7 @@
                             <label for="email">Mês Referência</label>
                             <input type="text" class="form-control datetime" id="mes" name="mes" placeholder="Meses" readonly required>
                         </div>
-                        
+<!--
                         <div class="form-group">
                             <label for="email">Valor Mensalidade</label>
                             <select class="form-control" name="valor">
@@ -110,7 +112,7 @@
                                 <option value="{{\App\Helpers\Helper::getConfig('valor-mensalidade-aluno')}}"> Aluno {{\App\Helpers\Helper::getConfig('valor-mensalidade-aluno')}}</option>
                             </select>
                         </div>
-
+-->
                         <button type="submit" class="btn btn-primary save">
                             Salvar
                         </button>

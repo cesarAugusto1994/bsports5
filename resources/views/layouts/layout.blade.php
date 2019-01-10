@@ -159,6 +159,12 @@
       color:white !important;
     }
 
+    @media (max-width: 767px) {
+      .navbar-collapse {
+        height:320px!important
+      }
+    }
+
     </style>
 
     @yield('css')

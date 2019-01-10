@@ -83,13 +83,22 @@
                                     <a>Rankings Home</a>-->
                                   </div>
                                   </div>
+
+                                  @php
+
+                                      $url = 'https://www.atpworldtour.com/-/media/tennis/players/gladiator/2018/nadal_full_ao18.png';
+
+                                      if(!empty($item['avatar'])) {
+                                        $url = route('image', ['link'=>$item['avatar']]);
+                                      }
+
+                                  @endphp
+
                                   <div class="player-ranking-image">
                                     <div class="item-overflow">
                                       <div class="item-container">
                                         <div class="previous-item">
-                                          <div class="image-wrap">
-                                            <img src="https://www.atpworldtour.com/-/media/tennis/players/gladiator/2018/nadal_full_ao18.png" class="">
-                                          </div>
+                                          <div class="image-wrap" style="background: url({{$url}}) no-repeat center center;background-size: 60% 60%;margin-left:18%"></div>
                                         </div>
                                       </div>
                                     </div>
@@ -167,7 +176,7 @@
                                         or j2.categoria_id = '.$categoria->id.')
                                         ;
                                     ';
-                                    
+
                                     $resultado = \DB::select($sql);
 
                                     $partidas = collect();

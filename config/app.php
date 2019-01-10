@@ -182,6 +182,8 @@ return [
         laravel\pagseguro\Platform\Laravel5\ServiceProvider::class,
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
 
+        Canducci\Cep\Providers\CepServiceProvider::class
+
     ],
 
     /*
@@ -231,7 +233,9 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Gravatar' => Creativeorange\Gravatar\Facades\Gravatar::class,
-        'PagSeguro' => laravel\pagseguro\Platform\Laravel5\PagSeguro::class
+        'PagSeguro' => laravel\pagseguro\Platform\Laravel5\PagSeguro::class,
+        'Cep'        => Canducci\Cep\Facades\Cep::class,
+        'Endereco'   => Canducci\Cep\Facades\Endereco::class,
 
     ],
 

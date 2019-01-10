@@ -130,6 +130,11 @@ return [
             'can'         => 'manage-players',
         ],
         [
+            'text'        => 'Semestres',
+            'url'         => 'admin/semestres',
+            'can'         => 'manage-semestres',
+        ],
+        [
             'text'        => 'Eventos',
             'url'         => 'admin/eventos',
             'can'         => 'manage-eventos',

@@ -84,6 +84,48 @@
             </div>
 
             <div class="form-group">
+              <label for="cep" class="col-sm-2 control-label">CEP</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control cep" data-url="{{ route('cep') }}" name="cep" id="cep" placeholder="">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="endereco" class="col-sm-2 control-label">Endereço</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="endereco" id="endereco" placeholder="">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="numero" class="col-sm-2 control-label">Numero</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="numero" id="numero" placeholder="">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="bairro" class="col-sm-2 control-label">Bairro</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="bairro" id="bairro" placeholder="">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="cidade" class="col-sm-2 control-label">Cidade</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="cidade" id="cidade" placeholder="">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="estado" class="col-sm-2 control-label">Estado</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="estado" id="estado" placeholder="">
+              </div>
+            </div>
+
+            <div class="form-group">
               <label for="observacao" class="col-sm-2 control-label">Observação</label>
               <div class="col-sm-10">
                 <textarea class="form-control" id="observacao" name="observacao"></textarea>

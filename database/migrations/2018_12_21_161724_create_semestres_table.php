@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFieldOnTableJoagadores extends Migration
+class CreateSemestresTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,17 @@ class CreateFieldOnTableJoagadores extends Migration
      */
     public function up()
     {
-        Schema::table('jogadores', function (Blueprint $table) {
-            $table->boolean('aluno')->default(true);
+        Schema::create('semestres', function (Blueprint $table) {
+
+            $table->increments('id');
+
+            $table->string('titulo');
+
+            $table->date('inicio');
+
+            $table->date('fim');
+
+            $table->timestamps();
         });
     }
 
@@ -25,8 +34,6 @@ class CreateFieldOnTableJoagadores extends Migration
      */
     public function down()
     {
-        Schema::table('jogadores', function (Blueprint $table) {
-            $table->dropColumn('aluno');
-        });
+        Schema::dropIfExists('semestres');
     }
 }

@@ -25,10 +25,11 @@ class CreateJogadorsTable extends Migration
             $table->integer('categoria_id')->nullable();
             $table->string('avatar')->nullable();
             $table->text('observacao')->nullable();
-            
+
             $table->uuid('uuid');
             $table->boolean('ativo')->default(true);
             $table->timestamps();
+            $table->boolean('aluno')->default(true);
         });
     }
 

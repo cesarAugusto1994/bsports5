@@ -75,18 +75,28 @@ class JogadorMensalidadesController extends Controller
           flash('O mês referência da mensalidade deve ser informado.')->error()->important();
           return back();
         }
-
+/*
         if(empty($data['valor'])) {
           flash('O valor da mensalidade deve ser informado.')->error()->important();
           return back();
         }
-
+*/
         $meses = explode(', ', $data['mes']);
 
         $jogadores = $data['jogador'];
-        $valor = (float)$data['valor'] ?? 265.00;
+        //$valor = (float)$data['valor'] ?? 265.00;
 
         foreach ($jogadores as $key => $jogador) {
+
+            $jog = Jogador::findOrFail($jogador);
+
+            $valor = \App\Helpers\Helper::getConfig('valor-mensalidade');
+
+            if($jog->aluno) {
+                $valor = \App\Helpers\Helper::getConfig('valor-mensalidade-aluno');
+            }
+
+            $valor = str_replace(',','.', $valor);
 
             $mesesCobrarMensalidade = [];
 
@@ -96,14 +106,23 @@ class JogadorMensalidadesController extends Controller
 
                 $existeMensalidade = Mensalidade::where('referencia', "$jogador:$dataMes")->get();
 
+                $vcto = \App\Helpers\Helper::getConfig('dias-vencimento-debito');
+
+                $vigencia = \DateTime::createFromFormat('m/Y', $mes);
+                $dataVencimento = \DateTime::createFromFormat('m/Y', $mes);
+
+                $dataVencimento->setDate($dataVencimento->format('Y'),$dataVencimento->format('m'),1);
+
+                $dataVencimento->modify("+$vcto days");
+
                 if($existeMensalidade->isEmpty()) {
                       $mensalidade = new Mensalidade();
-                      $dataMes = (\DateTime::createFromFormat('m/Y', $mes));
+                      $dataMes = $vigencia;
                       $mensalidade->mes = $dataMes->format('m/Y');
                       $mensalidade->jogador_id = $jogador;
                       $mensalidade->referencia = "$jogador:" . $dataMes->format('mY');
                       $mensalidade->valor = $valor;
-                      $dataVencimento = (\DateTime::createFromFormat('m/Y', $mes)->modify('+1 month'));
+
                       $mensalidade->vencimento = $dataVencimento;
                       $mensalidade->status_id = 1;
                       $mensalidade->criado_por = \Auth::user()->id;
@@ -134,6 +153,8 @@ class JogadorMensalidadesController extends Controller
         }
 
         //$request->user()->notify(new CreateMensalidade());
+
+        flash('Mensalidade Gerada com sucesso.')->success()->important();
 
         return redirect()->route('mensalidades.index');
     }
@@ -182,6 +203,13 @@ class JogadorMensalidadesController extends Controller
     {
         try {
             $registro = Mensalidade::findOrFail($id);
+
+            if($registro->status_id == 1) {
+              $registro->log->map(function($log) {
+                $log->delete();
+              });
+            }
+
             $registro->delete();
 
             return response()->json([

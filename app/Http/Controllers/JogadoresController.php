@@ -202,6 +202,30 @@ class JogadoresController extends Controller
             $jogador->avatar = $request->avatar->store('avatar');
         }
 
+        if($request->has('cep')) {
+           $jogador->cep = $data['cep'];
+        }
+
+        if($request->has('endereco')) {
+           $jogador->endereco = $data['endereco'];
+        }
+
+        if($request->has('numero')) {
+           $jogador->numero = $data['numero'];
+        }
+
+        if($request->has('bairro')) {
+           $jogador->bairro = $data['bairro'];
+        }
+
+        if($request->has('cidade')) {
+           $jogador->cidade = $data['cidade'];
+        }
+
+        if($request->has('estado')) {
+           $jogador->estado = $data['estado'];
+        }
+
         $jogador->categoria_id = $data['categoria'];
         $jogador->lateralidade = $data['lateralidade'];
         $jogador->ativo = $data['ativo'];
@@ -263,6 +287,30 @@ class JogadoresController extends Controller
             $jogador->avatar = $request->avatar->store('avatar');
         }
 
+        if($request->has('cep')) {
+           $jogador->cep = $data['cep'];
+        }
+
+        if($request->has('endereco')) {
+           $jogador->endereco = $data['endereco'];
+        }
+
+        if($request->has('numero')) {
+           $jogador->numero = $data['numero'];
+        }
+
+        if($request->has('bairro')) {
+           $jogador->bairro = $data['bairro'];
+        }
+
+        if($request->has('cidade')) {
+           $jogador->cidade = $data['cidade'];
+        }
+
+        if($request->has('estado')) {
+           $jogador->estado = $data['estado'];
+        }
+
         $jogador->lateralidade = $data['lateralidade'];
         $jogador->ativo = $data['ativo'];
         $jogador->aluno = $request->has('aluno');
@@ -297,6 +345,30 @@ class JogadoresController extends Controller
 
         flash('Jogadores inativados com sucesso.')->success()->important();
         return redirect()->back();
+    }
+
+    public function cep(Request $request)
+    {
+        $cep = $request->get('cep');
+
+        $cepresult = app('Cep')->find($cep);
+
+        $cepInfo = $cepresult->toJson();
+
+        $resultado = json_decode($cepInfo->result(), 1);
+
+        if(!empty($resultado)) {
+            return json_encode([
+              'success' => true,
+              'message' => 'Cep encontrado',
+              'data' => $resultado
+            ]);
+        }
+
+        return json_encode([
+          'success' => false,
+          'message' => 'Cep não encontrado'
+        ]);
     }
 
     public function destroy($id)
