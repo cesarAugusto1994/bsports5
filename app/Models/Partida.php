@@ -23,6 +23,7 @@ class Partida extends Model
       'jogador2_tiebreak','jogador2_vitoria_wo',
       'jogador2_desistencia','jogador2_pontos',
       'jogador2_bonus','jogador2_computado',
+      'semestre_id'
     ];
 
     public function jogadores()

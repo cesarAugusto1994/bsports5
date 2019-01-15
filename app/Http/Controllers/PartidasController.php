@@ -206,7 +206,7 @@ class PartidasController extends Controller
                 $cardCollor = "#CB4335";
               break;
             }
-            $jogador1 = $jogador2 = 'A definir';
+            $jogador1 = $jogador2 = '';
 
             if($partida->jogador1) {
               $jogador1 = $partida->jogador1->nome;
@@ -273,7 +273,7 @@ class PartidasController extends Controller
                 $cardCollor = "#CB4335";
               break;
             }
-            $jogador1 = $jogador2 = 'A definir';
+            $jogador1 = $jogador2 = '';
 
             if($partida->jogador1) {
               $jogador1 = $partida->jogador1->nome;
@@ -312,7 +312,8 @@ class PartidasController extends Controller
     {
         $quadras = Helper::quadras();
         $torneios = Helper::torneios();
-        return view('admin.partidas.create',compact('quadras', 'torneios'));
+        $semestres = Helper::semestres();
+        return view('admin.partidas.create',compact('quadras', 'torneios', 'semestres'));
     }
 
     /**
@@ -328,7 +329,19 @@ class PartidasController extends Controller
         $inicio = \DateTime::createFromFormat('d/m/Y H:i', $data['inicio']);
         $fim = \DateTime::createFromFormat('d/m/Y H:i', $data['fim']);
 
-        if(!isset($data['quadra'])) {
+        $hora = $fim->diff($inicio)->h;
+        $minuto = $fim->diff($inicio)->i;
+
+        $time = ($hora*60) + $minuto;
+
+        $tempoPartida = 90;
+
+        $quantidade = intval($time/$tempoPartida);
+
+        //dd($quantidade);
+        //exit;
+
+        if(!$request->filled('quadra')) {
           flash('Nenhuma quadra informada.')->warning()->important();
           return redirect()->back();
         }
@@ -337,31 +350,39 @@ class PartidasController extends Controller
 
         foreach ($quadras as $key => $quadra) {
 
-          $partida = new Partida();
-          $partida->torneio_id = $data['torneio'];
-          $partida->quadra_id = $quadra;
-          $partida->inicio = $inicio;
-          $partida->fim = $fim;
+          $horario = \DateTime::createFromFormat('d/m/Y H:i', $data['inicio']);
 
-          $partida->tipo_jogo = 'Simples';
-          $partida->semana = $inicio->format('wY');
+          foreach (range(1, $quantidade) as $item) {
 
-          if($request->has('jogador')) {
+            $partida = new Partida();
+            $partida->torneio_id = $data['torneio'];
+            $partida->quadra_id = $quadra;
+            $partida->inicio = $horario;
+            $partida->fim = $horario->modify('+90 minutes');
+            $partida->semestre_id = $data['semestre_id'];
+            $partida->tipo_jogo = 'Simples';
+            $partida->semana = $inicio->format('wY');
 
-              $jogadores = $data['jogador'];
+            if($request->has('jogador')) {
 
-              foreach ($jogadores as $key => $item) {
-                if($key == 0) {
-                    $partida->jogador1_id = $item;
-                } else {
-                    $partida->jogador2_id = $item;
+                $jogadores = $data['jogador'];
+
+                foreach ($jogadores as $key => $item) {
+                  if($key == 0) {
+                      $partida->jogador1_id = $item;
+                  } else {
+                      $partida->jogador2_id = $item;
+                  }
                 }
-              }
+            }
+
+            $partida->save();
+
           }
 
-          $partida->save();
-
         }
+
+
 
         flash('Partida marcada com sucesso!')->success()->important();
         return redirect()->back();
@@ -474,6 +495,16 @@ class PartidasController extends Controller
 
         flash('A sua solicitação foi enviada com sucesso!')->success()->important();
         return redirect()->back();
+    }
+
+    public function wo()
+    {
+
+    }
+
+    public function desistencia()
+    {
+      
     }
 
 }

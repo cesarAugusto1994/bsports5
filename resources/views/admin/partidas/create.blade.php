@@ -36,7 +36,7 @@
 
       <div class="col-md-12">@include('flash::message')</div>
 
-      <div class="col-md-8">
+      <div class="col-md-9">
           <div class="box box-solid">
             <div class="box-header with-border">
               <h3 class="box-title">Caledário</h3>
@@ -50,7 +50,7 @@
           </div>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-3">
 
           <div class="row">
 
@@ -113,7 +113,7 @@
                             <div class="form-group">
                                 <label>Jogadores</label>
                                 <div class="input-group col-md-12 col-xs-12 col-sm-12">
-                                  <select class="form-control select2 select-jogador" multiple style="width:270px" id="jogadores" name="jogador[]">
+                                  <select class="form-control select2 select-jogador" multiple style="width:99%" id="jogadores" name="jogador[]">
                                       <option value=""></option>
 
                                   </select>
@@ -147,10 +147,23 @@
                             </div>
                         </div>
 
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Semestre</label>
+                                <div class="input-group col-md-12 col-xs-12 col-sm-12">
+                                    <select class="form-control" name="semestre_id" id="semestre_id">
+                                      @foreach($semestres as $semestre)
+                                          <option value="{{ $semestre->id }}" {{ $loop->last ? 'selected' : '' }}>{{ $semestre->titulo }}</option>
+                                      @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
 
                       </div>
 
-                    <button type="submit" id="btnAgendar" class="btn btn-success">Agendar</button>
+                    <button type="submit" id="btnAgendar" class="btn btn-bitbucket btn-block">Agendar</button>
 
                   </form>
 
@@ -303,7 +316,7 @@
     lang: 'pt-br',
     eventLimit: true,
     eventLimitText: 'partidas',
-    defaultView: 'listMonth',
+    defaultView: 'agendaWeek',
     eventBorderColor: "#de1f1f",
     eventColor: "#AC1E23",
     slotLabelFormat: 'HH:mm',

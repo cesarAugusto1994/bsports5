@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Models\{Categoria, Quadras, Config, Torneio, Midia, Campeoes};
+use App\Models\{Categoria, Quadras, Config, Torneio, Midia, Campeoes, Semestre};
 use Session;
 use Auth;
 
@@ -94,6 +94,22 @@ class Helper
         $torneios = Torneio::where('ativo', true)->get();
 
         self::set($key, $torneios);
+        return self::get($key);
+    }
+
+    public static function semestres()
+    {
+        $key = 'semestres';
+
+        if(self::has($key)) {
+            return self::get($key);
+        }
+
+        $vigencia = now();
+
+        $semestre = Semestre::all();
+
+        self::set($key, $semestre);
         return self::get($key);
     }
 

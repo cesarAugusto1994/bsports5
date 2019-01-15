@@ -144,6 +144,9 @@ Route::middleware('loadCache')->group(function() {
 
               Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
+              Route::get('partidas/{id}/jogador/{jogador}/wo', 'PartidasController@wo')->name('wo');
+              Route::get('partidas/{id}/jogador/{jogador}/desistencia', 'PartidasController@desistencia')->name('desistencia');
+
           });
       });
 

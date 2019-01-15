@@ -20,7 +20,20 @@
 
           <p class="lead">Quadra: {{$partida->quadra->nome}}</p>
 
-          <a href="{{ route('editar_partida_placar', $partida->id) }}" class="btn btn-primary">Editar</a>
+          @if(!$partida->jogador1 || !$partida->jogador2)
+
+          <div class="alert alert-info" role="alert">
+              <h2>Observação</h2>
+              <p class="lead">Só é permitida a manipulação dos pontos, se os dois jogadores forem escalados para a partida.</p>
+          </div>
+
+          @else
+
+              <a href="{{ route('editar_partida_placar', $partida->id) }}" class="btn btn-bitbucket btn-lg">Atualizar Placar</a>
+
+          @endif
+
+
 
         </div>
       </div>
@@ -35,7 +48,7 @@
         <h5 class="widget-user-desc">{{ $partida->jogador1->categoria->nome ?? '-' }}</h5>
       </div>
       <div class="widget-user-image">
-        <img class="img-circle" src="{{ route('image', ['link'=>$partida->jogador1->avatar]) }}" alt="User Avatar">
+        <img class="img-circle" src="{{ route('image', ['link'=>$partida->jogador1->avatar]) }}" alt="">
       </div>
       <div class="box-footer">
         <div class="row">
@@ -82,6 +95,22 @@
               <span class="description-text">Bonus</span>
             </div>
           </div>
+
+          @if($partida->jogador1 && $partida->jogador2)
+
+          <div class="col-sm-6">
+            <div class="description-block">
+              <span class="description-text"><a class="btn btn-twitter btn-block btn-lg" href="{{ route('wo', [$partida->id, $partida->jogador1_id]) }}">Vitória por WO</a></span>
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <div class="description-block">
+              <span class="description-text"><a class="btn btn-bitbucket btn-block btn-lg" href="{{ route('desistencia', [$partida->id, $partida->jogador1_id]) }}">Desistência</a></span>
+            </div>
+          </div>
+
+          @endif
 
         </div>
       </div>
@@ -143,6 +172,22 @@
               <span class="description-text">Bonus</span>
             </div>
           </div>
+
+          @if($partida->jogador1 && $partida->jogador2)
+
+          <div class="col-sm-6">
+            <div class="description-block">
+              <span class="description-text"><a class="btn btn-twitter btn-block btn-lg" href="{{ route('wo', [$partida->id, $partida->jogador2_id]) }}">Vitória por WO</a></span>
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <div class="description-block">
+              <span class="description-text"><a class="btn btn-bitbucket btn-block btn-lg" href="{{ route('desistencia', [$partida->id, $partida->jogador2_id]) }}">Desistência</a></span>
+            </div>
+          </div>
+
+          @endif
 
         </div>
       </div>

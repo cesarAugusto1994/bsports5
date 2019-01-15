@@ -176,7 +176,8 @@ class HomeController extends Controller
           group by jg.id, jg.nome, jg.avatar, jg.uuid, jg.categoria_id, ca.nome
           #having pontos > 0
           order by pontos desc
-          limit 5;
+          #limit 5
+          ;
 
         ";
 /*

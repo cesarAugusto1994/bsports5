@@ -69,6 +69,13 @@ class PlayerController extends Controller
 
         $user->save();
 
+        $hasEmail = Jogador::where('email', $data['email'])->whereNotIn('id', [$id])->get();
+
+        if($hasEmail->isNotEmpty()){
+          flash('Email já existente.')->warning()->important();
+          return redirect()->back();
+        }
+
         $jogador = Jogador::findOrFail($id);
         $jogador->nome = $data['nome'];
         $jogador->email = $data['email'];
