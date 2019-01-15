@@ -13,7 +13,7 @@ class ImagensController extends Controller
         $image = \Storage::exists($link) ? \Storage::get($link) : false;
 
         if(!$image) {
-          return null;
+          $image = 'avatar.png';
         }
 
         return response($image, 200)->header('Content-Type', 'image/png');

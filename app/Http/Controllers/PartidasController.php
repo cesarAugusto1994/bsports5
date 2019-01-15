@@ -121,6 +121,16 @@ class PartidasController extends Controller
     {
         $partida = Partida::findOrFail($id);
 
+        if($partida->inicio < now()) {
+
+          notify()->flash('Atenção', 'error', [
+              'text' => 'A data para a realização desta partida já passou, não é possivel adicionar jogadores!',
+          ]);
+
+          return back();
+
+        }
+
         $jogador = null;
 
         $isAdmin = (boolean)$request->has('partida_admin');
@@ -497,14 +507,116 @@ class PartidasController extends Controller
         return redirect()->back();
     }
 
-    public function wo()
+    public function wo($id, $jogadorId)
     {
+        $partida = Partida::findOrFail($id);
 
+        $jogadorVencedor = $jogadorPerdedor = null;
+        $j1pontos = $j1bonus = $j2pontos = $j2bonus = 0;
+
+        if($jogadorId == $partida->jogador1->id) {
+          $jogadorVencedor = $partida->jogador1;
+          $jogadorPerdedor = $partida->jogador2;
+
+          $j1pontos = 1000;
+          $j1bonus = 0;
+
+          $j2pontos = -1000;
+          $j2bonus = -10;
+
+        } elseif($jogadorId == $partida->jogador2->id) {
+          $jogadorVencedor = $partida->jogador2;
+          $jogadorPerdedor = $partida->jogador1;
+
+          $j2pontos = 1000;
+          $j2bonus = 0;
+
+          $j1pontos = -1000;
+          $j1bonus = -10;
+        }
+
+        return view('admin.partidas.wo', compact('partida', 'j1pontos', 'j1bonus', 'j2pontos', 'j2bonus', 'jogadorVencedor', 'jogadorPerdedor'));
     }
 
-    public function desistencia()
+    public function desistencia($id, $jogadorId)
     {
-      
+        $partida = Partida::findOrFail($id);
+
+        $jogadorVencedor = $jogadorPerdedor = null;
+        $j1pontos = $j1bonus = $j2pontos = $j2bonus = 0;
+
+        if($jogadorId == $partida->jogador1->id) {
+          $jogadorVencedor = $partida->jogador1;
+          $jogadorPerdedor = $partida->jogador2;
+
+          $j1pontos = 1000;
+          $j1bonus = 0;
+
+          $j2pontos = -1000;
+          $j2bonus = -10;
+
+        } elseif($jogadorId == $partida->jogador2->id) {
+          $jogadorVencedor = $partida->jogador2;
+          $jogadorPerdedor = $partida->jogador1;
+
+          $j2pontos = 1000;
+          $j2bonus = 0;
+
+          $j1pontos = -1000;
+          $j1bonus = -10;
+        }
+
+        return view('admin.partidas.desistencia', compact('partida', 'j1pontos', 'j1bonus', 'j2pontos', 'j2bonus'));
+    }
+
+    public function woStore($id, Request $request)
+    {
+        $data = $request->request->all();
+
+        $partida = Partida::findOrFail($id);
+
+        $jogadorVencedor = Jogador::findOrFail($data['vencedor']);
+        $jogadorPerdedor = Jogador::findOrFail($data['perdedor']);
+
+        if($partida->jogador1->id == $jogadorVencedor->id) {
+
+          $partida->jogador1_pontos = 1000;
+          $partida->jogador1_bonus = 0;
+          $partida->jogador1_vitoria_wo = true;
+
+          $partida->jogador2_pontos = -1000;
+          $partida->jogador2_bonus = -10;
+
+        } else {
+
+          $partida->jogador2_pontos = 1000;
+          $partida->jogador2_bonus = 0;
+          $partida->jogador2_vitoria_wo = true;
+
+          $partida->jogador1_pontos = -1000;
+          $partida->jogador1_bonus = -10;
+
+        }
+
+        $partida->finalizado = true;
+        $partida->usuario_finalizacao_id = \Auth::user()->id;
+        $partida->save();
+
+        notify()->flash('Partida Finalizada', 'success', [
+            'timer' => 3000,
+            'text' => 'Esta partida foi finalizada como W.O',
+        ]);
+
+        return redirect()->route('partida_placar', $partida->id);
+    }
+
+    public function desistenciaStore($id, Request $request)
+    {
+        $data = $request->request->all();
+
+        $partida = Partida::findOrFail($id);
+
+        dd($data);
     }
 
 }

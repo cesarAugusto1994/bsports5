@@ -182,7 +182,8 @@ return [
         laravel\pagseguro\Platform\Laravel5\ServiceProvider::class,
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
 
-        Canducci\Cep\Providers\CepServiceProvider::class
+        Canducci\Cep\Providers\CepServiceProvider::class,
+        Codecourse\Notify\NotifyServiceProvider::class,
 
     ],
 
@@ -236,6 +237,7 @@ return [
         'PagSeguro' => laravel\pagseguro\Platform\Laravel5\PagSeguro::class,
         'Cep'        => Canducci\Cep\Facades\Cep::class,
         'Endereco'   => Canducci\Cep\Facades\Endereco::class,
+        'Notify' => Codecourse\Notify\Facades\Notify::class,
 
     ],
 

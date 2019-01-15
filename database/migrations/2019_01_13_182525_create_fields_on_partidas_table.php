@@ -14,7 +14,10 @@ class CreateFieldsOnPartidasTable extends Migration
     public function up()
     {
         Schema::table('partidas', function (Blueprint $table) {
-            $table->integer('semestre_id')->nullable();
+            $table->integer('usuario_criacao_id')->nullable()->after('jogador2_computado');
+            $table->integer('usuario_finalizacao_id')->nullable()->after('usuario_criacao_id');
+            $table->integer('semestre_id')->nullable()->after('usuario_finalizacao_id');
+            $table->boolean('finalizado')->default(false)->after('semestre_id');
         });
     }
 
@@ -27,6 +30,9 @@ class CreateFieldsOnPartidasTable extends Migration
     {
         Schema::table('partidas', function (Blueprint $table) {
             $table->dropColumn('semestre_id');
+            $table->dropColumn('finalizado');
+            $table->dropColumn('usuario_finalizacao_id');
+            $table->dropColumn('usuario_criacao_id');
         });
     }
 }

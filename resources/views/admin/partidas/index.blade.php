@@ -74,8 +74,7 @@
 
                 </div>
 
-                <button type="submit" class="btn btn-success">Buscar</button>
-                <a href="{{ route('players.create') }}" class="btn btn-primary">Novo Jogador</a>
+                <button type="submit" class="btn btn-dropbox btn-flat">Buscar</button>
               </div>
           </form>
 
@@ -91,7 +90,7 @@
         <!-- /.box-header -->
         <div class="box-body">
 
-          <a href="{{ route('matches.create') }}" class="btn btn-success">Nova Partida</a>
+          <a href="{{ route('matches.create') }}" class="btn btn-dropbox btn-flat">Nova Partida</a>
 
         </div>
       </div>
@@ -111,7 +110,6 @@
               <th>Horário</th>
               <th>Jogadores</th>
               <th>Quadra</th>
-              <th>Resultado</th>
               <th>Opções</th>
             </tr>
             </thead>
@@ -155,138 +153,150 @@
 
                     <div class="row">
 
-                    @if($jogador1Uuid)
+                        @if($jogador1Uuid)
 
-                    <div class="col-md-6">
-                      <div class="box box-widget widget-user-2">
+                        <div class="col-md-6">
+                          <div class="box box-widget widget-user-2">
 
-                        <div class="widget-user-header bg-aqua-active">
-                          <div class="widget-user-image">
-                            <img class="img-circle" src="{{ route('image', ['link'=>$partida->jogador1->avatar]) }}" alt="">
-                          </div>
-                          <!-- /.widget-user-image -->
-                          <h3 class="widget-user-username">{{ $jogador1 }} <a class="btn btn-default" href="{{ route('player_profile', $jogador1Uuid) }}"><i class="fa fa-search"></i></a></h3>
-                          <h5 class="widget-user-desc">{{ $partida->jogador1->categoria->nome }}</h5>
-                          <h5 class="widget-user-desc"></h5>
-                        </div>
-
-                        <div class="box-footer">
-                          <div class="row">
-                            <div class="col-sm-4 border-right">
-                              <div class="description-block">
-                                <span class="description-text">
-                                  @if($editavel)
-                                        <a class="btn btn-danger" href="{{ route('remover_jogador_partida', ['id' => $partida->id, 'jogador' => $partida->jogador1->id, 'partida_admin' => '1']) }}"><i class="fa fa-trash"></i> Remover</a>
-                                  @endif
-                                </span>
+                            <div class="widget-user-header bg-aqua-active">
+                              <div class="widget-user-image">
+                                <img class="img-circle" src="{{ route('image', ['link'=>$partida->jogador1->avatar]) }}" alt="">
                               </div>
+                              <!-- /.widget-user-image -->
+                              <h3 class="widget-user-username">{{ $jogador1 }} <a class="btn btn-default" href="{{ route('player_profile', $jogador1Uuid) }}"><i class="fa fa-search"></i></a></h3>
+                              <h5 class="widget-user-desc">{{ $partida->jogador1->categoria->nome }}</h5>
+                              <h5 class="widget-user-desc"></h5>
                             </div>
-                            <div class="col-sm-4 border-right">
-                              <div class="description-block">
-                                <span class="description-text">
-                                  @if($editavel)
-                                        <a class="btn btn-primary" href="{{ route('trocar_jogador_partida', ['id' => $partida->id, 'jogador' => $partida->jogador1->id, 'partida_admin' => '1']) }}"><i class="fa fa-refresh"></i> Trocar</a>
-                                  @endif
-                                </span>
-                              </div>
-                            </div>
-                            <div class="col-sm-4">
-                              <div class="description-block">
-                                <h5 class="description-header">
-                                  @if($showPlacar)
-                                    {{ $jogador1Pontos }}
-                                  @endif</h5>
-                                <span class="description-text">Pontos</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
 
-                    @else
-
-                      <div class="col-md-6">
-
-                      @if($editavel)
-                          <a class="btn btn-success" target="_blank" href="{{route('agendar_partida_jogador', $partida->id)}}">Selecionar Jogador 1</a>
-                      @endif
-
-                      </div>
-
-                    @endif
-
-
-                    @if($jogador2Uuid)
-
-                      <div class="col-md-6">
-                        <div class="box box-widget widget-user-2">
-
-                          <div class="widget-user-header bg-green">
-                            <div class="widget-user-image">
-                              <img class="img-circle" src="{{ route('image', ['link'=>$partida->jogador2->avatar]) }}" alt="">
-                            </div>
-                            <!-- /.widget-user-image -->
-                            <h3 class="widget-user-username">{{ $jogador2 }} <a class="btn btn-default" href="{{ route('player_profile', $jogador2Uuid) }}"><i class="fa fa-search"></i></a></h3>
-                            <h5 class="widget-user-desc">{{ $partida->jogador2->categoria->nome }}</h5>
-                            <h5 class="widget-user-desc"></h5>
-                          </div>
-
-                          <div class="box-footer">
-                            <div class="row">
-                              <div class="col-sm-4 border-right">
-                                <div class="description-block">
-                                  <span class="description-text">
-                                    @if($editavel)
-                                          <a class="btn btn-danger" href="{{ route('remover_jogador_partida', ['id' => $partida->id, 'jogador' => $partida->jogador2->id, 'partida_admin' => '1']) }}"><i class="fa fa-trash"></i> Remover</a>
-                                    @endif
-                                  </span>
+                            <div class="box-footer">
+                              <div class="row">
+                                <div class="col-sm-4 border-right">
+                                  <div class="description-block">
+                                    <span class="description-text">
+                                      @if($editavel)
+                                            <a class="btn btn-default btn-flat" href="{{ route('remover_jogador_partida', ['id' => $partida->id, 'jogador' => $partida->jogador1->id, 'partida_admin' => '1']) }}"><i class="fa fa-trash"></i> Remover</a>
+                                      @endif
+                                    </span>
+                                  </div>
                                 </div>
-                              </div>
-                              <div class="col-sm-4 border-right">
-                                <div class="description-block">
-                                  <span class="description-text">
-                                    @if($editavel)
-                                          <a class="btn btn-primary" href="{{ route('trocar_jogador_partida', ['id' => $partida->id, 'jogador' => $partida->jogador2->id, 'partida_admin' => '1']) }}"><i class="fa fa-refresh"></i> Trocar</a>
-                                    @endif
-                                  </span>
+                                <div class="col-sm-4 border-right">
+                                  <div class="description-block">
+                                    <span class="description-text">
+                                      @if($editavel)
+                                            <a class="btn btn-default btn-flat" href="{{ route('trocar_jogador_partida', ['id' => $partida->id, 'jogador' => $partida->jogador1->id, 'partida_admin' => '1']) }}"><i class="fa fa-refresh"></i> Trocar</a>
+                                      @endif
+                                    </span>
+                                  </div>
                                 </div>
-                              </div>
-                              <div class="col-sm-4">
-                                <div class="description-block">
-                                  <h5 class="description-header">
-                                    @if($showPlacar)
-                                      {{ $jogador2Pontos }}
-                                    @endif</h5>
-                                  <span class="description-text">Pontos</span>
+                                <div class="col-sm-4">
+                                  <div class="description-block">
+                                    <h5 class="description-header">
+                                      @if($showPlacar)
+                                        {{ $jogador1Pontos }}
+                                      @endif</h5>
+                                    <span class="description-text">Pontos</span>
+                                  </div>
+                                </div>
+                                <div class="col-sm-12">
+                                  <div class="description-block">
+                                    <h1>{{ $jogador1resultado }}</h1>
+                                    <span class="description-text">Resultado</span>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
 
-                    @else
+                        @else
 
-                      <div class="col-md-6">
+                              <div class="col-md-6">
 
-                        @if($editavel)
-                            <a class="btn btn-success" target="_blank" href="{{route('agendar_partida_jogador', $partida->id)}}">Selecionar Jogador 2 </a>
+                              @if($editavel)
+                                  <a class="btn btn-twitter btn-lg btn-flat" href="{{route('agendar_partida_jogador', $partida->id)}}">Selecionar Jogador 1</a>
+                              @endif
+
+                              </div>
+
                         @endif
 
-                      </div>
 
-                    @endif
+                        @if($jogador2Uuid)
+
+                          <div class="col-md-6">
+                            <div class="box box-widget widget-user-2">
+
+                              <div class="widget-user-header bg-green">
+                                <div class="widget-user-image">
+                                  <img class="img-circle" src="{{ route('image', ['link'=>$partida->jogador2->avatar]) }}" alt="">
+                                </div>
+                                <!-- /.widget-user-image -->
+                                <h3 class="widget-user-username">{{ $jogador2 }} <a class="btn btn-default" href="{{ route('player_profile', $jogador2Uuid) }}"><i class="fa fa-search"></i></a></h3>
+                                <h5 class="widget-user-desc">{{ $partida->jogador2->categoria->nome }}</h5>
+                                <h5 class="widget-user-desc"></h5>
+                              </div>
+
+                              <div class="box-footer">
+                                <div class="row">
+                                  <div class="col-sm-4 border-right">
+                                    <div class="description-block">
+                                      <span class="description-text">
+                                        @if($editavel)
+                                              <a class="btn btn-default btn-flat" href="{{ route('remover_jogador_partida', ['id' => $partida->id, 'jogador' => $partida->jogador2->id, 'partida_admin' => '1']) }}"><i class="fa fa-trash"></i> Remover</a>
+                                        @endif
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div class="col-sm-4 border-right">
+                                    <div class="description-block">
+                                      <span class="description-text">
+                                        @if($editavel)
+                                              <a class="btn btn-default btn-flat" href="{{ route('trocar_jogador_partida', ['id' => $partida->id, 'jogador' => $partida->jogador2->id, 'partida_admin' => '1']) }}"><i class="fa fa-refresh"></i> Trocar</a>
+                                        @endif
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                    <div class="description-block">
+                                      <h5 class="description-header">
+                                        @if($showPlacar)
+                                          {{ $jogador2Pontos }}
+                                        @endif</h5>
+                                      <span class="description-text">Pontos</span>
+                                    </div>
+                                  </div>
+                                  <div class="col-sm-12">
+                                    <div class="description-block">
+                                      <h1>{{ $jogador2resultado }}</h1>
+                                      <span class="description-text">Resultado</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        @else
+
+                          <div class="col-md-6">
+
+                            @if($editavel)
+                                <a class="btn btn-twitter btn-lg btn-flat" href="{{route('agendar_partida_jogador', $partida->id)}}">Selecionar Jogador 2 </a>
+                            @endif
+
+                          </div>
+
+                        @endif
+
+                    </div>
+
                   </td>
                   <td>
                     <h4>{{ $partida->quadra->nome }}</h4>
                   </td>
                   <td>
-                    <h4>{{ $jogador1resultado }} x {{ $jogador2resultado }}</h4>
-                  </td>
-                  <td>
-                    <a class="btn btn-primary btn-sm" href="{{ route('partida_placar', $partida->id) }}"><i class="fa fa-futbol-o"></i></a>
-                    <button data-route="{{ route('partida.destroy', ['id' => $partida->id]) }}" class="btn btn-sm btn-danger btnRemoveItem"><i class="fa fa-trash"></i> </button>
+                    <a class="btn btn-twitter btn-flat btn-block btn-lg" href="{{ route('partida_placar', $partida->id) }}"><i class="fa fa-futbol-o"></i> Súmula</a>
+                    <button data-route="{{ route('partida.destroy', ['id' => $partida->id]) }}" class="btn btn-default btn-lg btn-flat btn-block btnRemoveItem"><i class="fa fa-trash"></i> Remover</button>
                   </td>
                 </tr>
               @endforeach

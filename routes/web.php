@@ -147,6 +147,11 @@ Route::middleware('loadCache')->group(function() {
               Route::get('partidas/{id}/jogador/{jogador}/wo', 'PartidasController@wo')->name('wo');
               Route::get('partidas/{id}/jogador/{jogador}/desistencia', 'PartidasController@desistencia')->name('desistencia');
 
+              Route::post('/partidas/{id}/wo/store', 'PartidasController@woStore')->name('wo_store');
+              Route::post('/partidas/{id}/desistencia/store', 'PartidasController@desistenciaStore')->name('wo_desistencia');
+
+
+
           });
       });
 

@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\{Categoria, Quadras, Config, Torneio, Midia, Campeoes, Semestre};
+use App\Models\Pessoa\Jogador;
 use Session;
 use Auth;
 
@@ -203,5 +204,17 @@ class Helper
 
         self::set($key, $ranking);
         return self::get($key);
+    }
+
+    public static function jogadorPosicao($jogadorId)
+    {
+        $jogador = Jogador::findOrFail($jogadorId);
+
+        $categoria = $jogador->categoria;
+
+        $jogadores = Jogador::where('ativo', true);
+
+        return $categoria;
+
     }
 }
