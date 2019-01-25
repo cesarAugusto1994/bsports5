@@ -45,7 +45,8 @@
 
                               @if($partida->jogador1)
 
-                                  <img width="128" style="max-width:128px" src="{{ route('image', ['link'=>$partida->jogador1->avatar]) }}" alt=""/>
+                                  <img class="img-circle" src="{{ route('image', ['link'=>$partida->jogador1->avatar]) }}" alt=""/>
+
                                   <strong>{{ substr($partida->jogador1->nome, 0, 12) }}</strong>
                                   <input type="hidden" name="jogador1" value="{{ $partida->jogador1->id }}"/>
 
@@ -130,7 +131,12 @@
                   </div>
                 </div>
 
-              <button type="submit" class="btn btn-success">Salvar</button>
+
+                <div class="col-md-12">
+                      <button type="submit" class="btn btn-flat btn-lg btn-block btn-dropbox">Salvar</button>
+                </div>
+
+
 
             </div>
           </div>

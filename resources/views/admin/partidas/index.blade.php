@@ -164,7 +164,7 @@
                               </div>
                               <!-- /.widget-user-image -->
                               <h3 class="widget-user-username">{{ $jogador1 }} <a class="btn btn-default" href="{{ route('player_profile', $jogador1Uuid) }}"><i class="fa fa-search"></i></a></h3>
-                              <h5 class="widget-user-desc">{{ $partida->jogador1->categoria->nome }}</h5>
+                              <h5 class="widget-user-desc">{{ $partida->jogador1->categoria->nome ?? '' }}</h5>
                               <h5 class="widget-user-desc"></h5>
                             </div>
 
@@ -232,7 +232,7 @@
                                 </div>
                                 <!-- /.widget-user-image -->
                                 <h3 class="widget-user-username">{{ $jogador2 }} <a class="btn btn-default" href="{{ route('player_profile', $jogador2Uuid) }}"><i class="fa fa-search"></i></a></h3>
-                                <h5 class="widget-user-desc">{{ $partida->jogador2->categoria->nome }}</h5>
+                                <h5 class="widget-user-desc">{{ $partida->jogador2->categoria->nome ?? '' }}</h5>
                                 <h5 class="widget-user-desc"></h5>
                               </div>
 

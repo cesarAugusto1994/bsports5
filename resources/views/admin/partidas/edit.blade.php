@@ -21,11 +21,7 @@
           </div>
           <div class="box-body">
             <div class="table-responsive">
-
               <p class="lead">Quadra: {{$partida->quadra->nome}}</p>
-
-
-
             </div>
           </div>
         </div>
@@ -33,10 +29,21 @@
 
       <div class="col-md-6">
         <div class="box box-solid">
-          <div class="box-header with-border">
-            <h3 class="box-title">1º Jogador: {{ $partida->jogador1->nome ?? '' }}</h3>
-          </div>
           <div class="box-body">
+
+            <div class="box box-widget widget-user-2">
+
+              <div class="widget-user-header bg-aqua-active">
+                <div class="widget-user-image">
+                  <img class="img-circle" src="{{ route('image', ['link'=>$partida->jogador1->avatar]) }}" alt="">
+                </div>
+                <!-- /.widget-user-image -->
+                <h3 class="widget-user-username">{{ $partida->jogador1->nome ?? '-' }}</h3>
+                <h5 class="widget-user-desc">{{ $partida->jogador1->categoria->nome ?? '-' }}</h5>
+                <h5 class="widget-user-desc"></h5>
+              </div>
+
+              <div class="box-footer">
 
               <div class="row">
 
@@ -91,68 +98,86 @@
 
               </div>
 
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
 
       <div class="col-md-6">
         <div class="box box-solid">
-          <div class="box-header with-border">
-            <h3 class="box-title">2º Jogador: {{$partida->jogador2->nome ?? ''}}</h3>
-          </div>
+
           <div class="box-body">
 
-            <div class="row">
+            <div class="box box-widget widget-user-2">
 
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="jogador2_set1">1º SET</label>
-                    <input type="number" class="form-control" id="jogador2_set1" name="jogador2_set1" value="{{ $partida->jogador2_set1 }}" min="0">
-                  </div>
+              <div class="widget-user-header bg-green-active">
+                <div class="widget-user-image">
+                  <img class="img-circle" src="{{ route('image', ['link'=>$partida->jogador2->avatar]) }}" alt="">
                 </div>
+                <!-- /.widget-user-image -->
+                <h3 class="widget-user-username">{{ $partida->jogador2->nome ?? '-' }}</h3>
+                <h5 class="widget-user-desc">{{ $partida->jogador2->categoria->nome ?? '-' }}</h5>
+                <h5 class="widget-user-desc"></h5>
+              </div>
 
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="jogador2_set2">2º SET</label>
-                    <input type="number" class="form-control" id="jogador2_set2" name="jogador2_set2" value="{{ $partida->jogador2_set2 }}" min="0">
+              <div class="box-footer">
+
+                  <div class="row">
+
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label for="jogador2_set1">1º SET</label>
+                          <input type="number" class="form-control" id="jogador2_set1" name="jogador2_set1" value="{{ $partida->jogador2_set1 }}" min="0">
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label for="jogador2_set2">2º SET</label>
+                          <input type="number" class="form-control" id="jogador2_set2" name="jogador2_set2" value="{{ $partida->jogador2_set2 }}" min="0">
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label for="jogador2_set3">3º SET</label>
+                          <input type="number" class="form-control" id="jogador2_set3" name="jogador2_set3" value="{{ $partida->jogador2_set3 }}" min="0">
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label for="jogador2_resultado_final">Resultado</label>
+                          <input type="number" class="form-control" id="jogador2_resultado_final" name="jogador2_resultado_final" value="{{ $partida->jogador2_resultado_final }}" disabled>
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label for="jogador2_tiebreak">Tiebreak</label>
+                          <input type="number" class="form-control" id="jogador2_tiebreak" name="jogador2_tiebreak" value="{{ $partida->jogador2_tiebreak }}" disabled>
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label for="jogador2_pontos">Pontos</label>
+                          <input type="number" class="form-control" id="jogador2_pontos" name="jogador2_pontos" value="{{ $partida->jogador2_pontos }}" disabled>
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label for="jogador2_bonus">Bonus</label>
+                          <input type="number" class="form-control" id="jogador2_bonus" name="jogador2_bonus" value="{{ $partida->jogador2_bonus }}" disabled>
+                        </div>
+                      </div>
+
                   </div>
-                </div>
 
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="jogador2_set3">3º SET</label>
-                    <input type="number" class="form-control" id="jogador2_set3" name="jogador2_set3" value="{{ $partida->jogador2_set3 }}" min="0">
-                  </div>
-                </div>
-
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <label for="jogador2_resultado_final">Resultado</label>
-                    <input type="number" class="form-control" id="jogador2_resultado_final" name="jogador2_resultado_final" value="{{ $partida->jogador2_resultado_final }}" disabled>
-                  </div>
-                </div>
-
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <label for="jogador2_tiebreak">Tiebreak</label>
-                    <input type="number" class="form-control" id="jogador2_tiebreak" name="jogador2_tiebreak" value="{{ $partida->jogador2_tiebreak }}" disabled>
-                  </div>
-                </div>
-
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <label for="jogador2_pontos">Pontos</label>
-                    <input type="number" class="form-control" id="jogador2_pontos" name="jogador2_pontos" value="{{ $partida->jogador2_pontos }}" disabled>
-                  </div>
-                </div>
-
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <label for="jogador2_bonus">Bonus</label>
-                    <input type="number" class="form-control" id="jogador2_bonus" name="jogador2_bonus" value="{{ $partida->jogador2_bonus }}" disabled>
-                  </div>
-                </div>
-
+              </div>
             </div>
 
           </div>
@@ -161,7 +186,7 @@
 
       <div class="col-md-12">
 
-        <button type="submit" class="btn btn-block btn-bitbucket btn-lg">Salvar</button>
+        <button type="submit" class="btn btn-block btn-success btn-lg">Finalizar Partida</button>
 
       </div>
 

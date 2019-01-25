@@ -20,20 +20,21 @@
 
           <p class="lead">Quadra: {{$partida->quadra->nome}}</p>
 
-          @if(!$partida->finalizado)
+          @if(!$partida->jogador1 || !$partida->jogador2)
 
-              @if(!$partida->jogador1 || !$partida->jogador2)
-
-              <div class="alert alert-info" role="alert">
-                  <h2>Observação</h2>
-                  <p class="lead">Só é permitida a manipulação dos pontos, se os dois jogadores forem escalados para a partida.</p>
-              </div>
-
-              @else
-                  <a href="{{ route('editar_partida_placar', $partida->id) }}" class="btn btn-dropbox btn-lg">Atualizar Placar</a>
-              @endif
+          <div class="alert alert-info" role="alert">
+              <h2>Observação</h2>
+              <p class="lead">Só é permitida a manipulação dos pontos, se os dois jogadores forem escalados para a partida.</p>
+          </div>
 
           @else
+              <a href="{{ route('editar_partida_placar', $partida->id) }}" class="btn btn-default btn-lg btn-flat">Atualizar Placar</a>
+          @endif
+
+          <br/>
+          <br/>
+
+          @if($partida->status == 'Finalizada')
 
             <div class="alert alert-success" role="alert">
                 <p class="lead">Esta partida foi finalizada.</p>
@@ -106,29 +107,29 @@
             </div>
           </div>
 
-          @if(!$partida->finalizado)
+          @if($partida->status != 'Finalizada')
 
               @if($partida->jogador1 && $partida->jogador2)
 
-              <div class="col-sm-6">
-                <div class="description-block">
-                  <span class="description-text"><a class="btn btn-default btn-block btn-lg" href="{{ route('wo', [$partida->id, $partida->jogador1_id]) }}">Vitória por WO</a></span>
-                </div>
-              </div>
+                  <div class="col-sm-6">
+                    <div class="description-block">
+                      <span class="description-text"><a class="btn btn-default btn-block btn-lg" href="{{ route('wo', [$partida->id, $partida->jogador1_id]) }}">Vitória por WO</a></span>
+                    </div>
+                  </div>
 
-              <div class="col-sm-6">
-                <div class="description-block">
-                  <span class="description-text"><a class="btn btn-default btn-block btn-lg" href="{{ route('desistencia', [$partida->id, $partida->jogador1_id]) }}">Desistência</a></span>
-                </div>
-              </div>
+                  <div class="col-sm-6">
+                    <div class="description-block">
+                      <span class="description-text"><a class="btn btn-default btn-block btn-lg" href="{{ route('desistencia', [$partida->id, $partida->jogador1_id]) }}">Vitória por Desistência</a></span>
+                    </div>
+                  </div>
 
               @endif
 
-          @else
+          @elseif($partida->status == 'Finalizada')
 
               <div class="col-sm-12">
                 <div class="description-block">
-                  <h1>{{ $partida->jogador1_pontos > $partida->jogador2_pontos ? 'Venceu' : 'Perdeu' }} </h1>
+                  <h1>{{ $partida->jogador1_resultado_final > $partida->jogador2_resultado_final || $partida->jogador1_pontos > $partida->jogador2_pontos ? 'Venceu' : 'Perdeu' }} </h1>
                 </div>
               </div>
 
@@ -200,7 +201,7 @@
             </div>
           </div>
 
-          @if(!$partida->finalizado)
+          @if($partida->status != 'Finalizada')
 
               @if($partida->jogador1 && $partida->jogador2)
 
@@ -212,17 +213,17 @@
 
               <div class="col-sm-6">
                 <div class="description-block">
-                  <span class="description-text"><a class="btn btn-default btn-block btn-lg" href="{{ route('desistencia', [$partida->id, $partida->jogador2_id]) }}">Desistência</a></span>
+                  <span class="description-text"><a class="btn btn-default btn-block btn-lg" href="{{ route('desistencia', [$partida->id, $partida->jogador2_id]) }}">Vitória por Desistência</a></span>
                 </div>
               </div>
 
               @endif
 
-          @else
+          @elseif($partida->status == 'Finalizada')
 
               <div class="col-sm-12">
                 <div class="description-block">
-                  <h1>{{ $partida->jogador2_pontos > $partida->jogador1_pontos ? 'Venceu' : 'Perdeu' }} </h1>
+                  <h1>{{ $partida->jogador2_resultado_final > $partida->jogador1_resultado_final || $partida->jogador2_pontos > $partida->jogador1_pontos ? 'Venceu' : 'Perdeu' }} </h1>
                 </div>
               </div>
 

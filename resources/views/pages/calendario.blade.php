@@ -115,7 +115,7 @@
 
 
                                           </strong></li>
-                                          <li class="time-batch"> <strong class="m-vs">VS</strong></li>
+                                          <li class=""> <strong class="m-vs">{{ $partida['quadra-1']['jogador1-pontos'] }} x {{ $partida['quadra-1']['jogador2-pontos'] }}</strong></li>
                                           <li class="team">
                                             <strong>
                                             @if($partida['quadra-1']['jogador2'])
@@ -183,7 +183,7 @@
                                               @endif
 
                                             </strong></li>
-                                            <li class="time-batch"> <strong class="m-vs">VS</strong></li>
+                                            <li class=""> <strong class="m-vs">{{ $partida['quadra-2']['jogador1-pontos'] }} x {{ $partida['quadra-2']['jogador2-pontos'] }}</strong></li>
                                             <li class="team"> <strong>
 
                                               @if($partida['quadra-2']['jogador2'])
@@ -248,7 +248,7 @@
                                             @endif
 
                                           </strong></li>
-                                          <li class="time-batch"> <strong class="m-vs">VS</strong></li>
+                                          <li class=""> <strong class="m-vs">{{ $partida['quadra-3']['jogador1-pontos'] }} x {{ $partida['quadra-3']['jogador2-pontos'] }}</strong></li>
                                           <li class="team"> <strong>
 
                                             @if($partida['quadra-3']['jogador2'])
@@ -314,7 +314,7 @@
                                             @endif
 
                                           </strong></li>
-                                          <li class="time-batch"> <strong class="m-vs">VS</strong></li>
+                                          <li class=""> <strong class="m-vs">{{ $partida['quadra-4']['jogador1-pontos'] }} x {{ $partida['quadra-4']['jogador2-pontos'] }}</strong></li>
                                           <li class="team"> <strong>
 
 
@@ -381,7 +381,7 @@
                                             @endif
 
                                           </strong></li>
-                                          <li class="time-batch"> <strong class="m-vs">VS</strong></li>
+                                          <li class=""> <strong class="m-vs">{{ $partida['quadra-5']['jogador1-pontos'] }} x {{ $partida['quadra-5']['jogador2-pontos'] }}</strong></li>
                                           <li class="team"> <strong>
 
                                             @if($partida['quadra-5']['jogador2'])

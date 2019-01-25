@@ -10,8 +10,11 @@
 
 <div class="row">
 
-  <form method="post" action="">
+  <form method="post" action="{{ route('wo_store', [$partida->id]) }}">
     {{csrf_field()}}
+
+    <input type="hidden" name="vencedor" value="{{ $jogadorVencedor->id }}"/>
+    <input type="hidden" name="perdedor" value="{{ $jogadorPerdedor->id }}"/>
 
     <div class="col-md-12">
       <div class="box box-solid">

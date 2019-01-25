@@ -18,6 +18,13 @@ class ResultadosController extends Controller
     {
         $partidas = Partida::orderByDesc('id')->paginate(10);
         $categorias = Helper::categorias();
+
+        if($request->has('date')) {
+          $partidas = Partida::where('inicio', '>=', (\DateTime::createFromFormat('d/m/Y', $request->get('date')))->setTime(00, 00, 00))
+          ->where('fim', '<=', (\DateTime::createFromFormat('d/m/Y', $request->get('date')))->setTime(23, 59, 59))
+          ->where('tipo_jogo', 'Simples')->get();
+        }
+
         return view('pages.resultados', compact('partidas', 'categorias'));
     }
 }

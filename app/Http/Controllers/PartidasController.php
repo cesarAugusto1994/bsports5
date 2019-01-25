@@ -98,8 +98,130 @@ class PartidasController extends Controller
     {
         $data = $request->request->all();
 
+        #dd($data);
+
+        $resultadoJ1 = $resultadoJ2 = 0;
+        $jogador1_pontos = $jogador1_bonus = 0;
+        $jogador2_pontos = $jogador2_bonus = 0;
+
+        $jogador1_set1 = $data['jogador1_set1'];
+        $jogador1_set2 = $data['jogador1_set2'];
+        $jogador1_set3 = $data['jogador1_set3'];
+
+        $jogador2_set1 = $data['jogador2_set1'];
+        $jogador2_set2 = $data['jogador2_set2'];
+        $jogador2_set3 = $data['jogador2_set3'];
+
+        if($jogador1_set1 == 0 && $jogador2_set1 == 0) {
+
+          notify()->flash('Erro ao finalizar Partida', 'error', [
+              'text' => 'O Primeiro set não pode estar zerado para ambos os jogadores.',
+          ]);
+
+          return back()->withInput();
+
+        }
+
+        if($jogador1_set2 == 0 && $jogador2_set2 == 0) {
+
+          notify()->flash('Erro ao finalizar Partida', 'error', [
+              'text' => 'O Segundo set não pode estar zerado para ambos os jogadores.',
+          ]);
+
+          return back()->withInput();
+
+        }
+
+        if($jogador1_set1 > $jogador2_set1) {
+            $resultadoJ1++;
+        } else {
+            $resultadoJ2++;
+        }
+
+        if($jogador1_set2 > $jogador2_set2) {
+            $resultadoJ1++;
+        } else {
+            $resultadoJ2++;
+        }
+
+        if($jogador1_set3 == 0 && $jogador2_set3 == 0 && $resultadoJ1 == $resultadoJ2) {
+
+          notify()->flash('Erro ao finalizar Partida', 'error', [
+              'text' => 'O Terceiro set não pode estar zerado para ambos os jogadores, já que estão empatados.',
+          ]);
+
+          return back()->withInput();
+
+        }
+
+        if($resultadoJ1==2||$resultadoJ2==2) {
+            //Partida Finalizada
+        } else {
+          if($jogador1_set3 > $jogador2_set3) {
+              $resultadoJ1++;
+          } else {
+              $resultadoJ2++;
+          }
+        }
+
         $partida = Partida::findOrFail($id);
         $partida->update($data);
+
+        $jogadorId = null;
+
+        if($partida->jogador1_resultado_final > $partida->jogador2_resultado_final) {
+          $jogadorId = $partida->jogador1_id;
+        } else {
+          $jogadorId = $partida->jogador2_id;
+        }
+
+        $posicao = Helper::jogadorPosicao($jogadorId);
+
+        $bonus = Helper::pontosPorPosicao($posicao['posicao']);
+        $bonusJg1 = $bonusJg2 = 0;
+
+        $jogador1CategoriaNivel = Helper::categoriasHierarquia($partida->jogador1->categoria->id);
+        $jogador2CategoriaNivel = Helper::categoriasHierarquia($partida->jogador2->categoria->id);
+
+        if($jogador1CategoriaNivel > $jogador2CategoriaNivel) {
+            $bonusJg2 = 11;
+        } elseif($jogador2CategoriaNivel > $jogador1CategoriaNivel) {
+            $bonusJg1 = 11;
+        }
+
+        if($resultadoJ1 > $resultadoJ2) {
+
+          $jogador1_pontos = 1000;
+          $jogador1_bonus = $bonus + $bonusJg1;
+          $jogador2_pontos = -1000;
+          $jogador2_bonus = 0;
+
+        } else {
+
+          $jogador2_pontos = 1000;
+          $jogador2_bonus = $bonus + $bonusJg2;
+          $jogador1_pontos = -1000;
+          $jogador1_bonus = 0;
+
+        }
+
+        $partida->jogador1_resultado_final = $resultadoJ1;
+        $partida->jogador2_resultado_final = $resultadoJ2;
+
+        $partida->jogador1_pontos = $jogador1_pontos;
+        $partida->jogador1_bonus = $jogador1_bonus;
+
+        $partida->jogador2_pontos = $jogador2_pontos;
+        $partida->jogador2_bonus = $jogador2_bonus;
+
+        $partida->status = 'Finalizada';
+        $partida->usuario_finalizacao_id = \Auth::user()->id;
+
+        $partida->save();
+
+        notify()->flash('Partida Finalizada', 'success', [
+            'text' => 'Partida Finalizada com Sucesso.',
+        ]);
 
         return view('admin.partidas.placar', compact('partida'));
     }
@@ -120,7 +242,7 @@ class PartidasController extends Controller
     public function agendar(Request $request, $id)
     {
         $partida = Partida::findOrFail($id);
-
+/*
         if($partida->inicio < now()) {
 
           notify()->flash('Atenção', 'error', [
@@ -130,7 +252,7 @@ class PartidasController extends Controller
           return back();
 
         }
-
+*/
         $jogador = null;
 
         $isAdmin = (boolean)$request->has('partida_admin');
@@ -356,6 +478,11 @@ class PartidasController extends Controller
           return redirect()->back();
         }
 
+        if(!$request->filled('semestre_id')) {
+          flash('Nenhum semestre informado.')->warning()->important();
+          return redirect()->back();
+        }
+
         $quadras = $data['quadra'];
 
         foreach ($quadras as $key => $quadra) {
@@ -391,8 +518,6 @@ class PartidasController extends Controller
           }
 
         }
-
-
 
         flash('Partida marcada com sucesso!')->success()->important();
         return redirect()->back();
@@ -511,25 +636,30 @@ class PartidasController extends Controller
     {
         $partida = Partida::findOrFail($id);
 
+        $posicao = Helper::jogadorPosicao($jogadorId);
+        $bonus = Helper::pontosPorPosicao($posicao);
+
         $jogadorVencedor = $jogadorPerdedor = null;
         $j1pontos = $j1bonus = $j2pontos = $j2bonus = 0;
 
         if($jogadorId == $partida->jogador1->id) {
+
           $jogadorVencedor = $partida->jogador1;
           $jogadorPerdedor = $partida->jogador2;
 
           $j1pontos = 1000;
-          $j1bonus = 0;
+          $j1bonus = $bonus;
 
           $j2pontos = -1000;
           $j2bonus = -10;
 
         } elseif($jogadorId == $partida->jogador2->id) {
+
           $jogadorVencedor = $partida->jogador2;
           $jogadorPerdedor = $partida->jogador1;
 
           $j2pontos = 1000;
-          $j2bonus = 0;
+          $j2bonus = $bonus;
 
           $j1pontos = -1000;
           $j1bonus = -10;
@@ -545,12 +675,15 @@ class PartidasController extends Controller
         $jogadorVencedor = $jogadorPerdedor = null;
         $j1pontos = $j1bonus = $j2pontos = $j2bonus = 0;
 
+        $posicao = Helper::jogadorPosicao($jogadorId);
+        $bonus = Helper::pontosPorPosicao($posicao);
+
         if($jogadorId == $partida->jogador1->id) {
           $jogadorVencedor = $partida->jogador1;
           $jogadorPerdedor = $partida->jogador2;
 
           $j1pontos = 1000;
-          $j1bonus = 0;
+          $j1bonus = $bonus;
 
           $j2pontos = -1000;
           $j2bonus = -10;
@@ -560,13 +693,13 @@ class PartidasController extends Controller
           $jogadorPerdedor = $partida->jogador1;
 
           $j2pontos = 1000;
-          $j2bonus = 0;
+          $j2bonus = $bonus;
 
           $j1pontos = -1000;
           $j1bonus = -10;
         }
 
-        return view('admin.partidas.desistencia', compact('partida', 'j1pontos', 'j1bonus', 'j2pontos', 'j2bonus'));
+        return view('admin.partidas.desistencia', compact('partida', 'j1pontos', 'j1bonus', 'j2pontos', 'j2bonus', 'jogadorVencedor', 'jogadorPerdedor'));
     }
 
     public function woStore($id, Request $request)
@@ -598,13 +731,13 @@ class PartidasController extends Controller
 
         }
 
-        $partida->finalizado = true;
+        $partida->status = 'Finalizada';
         $partida->usuario_finalizacao_id = \Auth::user()->id;
         $partida->save();
 
         notify()->flash('Partida Finalizada', 'success', [
             'timer' => 3000,
-            'text' => 'Esta partida foi finalizada como W.O',
+            'text' => 'Esta partida foi finalizada como Vitória por W.O',
         ]);
 
         return redirect()->route('partida_placar', $partida->id);
@@ -616,7 +749,39 @@ class PartidasController extends Controller
 
         $partida = Partida::findOrFail($id);
 
-        dd($data);
+        $jogadorVencedor = Jogador::findOrFail($data['vencedor']);
+        $jogadorPerdedor = Jogador::findOrFail($data['perdedor']);
+
+        if($partida->jogador1->id == $jogadorVencedor->id) {
+
+          $partida->jogador1_pontos = 1000;
+          $partida->jogador1_bonus = 0;
+          $partida->jogador1_vitoria_wo = true;
+
+          $partida->jogador2_pontos = -1000;
+          $partida->jogador2_bonus = -10;
+
+        } else {
+
+          $partida->jogador2_pontos = 1000;
+          $partida->jogador2_bonus = 0;
+          $partida->jogador2_vitoria_wo = true;
+
+          $partida->jogador1_pontos = -1000;
+          $partida->jogador1_bonus = -10;
+
+        }
+
+        $partida->status = 'Finalizada';
+        $partida->usuario_finalizacao_id = \Auth::user()->id;
+        $partida->save();
+
+        notify()->flash('Partida Finalizada', 'success', [
+            'timer' => 3000,
+            'text' => 'Esta partida foi finalizada como Vitória por Desistência',
+        ]);
+
+        return redirect()->route('partida_placar', $partida->id);
     }
 
 }

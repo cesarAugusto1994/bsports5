@@ -138,7 +138,7 @@
                             <div class="form-group">
                                 <label>Torneio</label>
                                 <div class="input-group col-md-12 col-xs-12 col-sm-12">
-                                    <select class="form-control" name="torneio" id="torneio">
+                                    <select class="form-control" name="torneio" id="torneio" required>
                                       @foreach($torneios as $quadra)
                                           <option value="{{ $quadra->id }}" {{ $loop->last ? 'selected' : '' }}>{{ $quadra->nome }}</option>
                                       @endforeach
@@ -151,7 +151,7 @@
                             <div class="form-group">
                                 <label>Semestre</label>
                                 <div class="input-group col-md-12 col-xs-12 col-sm-12">
-                                    <select class="form-control" name="semestre_id" id="semestre_id">
+                                    <select class="form-control" name="semestre_id" id="semestre_id" required>
                                       @foreach($semestres as $semestre)
                                           <option value="{{ $semestre->id }}" {{ $loop->last ? 'selected' : '' }}>{{ $semestre->titulo }}</option>
                                       @endforeach

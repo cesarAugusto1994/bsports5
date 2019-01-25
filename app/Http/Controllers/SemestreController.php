@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Semestre;
+use App\Helpers\Helper;
 
 class SemestreController extends Controller
 {
@@ -47,6 +48,8 @@ class SemestreController extends Controller
         }
 
         $semestre = Semestre::create($data);
+
+        Helper::drop('semestres');
 
         flash('Semestre adicionado com sucesso.')->success()->important();
 
@@ -99,6 +102,8 @@ class SemestreController extends Controller
 
             $semestre = Semestre::findOrFail($id);
             $semestre->delete();
+
+            Helper::drop('semestres');
 
             return response()->json([
               'code' => 201,

@@ -212,9 +212,105 @@ class Helper
 
         $categoria = $jogador->categoria;
 
-        $jogadores = Jogador::where('ativo', true);
+        $jg = [];
 
-        return $categoria;
+        $index = 1;
 
+        $jogadores = Jogador::where('categoria_id', $categoria->id)->get();
+
+        foreach ($jogadores as $key => $jogador) {
+
+            $jg[] = [
+              'id' => $jogador->id,
+              'posicao' => $index,
+              'pontos' => $jogador->partidas->sum('pontos')
+            ];
+
+            $index++;
+
+        }
+
+        usort($jg, function ($item1, $item2) {
+            return $item1['pontos'] <=> $item2['pontos'];
+        });
+
+        $player = array_filter($jg, function($item) use ($jogadorId) {
+            return $item['id'] == $jogadorId;
+        });
+
+        return current($player);
+    }
+
+    public static function pontosPorPosicao($posicao)
+    {
+        $bonus = 0;
+
+        if($posicao >= 1 && $posicao <= 5) {
+
+            $bonus = 9;
+
+        } elseif($posicao >= 6 && $posicao <= 10) {
+
+            $bonus = 7;
+
+        } elseif($posicao >= 11 && $posicao <= 15) {
+
+            $bonus = 5;
+
+        } elseif($posicao >= 16 && $posicao <= 30) {
+
+            $bonus = 3;
+
+        }
+
+        return $bonus;
+    }
+
+    public static function categoriasHierarquia($categoriaJogador)
+    {
+        $categorias = [
+          [
+            'id' => 1,
+            'nivel' => 5,
+          ],
+          [
+            'id' => 2,
+            'nivel' => 3,
+          ],
+          [
+            'id' => 3,
+            'nivel' => 1,
+          ],
+          [
+            'id' => 4,
+            'nivel' => 5,
+          ],
+          [
+            'id' => 5,
+            'nivel' => 3,
+          ],
+          [
+            'id' => 6,
+            'nivel' => 1,
+          ],
+          [
+            'id' => 7,
+            'nivel' => 10,
+          ],
+          [
+            'id' => 8,
+            'nivel' => 9,
+          ],
+          [
+            'id' => 9,
+            'nivel' => 2,
+          ],
+        ];
+
+        $categoria = array_filter($categorias, function($categoria) use($categoriaJogador) {
+            return $categoria['id'] == $categoriaJogador;
+        });
+
+        return !empty($categoria) ? current($categoria)['nivel'] : null;
     }
 }

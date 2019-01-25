@@ -53,13 +53,13 @@
 
               <div class="col-md-12">@include('flash::message')</div>
 
-              <div class="col-md-6">
+              <div class="col-md-5">
 
                   <div class="calendar"></div>
 
               </div>
 
-              <div class="col-md-6">
+              <div class="col-md-7">
                   @if(!empty($partidas) && $partidas->isNotEmpty())
 
                       <div class="tickets-sort text-center">
@@ -73,7 +73,7 @@
                                 <li>
                                     <div class="tickets-date"> <span>{{ $partida->inicio ? $partida->inicio->format('D') : '' }}</span>
                                       <strong>{{ $partida->inicio ? $partida->inicio->format('M d') : '' }}</strong> <span>{{ $partida->inicio->format('H:i') }}</span> </div>
-                                    <div class="tickets-detail">
+                                    <div class="tickets-detail text-center">
                                         <div class="team-vs text-center">
 
                                           @php
@@ -106,25 +106,21 @@
 
                                           @endphp
 
-                                            <h4>
+                                            <h3 class="text-center">
                                               @if($partida->jogador1)
                                                   <a href="{{ route('jogador', $partida->jogador1->uuid) }}">
                                                   {{ substr($partida->jogador1->nome, 0, 12) }}</a>
                                               @else
-                                                <a class="btn btn-success btn-sm btn-flat" href="{{ $rotaJOgador }}">Agendar</a>
+                                                <a class="btn btn-default btn-sm btn-flat" href="{{ $rotaJOgador }}">Agendar</a>
                                               @endif
-                                              <i>vs</i>
+                                              {{$partida->jogador1_resultado_final}} x {{$partida->jogador2_resultado_final}}
                                               @if($partida->jogador2)
                                                   <a href="{{ route('jogador', $partida->jogador2->uuid) }}">
                                                   {{ substr($partida->jogador2->nome, 0, 12) }}</a>
                                               @else
-                                                <a class="btn btn-success btn-sm btn-flat" href="{{ $rotaJOgador }}">Agendar</a>
+                                                <a class="btn btn-default btn-sm btn-flat" href="{{ $rotaJOgador }}">Agendar</a>
                                               @endif
-                                            </h4>
-
-                                            @if($partida->inicio < now())
-                                                <h3>{{$partida->jogador1_resultado_final}} x {{$partida->jogador2_resultado_final}}</h3>
-                                            @endif
+                                            </h3>
 
                                             <p>{{ $partida->quadra->nome }}</p>
                                         </div>
@@ -185,44 +181,6 @@
   </div>
 
 </div>
-
-<div class="modal inmodal" id="cadastra-consulta-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content animated fadeIn">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                <i class="fa fa-clock-o modal-icon"></i>
-                <h4 class="modal-title">Consulta</h4>
-                <small>Registre nova consulta</small>
-            </div>
-
-            <form id="formConsultaModal" method="POST" action="#">
-            <div class="modal-body">
-
-                  {{  csrf_field() }}
-                  <div class="row">
-
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Notas do agendamento</label>
-                            <div class="input-group col-md-12 col-xs-12 col-sm-12">
-                                <textarea class="form-control" rows="6" id="consulta-notas" name="notas"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                  </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white pull-left" data-dismiss="modal">Fechar</button>
-                <button type="submit" id="btnConsulta" class="btn btn-primary">Marcar Consulta</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 
 <input type="hidden" id="partidas-ajax" value="{{ route('partidas_ajax') }}">
 <input type="hidden" id="now" value="{{ now()->format('c') }}">
