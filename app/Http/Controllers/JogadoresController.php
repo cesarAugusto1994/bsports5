@@ -132,6 +132,7 @@ class JogadoresController extends Controller
 
         $jogadores = \App\Models\Pessoa\Jogador::where('nome', 'like', "%$search%")
         ->orWhere('email', 'like', "%$search%")
+        ->where('ativo', true)
         ->get();
 
         $resultatos = [];

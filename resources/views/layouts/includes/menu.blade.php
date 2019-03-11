@@ -1,6 +1,6 @@
 <header class="header color-2" id="header">
     <div class="logo-nav">
-        <div class="container">
+        <div class="container containermenu">
             <div class="row">
                 <!--Logo Start-->
                 <div class="col-md-3 nop">
@@ -100,7 +100,7 @@
 
                 </div>
 
-                <div class="col-md-12" style="padding-right:0;padding-left:0;">
+                <div class="col-md-12 containercategorias" style="padding-right:0;padding-left:0;">
 
                   <div class="header-navbar">
 

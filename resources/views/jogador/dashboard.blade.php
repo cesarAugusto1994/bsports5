@@ -20,27 +20,49 @@
             <img class="profile-user-img img-responsive img-circle" alt="" src="{{ route('image', ['link'=>$jogador->avatar]) }}"/>
 
           </div>
+
+          @php
+
+              $derrotas = $vitorias = 0;
+
+              foreach($jogador->partidas as $partida) {
+
+                if($partida->jogador1_id == $jogador->id) {
+
+                  if($partida->jogador2_resultado_final < $partida->jogador1_resultado_final) {
+                      $vitorias++;
+                  } else {
+                      $derrotas++;
+                  }
+
+                } else {
+
+                  $derrotas++;
+
+                }
+
+              }
+
+          @endphp
+
           <div class="box-footer">
             <div class="row">
               <div class="col-sm-4 border-right">
                 <div class="description-block">
-                  <h5 class="description-header">{{ $jogador->resultados->sum('pontos') - $jogador->resultados->sum('bonus') }}</h5>
+                  <h5 class="description-header">{{ $jogador->partidas->sum('jogador1_pontos') - $jogador->resultados->sum('jogador1_bonus')
+                    + $jogador->partidas->sum('jogador2_pontos') - $jogador->resultados->sum('jogador2_bonus')
+                   }}</h5>
                   <span class="description-text">Pontos</span>
                 </div>
               </div>
               <div class="col-sm-4 border-right">
                 <div class="description-block">
-                  <h5 class="description-header">{{ $jogador->resultados->count() }}</h5>
+                  <h5 class="description-header">{{ $jogador->partidas->count() }}</h5>
                   <span class="description-text">Partidas</span>
                 </div>
               </div>
               <div class="col-sm-4">
                 <div class="description-block">
-                  @php
-                        $vitorias = $jogador->resultados->filter(function($resultado) {
-                            return $resultado->resultado_final >= 2;
-                        })->count();
-                  @endphp
                   <h5 class="description-header">{{ $vitorias }}</h5>
                   <span class="description-text">Vitórias</span>
                 </div>
@@ -56,7 +78,9 @@
 
             <div class="info-box-content">
               <span class="info-box-text">Pontos</span>
-              <span class="info-box-number">{{ $jogador->resultados->sum('pontos') - $jogador->resultados->sum('bonus') }}</span>
+              <span class="info-box-number">{{ $jogador->partidas->sum('jogador1_pontos') - $jogador->resultados->sum('jogador1_bonus')
+                + $jogador->partidas->sum('jogador2_pontos') - $jogador->resultados->sum('jogador2_bonus')
+               }}</span>
 
               <div class="progress">
                 <div class="progress-bar" style="width: 70%"></div>
@@ -67,6 +91,9 @@
             </div>
           </div>
         </div>
+
+
+
         <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="info-box bg-green">
             <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
@@ -89,7 +116,7 @@
 
             <div class="info-box-content">
               <span class="info-box-text">Partidas</span>
-              <span class="info-box-number">{{ $jogador->resultados->count() }}</span>
+              <span class="info-box-number">{{ $jogador->partidas->count() }}</span>
 
               <div class="progress">
                 <div class="progress-bar" style="width: 70%"></div>
@@ -104,14 +131,6 @@
             <span class="info-box-icon"><i class="fa fa-comments-o"></i></span>
 
             <div class="info-box-content">
-
-              @php
-
-                    $derrotas = $jogador->resultados->filter(function($resultado) {
-                        return $resultado->resultado_final < 2;
-                    })->count();
-
-              @endphp
 
               <span class="info-box-text">Derrotas</span>
               <span class="info-box-number">{{ $derrotas }}</span>
@@ -137,40 +156,49 @@
         <h3 class="box-title">Partidas</h3>
       </div>
       <div class="box-body">
-        @if($jogador->resultados->isNotEmpty())
+        @if($jogador->partidas->isNotEmpty())
         <div class="table-responsive">
           <table class="table no-margin">
             <thead>
             <tr>
               <th></th>
               <th>Data</th>
-              <th>Opnente</th>
+              <th>Adversário</th>
               <th>Status</th>
               <th>Placar</th>
             </tr>
             </thead>
             <tbody>
-              @foreach($jogador->resultados->take(10) as $resultado)
+              @foreach($jogador->partidas as $partida)
                 <tr>
                   <td><a href="#"></a></td>
-                  <td>{{ $resultado->partida->inicio->format('d/m/Y H:i') }}</td>
+                  <td>{{ $partida->inicio->format('d/m/Y H:i') }}</td>
                   <td>
                     @php
 
-                        $resultadoPartida = $resultado->partida->resultado;
-
-                        $jogadorAdversario = $resultadoPartida->filter(function($resultado) use ($jogador) {
-                          return $resultado->jogador->id !== $jogador->id;
-                        })->first();
+                        if($partida->jogador1->id == $jogador->id) {
+                            $jogadorAdversario = $partida->jogador2;
+                        } else {
+                            $jogadorAdversario = $partida->jogador1;
+                        }
 
                     @endphp
 
-                    {{ $jogadorAdversario->jogador->nome }}</td>
+                    {{ $jogadorAdversario->nome }}</td>
 
                     @php
 
-                        $label = $jogadorAdversario->pontos < $resultado->pontos ? 'Venceu' : 'Perdeu';
-                        $class = $jogadorAdversario->pontos < $resultado->pontos ? 'success' : 'danger';
+                        if($partida->jogador1_id == $jogador->id) {
+
+                          $label = $partida->jogador2_resultado_final < $partida->jogador1_resultado_final ? 'Venceu' : 'Perdeu';
+                          $class = $partida->jogador2_resultado_final < $partida->jogador1_resultado_final ? 'success' : 'danger';
+
+                        } else {
+
+                          $label = $partida->jogador1_resultado_final < $partida->jogador2_resultado_final ? 'Venceu' : 'Perdeu';
+                          $class = $partida->jogador1_resultado_final < $partida->jogador2_resultado_final ? 'success' : 'danger';
+
+                        }
 
                     @endphp
                   <td>
@@ -180,7 +208,26 @@
                   </td>
                   <td>
 
-                    {{ $resultado->resultado_final }} x {{ $jogadorAdversario->resultado_final }}
+                    @php
+
+                    if($partida->jogador1_id == $jogador->id) {
+
+                      $label = $partida->jogador2_resultado_final < $partida->jogador1_resultado_final ? 'Venceu' : 'Perdeu';
+                      $class = $partida->jogador2_resultado_final < $partida->jogador1_resultado_final ? 'success' : 'danger';
+
+                      $j1Placar = $partida->jogador1_resultado_final;
+                      $j2Placar = $partida->jogador2_resultado_final;
+
+                    } else {
+
+                      $j1Placar = $partida->jogador1_resultado_final;
+                      $j2Placar = $partida->jogador2_resultado_final;
+
+                    }
+
+                    @endphp
+
+                    {{ $j1Placar }} x {{ $j2Placar }}
 
                   </td>
                 </tr>

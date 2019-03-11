@@ -98,8 +98,6 @@ class PartidasController extends Controller
     {
         $data = $request->request->all();
 
-        #dd($data);
-
         $resultadoJ1 = $resultadoJ2 = 0;
         $jogador1_pontos = $jogador1_bonus = 0;
         $jogador2_pontos = $jogador2_bonus = 0;
@@ -193,14 +191,14 @@ class PartidasController extends Controller
 
           $jogador1_pontos = 1000;
           $jogador1_bonus = $bonus + $bonusJg1;
-          $jogador2_pontos = -1000;
+          $jogador2_pontos = 0;
           $jogador2_bonus = 0;
 
         } else {
 
           $jogador2_pontos = 1000;
           $jogador2_bonus = $bonus + $bonusJg2;
-          $jogador1_pontos = -1000;
+          $jogador1_pontos = 0;
           $jogador1_bonus = 0;
 
         }

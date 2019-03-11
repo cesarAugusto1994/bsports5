@@ -127,22 +127,6 @@ class HomeController extends Controller
             $jogador = $request->get('jogador');
         }
 
-        $sql = "select
-                jg.id,
-                jg.uuid,
-                jg.nome,
-                categoria_id categoria,
-                ca.nome categoria_nome,
-                sum(partida.jogador1_pontos) as pontos,
-                '' link,
-                '' url,
-                jg.avatar avatar
-                from partidas partida
-                inner join jogadores jg ON(jg.id = partida.jogador1_id)
-                inner join categorias ca ON(ca.id = jg.categoria_id)
-                where jg.categoria_id = ?
-                ";
-
         $sql = "
 
           select jg.id,
@@ -171,22 +155,26 @@ class HomeController extends Controller
           from jogadores jg
           inner join partidas p ON(jg.id = p.jogador1_id OR jg.id = p.jogador2_id)
           inner join categorias ca ON(ca.id = jg.categoria_id)
-          where jg.ativo = 1
-          and jg.categoria_id = ?
-          group by jg.id, jg.nome, jg.avatar, jg.uuid, jg.categoria_id, ca.nome
-          #having pontos > 0
-          order by pontos desc
-          #limit 5
-          ;
+            where jg.ativo = 1
+            and jg.categoria_id = ?
 
         ";
-/*
+
         if($jogador) {
-          $sql .= " AND jg.nome like '%$jogador%' ";
+
+          $sql .= "
+              and jg.nome like '%$jogador%'
+          ";
+
         }
 
-        $sql .= "group by jg.id, jg.uuid, jg.nome, jg.categoria_id, ca.nome, jg.avatar
-        order by pontos DESC";*/
+        $sql .= "
+
+        group by jg.id, jg.nome, jg.avatar, jg.uuid, jg.categoria_id, ca.nome
+        #having pontos > 0
+        order by pontos desc
+
+        ";
 
         $resultado = \DB::select($sql, [$id]);
 

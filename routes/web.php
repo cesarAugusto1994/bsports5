@@ -58,6 +58,10 @@ Route::middleware('loadCache')->group(function() {
   Route::get('/partida/{id}/remover-jogador/{jogador}', 'PartidasController@removerJogador')->name('remover_jogador_partida');
   Route::get('/partida/{id}/trocar/jogador/{jogador}', 'PartidasController@trocarJogador')->name('trocar_jogador_partida');
 
+  Route::get('/images', 'PropagandasController@images')->name('images');
+  Route::get('/images/external', 'PropagandasController@externalImages')->name('external_images');
+  Route::get('/images/storage', 'PropagandasController@storageImages')->name('storage_images');
+
   Route::group(['middleware' => 'auth'], function () {
 
   //  Route::group(['middleware' => 'checkrole'], function () {
@@ -96,10 +100,9 @@ Route::middleware('loadCache')->group(function() {
               Route::resource('matches', 'PartidasController');
               Route::get('/appointment', 'PartidasController@agendamento')->name('agendar_partida');
               Route::get('/appointment/create', 'PartidasController@create')->name('create_partida');
-              //Route::resource('perfil', 'PerfilController');
+
               Route::get('/mensalidade', 'JogadoresController@mensalidade')->name('mensalidade');
               Route::get('/banner/link', 'BannersController@image')->name('banner_link');
-
 
               Route::get('/players/{id}/profile', 'JogadoresController@view')->name('player_profile');
               Route::resource('configs', 'ConfigsController');
@@ -122,7 +125,6 @@ Route::middleware('loadCache')->group(function() {
               Route::resource('pagamentos', 'PagamentosController');
 
               Route::post('/pagamentos/{id}/informe-pagamento', 'PagamentosController@informe')->name('informe_pagamento');
-
               Route::get('/partidas/{id}/placar', 'PartidasController@placar')->name('partida_placar');
               Route::get('/partidas/{id}/placar/edit', 'PartidasController@editarPlacar')->name('editar_partida_placar');
               Route::post('/partida/{id}/placar/update', 'PartidasController@placarUpdate')->name('partida_placar_update');
@@ -150,8 +152,21 @@ Route::middleware('loadCache')->group(function() {
               Route::post('/partidas/{id}/wo/store', 'PartidasController@woStore')->name('wo_store');
               Route::post('/partidas/{id}/desistencia/store', 'PartidasController@desistenciaStore')->name('wo_desistencia');
 
+              Route::resource('templates', 'TemplatesController');
+              Route::resource('modelos', 'ModelosController');
+              Route::resource('propagandas', 'PropagandasController');
 
+              Route::resource('mailling', 'MaillingController');
 
+              Route::get('/mailling/email/envio', 'MaillingController@envioEmail')->name('mailling_envio_email_clientes');
+              Route::post('/mailling/{id}/send/email', 'MaillingController@sendEmail')->name('mailling_send_email');
+
+              Route::post('templates/preview', 'ModelosController@setPreview')->name('template_preview');
+              Route::get('templates/preview/{id}', 'ModelosController@preview')->name('template_preview_item');
+
+              Route::get('/images/google', 'PropagandasController@googleImages')->name('google_images');
+              Route::post('/images/upload', 'PropagandasController@enviarImagem')->name('upload_images');
+              Route::post('/templates/preview/storeImages', 'PropagandasController@storeImages')->name('template_store_images');
           });
       });
 

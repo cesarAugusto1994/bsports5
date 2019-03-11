@@ -114,6 +114,8 @@
         </div>
 
     </div>
+
+    <input type="hidden" id="route-preview" value="{{ route('template_preview') }}"/>
 @stop
 
 @section('adminlte_js')
