@@ -15427,7 +15427,7 @@ html.long-form-on body {
 
 .data-number {
     display: inline-block;
-    color: #F1180C;
+    color: #da1418;
     font: 55px/0.7em "roboto_bold";
     text-transform: capitalize
 }
@@ -15576,8 +15576,7 @@ html.long-form-on body {
     padding-right: 30px;
     max-width: 806px;
     min-height: 400px;
-    margin: 0 auto;
-    border-bottom: 5px solid #0E61D3;
+    margin: 0 auto
 }
 
 .player-ranking-wrapper.panel-start .player-ranking-panel {
@@ -15596,7 +15595,7 @@ html.long-form-on body {
 }
 
 .player-ranking-details {
-    float: right;
+    float: left;
     width: calc(100% - 150px)
 }
 
@@ -15647,6 +15646,7 @@ html.long-form-on body {
 }
 
 .player-ranking-links {
+    max-width: 424px;
     text-align: right;
     text-transform: capitalize;
     font: 15px/1em "roboto_regular";
@@ -15668,7 +15668,7 @@ html.long-form-on body {
 }
 
 .player-ranking-data {
-    background-color: #F4F5FA;
+    background-color: #ebebeb;
     height: 185px
 }
 
@@ -17261,6 +17261,7 @@ html.long-form-on body {
 .nav>li>a {
     position: relative;
     display: block;
+    height: 39px;
     line-height: 39px
 }
 

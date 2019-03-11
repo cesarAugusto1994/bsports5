@@ -7,7 +7,7 @@
 @section('content')
 
     <!--Featured News Area Start-->
-    <section class="news-section-wrapper" style="background: #f6f6f6;">
+    <section class="news-section-wrapper">
         <div class="featured-news-block">
             <div class="container">
                 <div class="row">
@@ -15,7 +15,7 @@
                     <div class="col-md-9 p3r">
                         <div id="featured-slider" class="owl-carousel owl-theme" style="min-height:500px;max-height:500px;">
                           @foreach($ranking as $key => $item)
-                            <div class="item">
+                            <div class="item" style="border-radius:15px;box-shadow: 8px 13px 14px -7px rgba(235,232,235,1);">
 
                                 <div class="module-header">
                                     <h2 id="singlesRankingTitle" class="module-title landscape-logo">
@@ -29,7 +29,7 @@
                                     </div>
                                 </div>
 
-                                <div class="player-ranking-panel">
+                                <div class="player-ranking-panel" style="border-radius:15px">
                                   <div class="player-ranking-top">
                                   <div class="item-overflow">
                                     <div class="item-container">
@@ -144,14 +144,14 @@
                 @endphp
 
                 <div class="row proximas-partidas">
-                    <div class="col-md-3">
-                        <h2 class="section-title"> Próximas Partidas </h2>
+                    <div class="col-md-12">
+                        <h2 class="section-title"> PRÓXIMAS PARTIDAS </h2>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-12">
                         <ul class="nav" role="tablist">
                           @foreach($categorias as $key => $categoria)
-                            <li role="presentation" class="{{ $loop->index == 0 ? 'active' : '' }}">
-                              <a {{ $loop->index == 0 ? 'style=color:white' : '' }}  class="tab-proximas-partidas" href="#news-tab-{{ $loop->index }}" aria-controls="news-tab-{{ $loop->index }}" role="tab" data-toggle="tab">{{ $categoria->nome }}</a></li>
+                            <li style="float:left;" role="presentation" class="{{ $loop->index == 0 ? 'active' : '' }}">
+                              <a class="tab-proximas-partidas" href="#news-tab-{{ $loop->index }}" aria-controls="news-tab-{{ $loop->index }}" role="tab" data-toggle="tab">{{ $categoria->nome }}</a></li>
                           @endforeach
                         </ul>
                     </div>
