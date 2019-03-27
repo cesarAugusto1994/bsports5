@@ -100,22 +100,21 @@
 
                   <div class="team-page">
                       <div class="row">
-                        @foreach($ranking as $posicao)
-                          <!--Team Box Start-->
+                        @foreach($ranking as $k => $posicao)
                           <a style="color:#D5E904" href="{{route('jogador', $posicao['uuid'])}}">
                           <div class="col-md-4">
                               <div class="team-box">
-                                <div class="player-number">#{{ $posicao['posicao'] }}</div>
+                                <div class="player-number">#{{ $k+1 }}</div>
                                 <img width="128" height="128" src="{{ route('image', ['link'=>$posicao['avatar']]) }}" alt="" />
                                 <div class="player-info">
-                                  {{ $posicao['categoria_nome'] }}
-                                  <br>
-                                  <strong class="name"><a style="color:#D5E904" href="{{route('jogador', $posicao['uuid'])}}">{{ $posicao['primeiro_nome'] }}</a></strong>
-                                  <br> {{ $posicao['pontos'] }}
+                                  <p style="float:right">{{ $posicao['categoria_nome'] }}</p>
+                                  <p>
+                                    <a style="color:#D5E904" href="{{route('jogador', $posicao['uuid'])}}">{{ substr($posicao['nome'], 0, 15) }}</a>
+                                  </p>
+                                  <p style="float:right"> {{ $posicao['pontos'] }}</p>
                                 </div>
                               </div>
                           </div></a>
-                          <!--Team Box End-->
                         @endforeach
                       </div>
                       <div class="row">

@@ -18,6 +18,12 @@ class NoticiasController extends Controller
         return view('admin.noticias.index', compact('noticias'));
     }
 
+    public function posts()
+    {
+        $noticias = Noticia::orderByDesc('id')->paginate();
+        return view('pages.noticias', compact('noticias'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *

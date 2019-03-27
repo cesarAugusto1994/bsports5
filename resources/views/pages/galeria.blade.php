@@ -2,8 +2,14 @@
 
 @section('css')
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.swipebox/1.4.4/css/swipebox.min.css"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.7.0/css/justifiedGallery.min.css"/>
+
+<style>
+
+.page-wrapper {
+  padding: 30px 0;
+}
+
+</style>
 
 @stop
 
@@ -11,15 +17,17 @@
 
 <div class="inner-banner">
     <h1>Galeria - {{ $midia->titulo }}</h1>
-    <p>{{ $midia->descricao }}</p>
+
 </div>
+
 <div class="fl-breadcrumps">
     <div class="container">
         <ul class="pull-left">
             <li> <a href="{{ route('home') }}">Home</a> </li>
             <li> <a>Galeria</a> </li>
         </ul>
-        <a class="pull-right" href="{{ route('home') }}">Voltar à Home <i class="fa fa-caret-right"></i></a> </div>
+        <a class="pull-right" href="{{ route('home') }}">Voltar à Home <i class="fa fa-caret-right"></i></a>
+    </div>
 </div>
 
 <div class="page-wrapper">
@@ -32,6 +40,9 @@
                     <div class="contact-form">
 
                         <div class="row">
+
+                          <p>Descrição: {{ $midia->descricao }}</p>
+                          <br/>
 
                         @foreach($midia->links as $link)
 

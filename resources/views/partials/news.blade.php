@@ -12,7 +12,7 @@
                     @foreach(\App\Models\Evento::all() as $evento)
                       <div class="col-md-4 col-sm-4">
                           <div class="news-block ">
-                              <div class="news-thumb"> <img src="{{ route('image', ['link'=>$evento->banner]) }}" alt="" /> </div>
+                              <div class="news-thumb"> <img style="min-width:300px;max-width:300px;min-height:200px;max-height:200px;" src="{{ route('image', ['link'=>$evento->banner]) }}" alt="" /> </div>
                               <div class="news-txt">
                                   <h4> <a href="{{ route('evento', ['id'=>$evento->id,'titulo'=>str_slug($evento->titulo)]) }}">{{ substr($evento->titulo, 0, 250) }}</a> </h4>
                                   <p> {{ substr($evento->conteudo, 0, 150) }} ... </p>
@@ -36,12 +36,12 @@
                             <h2 class="section-title">Noticias</h2>
                         </div>
                         @foreach(\App\Models\Noticia::all() as $noticia)
-                        <div class="col-md-6 col-sm-6">
+                        <div class="col-md-6 col-sm-6" style="padding:1em 1em">
                             <div class="news-block ">
-                                <div class="news-thumb"> <img src="{{ route('image', ['link'=>$noticia->banner]) }}" alt="" /> </div>
+                                <div class="news-thumb"> <img style="min-width:300px;max-width:300px;min-height:200px;max-height:200px;" src="{{ route('image', ['link'=>$noticia->banner]) }}" alt="" /> </div>
                                 <div class="news-txt">
                                     <h4> <a href="{{ route('noticia', ['id'=>$noticia->id,'titulo'=>str_slug($noticia->titulo)]) }}">{{ $noticia->titulo }}</a> </h4>
-                                    <p> {{ substr($noticia->conteudo, 0, 150) }} </p>
+
                                     <a class="rm" href="{{ route('noticia', ['id'=>$noticia->id,'titulo'=>str_slug($noticia->titulo)]) }}"> Saiba Mais </a> </div>
                             </div>
                         </div>
@@ -158,10 +158,11 @@
 
             <div class="col-md-3 col-sm-6">
                 <div class="news-block ">
-                    <div class="news-thumb"> <a href="{{ route('galeria', $imagem->id) }}"><i class="fa fa-link"></i></a> <img src="{{ $route }}" alt="" /> </div>
+                    <div class="news-thumb"> <a href="{{ route('galeria', $imagem->id) }}">
+                      <i class="fa fa-link"></i></a> <img style="min-width:300px;max-width:300px;min-height:200px;max-height:200px;" src="{{ $route }}" alt="" /> </div>
                     <div class="news-txt">
                         <h5> <a href="{{ route('galeria', $imagem->id) }}">{{ $imagem->titulo }} </a> </h5>
-                        <p>{{ $imagem->descricao }}</p>
+                        
                     </div>
                 </div>
             </div>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Pessoa, Partida, Semana, Categoria, Pagina, Clube};
+use App\Models\{Pessoa, Partida, Semana, Categoria, Pagina, Clube, Semestre};
 use App\Models\Pessoa\{Jogador, Telefone};
 use App\Models\Torneio\Resultado;
 use Illuminate\Pagination\{Paginator, LengthAwarePaginator};
@@ -39,8 +39,12 @@ class HomeController extends Controller
 
         $id = 1;
 
+        $categoriaAtual = Categoria::find($id);
+
         if($request->has('category')) {
             $id = $request->get('category');
+
+            $categoriaAtual = Categoria::find($id);
         }
 
         $sql = "
@@ -78,11 +82,7 @@ class HomeController extends Controller
 
         ";
 
-        //print_r($sql);exit;
-
         $resultado = \DB::select($sql, [$id]);
-
-        //dd($resultado);
 
         $ranking = [];
 
@@ -106,7 +106,30 @@ class HomeController extends Controller
           ];
         }
 
-        return view('home', compact('ranking'));
+        $categorias = Categoria::where('habilitar_menu', true)->get();
+        $partidasPorCategoria = [];
+
+        foreach ($categorias as $key => $categoria) {
+
+          foreach ($categoria->jogadores as $key2 => $jogador) {
+
+            foreach ($jogador->partidas as $key3 => $partida) {
+
+              $partidas = $partida->where('fim', '>', now())->get();
+
+              foreach ($partidas as $key4 => $item) {
+                  $partidasPorCategoria[$categoria->nome] = [
+                    $item->id => $item
+                  ];
+              }
+
+            }
+
+          }
+
+        }
+
+        return view('home', compact('ranking', 'partidasPorCategoria', 'categorias', 'categoriaAtual'));
     }
 
     public function classificacao(Request $request)
@@ -117,96 +140,112 @@ class HomeController extends Controller
 
         $id = 1;
 
-        $jogador = null;
+        $jogadorNome = null;
 
         if($request->has('category') && !empty($request->get('category'))) {
             $id = $request->get('category');
         }
 
         if($request->has('jogador') && !empty($request->get('jogador'))) {
-            $jogador = $request->get('jogador');
+            $jogadorNome = $request->get('jogador');
         }
 
-        $sql = "
+        $jogadores = Jogador::where('ativo', true);
 
-          select jg.id,
-            jg.nome,
-            count(p.id) as partidas,
-            jg.uuid, jg.categoria_id categoria,
-            jg.avatar avatar,
-            ca.nome categoria_nome, '' link, '' url,
-            sum(
-            p.jogador1_pontos/
-            (
-            select count(p2.id) as i
-            from partidas p2
-            where p2.semana = p.semana AND (p2.jogador1_id = p.jogador1_id OR p2.jogador2_id = p.jogador2_id)
-
-            ) +
-
-            p.jogador2_pontos/
-            (
-            select count(p2.id) as i
-            from partidas p2
-            where p2.semana = p.semana AND (p2.jogador1_id = p.jogador1_id OR p2.jogador2_id = p.jogador2_id)
-
-            )) as pontos
-
-          from jogadores jg
-          inner join partidas p ON(jg.id = p.jogador1_id OR jg.id = p.jogador2_id)
-          inner join categorias ca ON(ca.id = jg.categoria_id)
-            where jg.ativo = 1
-            and jg.categoria_id = ?
-
-        ";
-
-        if($jogador) {
-
-          $sql .= "
-              and jg.nome like '%$jogador%'
-          ";
-
+        if($jogadorNome) {
+          $jogadores->where('nome', 'LIKE', "%$jogadorNome%");
+        } elseif ($id) {
+          $jogadores->where('categoria_id', $id);
         }
 
-        $sql .= "
+        $jogadores = $jogadores->get();
 
-        group by jg.id, jg.nome, jg.avatar, jg.uuid, jg.categoria_id, ca.nome
-        #having pontos > 0
-        order by pontos desc
-
-        ";
-
-        $resultado = \DB::select($sql, [$id]);
+        $jogadores = $jogadores->sortByDesc(function($jogador) {
+          return $jogador->partidas->sum('jogador1_pontos')
+                  + $jogador->partidas->sum('jogador1_bonus')
+                  + $jogador->partidas2->sum('jogador2_pontos')
+                  + $jogador->partidas2->sum('jogador2_bonus');
+        });
 
         $ranking = [];
-
         $items = new Collection();
 
-        foreach ($resultado as $key => $item) {
+        $partidasCollection = new Collection();
 
-          $nomeArray = explode(" ", $item->nome);
+        foreach ($jogadores as $keyJ => $jogador) {
 
-          $primeiroNome = $nomeArray[0] ?? "";
-          $ultimoNome = $nomeArray[1] ?? "";
+            $nomeArray = explode(" ", $jogador->nome);
 
-          $ranking[$key] = [
-            "id" => $item->id,
-            "uuid" => $item->uuid,
-            "nome" => $item->nome,
-            "primeiro_nome" => $primeiroNome,
-            "ultimo_nome" => $ultimoNome,
-            "categoria" => $item->categoria,
-            "categoria_nome" => $item->categoria_nome,
-            "pontos" => floor($item->pontos),
-            "posicao" => $key+1,
-            "link" => $item->link,
-            "url" => $item->url,
-            "avatar" => $item->avatar,
-          ];
+            $primeiroNome = $nomeArray[0] ?? "";
+            $ultimoNome = $nomeArray[1] ?? "";
 
-          $items->push($ranking[$key]);
+            $bonus = $jogador->partidas->sum('jogador1_bonus')
+                    + $jogador->partidas2->sum('jogador2_bonus');
 
+            $partidaslist=$partidaslistWeekEnd=[];
+
+            $pts=0;
+
+            $semestreVigente = Semestre::where('inicio', '<=', now()->format('Y-m-d'))
+              ->where('fim', '>=', now()->format('Y-m-d'))
+              ->get();
+
+            $semestre = $semestreVigente->last();
+
+            if(!$semestre) {
+              notify()->flash('Classificação não carregada', 'error', [
+                  'text' => 'Informe um semestre que esteja em vigencia.',
+              ]);
+              return back();
+            }
+
+            $partidas = $jogador->partidas->filter(function($partida) use ($semestre) {
+                return $partida->semestre_id == $semestre->id;
+            });
+
+            $partidas2 = $jogador->partidas2->filter(function($partida) use ($semestre) {
+                return $partida->semestre_id == $semestre->id;
+            });
+
+            foreach ($partidas as $key => $partida) {
+                $partidaslistWeekEnd[$partida->semana][] = $partida->jogador1_pontos+$partida->jogador1_bonus;
+            }
+
+            foreach ($partidas2 as $key => $partida) {
+                $partidaslistWeekEnd[$partida->semana][] = $partida->jogador2_pontos+$partida->jogador2_bonus;
+            }
+
+            $semanasPontos = [];
+
+            foreach ($partidaslistWeekEnd as $key => $item) {
+                $semanasPontos[] = array_sum($item) / count($item);
+            }
+
+            $pontos = array_sum(array_merge($semanasPontos, $partidaslist));
+
+            $ranking[$keyJ] = [
+              "id" => $jogador->id,
+              "uuid" => $jogador->uuid,
+              "nome" => $jogador->nome,
+              "primeiro_nome" => $primeiroNome,
+              "ultimo_nome" => $ultimoNome,
+              "categoria" => $jogador->categoria->id,
+              "categoria_nome" => $jogador->categoria->nome,
+              "pontos" => round($pontos, 2) ?: "-",
+              "pontuacao" => $pontos?:0,
+              "bonus" => $bonus,
+              "posicao" => $keyJ+1,
+              "link" => $jogador->link,
+              "url" => $jogador->url,
+              "avatar" => $jogador->avatar,
+            ];
+
+            $items->push($ranking[$keyJ]);
         }
+
+        uksort($ranking, function($a, $b) {
+            return $a['pontuacao'] <=> $b['pontuacao'];
+        });
 
         $perPage = 15;
 

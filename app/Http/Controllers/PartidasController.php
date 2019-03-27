@@ -111,23 +111,23 @@ class PartidasController extends Controller
         $jogador2_set3 = $data['jogador2_set3'];
 
         if($jogador1_set1 == 0 && $jogador2_set1 == 0) {
-
+/*
           notify()->flash('Erro ao finalizar Partida', 'error', [
               'text' => 'O Primeiro set não pode estar zerado para ambos os jogadores.',
           ]);
 
           return back()->withInput();
-
+*/
         }
 
         if($jogador1_set2 == 0 && $jogador2_set2 == 0) {
-
+/*
           notify()->flash('Erro ao finalizar Partida', 'error', [
               'text' => 'O Segundo set não pode estar zerado para ambos os jogadores.',
           ]);
 
           return back()->withInput();
-
+*/
         }
 
         if($jogador1_set1 > $jogador2_set1) {
@@ -143,13 +143,13 @@ class PartidasController extends Controller
         }
 
         if($jogador1_set3 == 0 && $jogador2_set3 == 0 && $resultadoJ1 == $resultadoJ2) {
-
+/*
           notify()->flash('Erro ao finalizar Partida', 'error', [
               'text' => 'O Terceiro set não pode estar zerado para ambos os jogadores, já que estão empatados.',
           ]);
 
           return back()->withInput();
-
+*/
         }
 
         if($resultadoJ1==2||$resultadoJ2==2) {
@@ -163,7 +163,23 @@ class PartidasController extends Controller
         }
 
         $partida = Partida::findOrFail($id);
+
+        if($request->has('atualizacao_manual')) {
+
+          $data['jogador1_tiebreak'] = $request->get('jogador1_tiebreak');
+          $data['jogador2_tiebreak'] = $request->get('jogador2_tiebreak');
+          $data['jogador1_resultado_final'] = $request->get('jogador1_resultado_final');
+          $data['jogador2_resultado_final'] = $request->get('jogador2_resultado_final');
+          $data['jogador1_pontos'] = $request->get('jogador1_pontos');
+          $data['jogador2_pontos'] = $request->get('jogador2_pontos');
+          $data['jogador1_bonus'] = $request->get('jogador1_bonus');
+          $data['jogador2_bonus'] = $request->get('jogador2_bonus');
+
+        }
+
         $partida->update($data);
+
+        if(!$request->has('atualizacao_manual')) {
 
         $jogadorId = null;
 
@@ -216,6 +232,8 @@ class PartidasController extends Controller
         $partida->usuario_finalizacao_id = \Auth::user()->id;
 
         $partida->save();
+
+        }
 
         notify()->flash('Partida Finalizada', 'success', [
             'text' => 'Partida Finalizada com Sucesso.',
@@ -496,7 +514,7 @@ class PartidasController extends Controller
             $partida->fim = $horario->modify('+90 minutes');
             $partida->semestre_id = $data['semestre_id'];
             $partida->tipo_jogo = 'Simples';
-            $partida->semana = $inicio->format('wY');
+            $partida->semana = $inicio->format('WY');
 
             if($request->has('jogador')) {
 

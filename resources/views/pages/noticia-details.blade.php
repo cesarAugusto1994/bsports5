@@ -11,6 +11,10 @@
           background-color: #f4f4f4;
       }
 
+      .page-wrapper {
+        padding: 30px 0;
+      }
+
     </style>
 @stop
 

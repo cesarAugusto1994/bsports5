@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pessoa\Jogador;
-use App\Models\Pessoa;
+use App\Models\{Pessoa,Semestre};
 use App\Models\Jogador\Mensalidade;
 use Auth;
 use App\Helpers\Helper;
@@ -75,16 +75,6 @@ class JogadoresController extends Controller
           $start = \DateTime::createFromFormat('d/m/Y', $data['start']);
           $end = \DateTime::createFromFormat('d/m/Y', $data['end']);
         }
-/*
-        if(!empty($data['start']) && !empty($data['end'])) {
-
-            $start = \DateTime::createFromFormat('d/m/Y', $data['start']);
-            $end = \DateTime::createFromFormat('d/m/Y', $data['end']);
-
-            $chamados->where('created_at', '>=', $start->format('Y-m-d') . ' 00:00:00')
-            ->where('created_at', '<=', $end->format('Y-m-d') . ' 23:59:59');
-
-        }*/
 
         $jogadores->whereDoesntHave('partidas', function($query) use($start, $end) {
               $query->where('inicio', '>', $start);
@@ -112,7 +102,49 @@ class JogadoresController extends Controller
     {
         $jogador = Jogador::uuid($id);
         $categorias = Helper::categorias();
-        return view('pages.jogador', compact('jogador', 'categorias'));
+
+        $partidaslist=$partidaslistWeekEnd=[];
+
+        $semestreVigente = Semestre::where('inicio', '<=', now()->format('Y-m-d'))
+          ->where('fim', '>=', now()->format('Y-m-d'))
+          ->get();
+
+        $semestre = $semestreVigente->last();
+
+        if(!$semestre) {
+          notify()->flash('Classificação não carregada', 'error', [
+              'text' => 'Informe um semestre que esteja em vigencia.',
+          ]);
+          return back();
+        }
+
+        $partidas = $jogador->partidas->filter(function($partida) use ($semestre) {
+            return $partida->semestre_id == $semestre->id;
+        });
+
+        $partidas2 = $jogador->partidas2->filter(function($partida) use ($semestre) {
+            return $partida->semestre_id == $semestre->id;
+        });
+
+        foreach ($partidas as $key => $partida) {
+            $partidaslistWeekEnd[$partida->semana][] = $partida->jogador1_pontos+$partida->jogador1_bonus;
+        }
+
+        foreach ($partidas2 as $key => $partida) {
+            $partidaslistWeekEnd[$partida->semana][] = $partida->jogador2_pontos+$partida->jogador2_bonus;
+        }
+
+        $semanasPontos = [];
+
+        foreach ($partidaslistWeekEnd as $key => $item) {
+            $semanasPontos[] = array_sum($item) / count($item);
+        }
+
+        $pontos = array_sum(array_merge($semanasPontos, $partidaslist));
+
+        $pontos = round($pontos,2);
+
+        return view('pages.jogador', compact('jogador', 'categorias', 'pontos'));
     }
 
     public function view($id)
@@ -134,6 +166,10 @@ class JogadoresController extends Controller
         ->orWhere('email', 'like', "%$search%")
         ->where('ativo', true)
         ->get();
+
+        $jogadores = $jogadores->filter(function($jogador) {
+            return $jogador->ativo;
+        });
 
         $resultatos = [];
 

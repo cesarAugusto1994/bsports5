@@ -69,7 +69,7 @@
                                     <li>
                                         <a style="color:white" href="{{ $route }}" class="login-btn"> <i class="fa fa-calendar-o"></i> &nbsp;&nbsp;Agendamento</a>
                                     </li>
-                                    <li>
+                                    <li style="border-left:2px solid white">
                                         @php
 
                                           $defaultRoute = '/admin';
@@ -80,7 +80,7 @@
 
                                         @endphp
 
-                                        <a style="color:white" target="_blank" href="{{ url($defaultRoute) }}" class="login-btn"> <i class="fa fa-user"></i>  &nbsp;&nbsp;Área do Jogador</a>
+                                        <a style="color:white;padding-left:20px" target="_blank" href="{{ url($defaultRoute) }}" class="login-btn"> <i class="fa fa-user"></i>  &nbsp;&nbsp;Área do Jogador</a>
                                     </li>
                                 </ul>
 
@@ -133,8 +133,8 @@
                                         </ul>
                                     </li>
 
-                                    <li><a href="{{ route('contato') }}">GALERIA</a></li>
-                                    <li><a href="{{ route('contato') }}">NOTÍCIAS</a></li>
+                                    <li><a href="{{ route('galerias') }}">GALERIA</a></li>
+                                    <li><a href="{{ route('posts') }}">NOTÍCIAS</a></li>
                                     <li><a href="{{ route('contato') }}">CONTATO</a></li>
                                 </ul>
                                 <ul class="acbar-right">

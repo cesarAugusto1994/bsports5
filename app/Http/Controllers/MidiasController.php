@@ -19,6 +19,12 @@ class MidiasController extends Controller
         return view('admin.midias.index', compact('midias'));
     }
 
+    public function galerias()
+    {
+        $midias = Midia::paginate();
+        return view('pages.galerias', compact('midias'));
+    }
+
     public function galeria($id)
     {
         $midia = Midia::findOrFail($id);

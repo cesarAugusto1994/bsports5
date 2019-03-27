@@ -24,20 +24,82 @@
 
           <ul class="list-group list-group-unbordered">
             <li class="list-group-item">
-              <b>Pontos</b> <a class="pull-right">{{ $jogador->resultados->sum('pontos') - $jogador->resultados->sum('bonus') }}</a>
-            </li>
-            <li class="list-group-item">
-              <b>Partidas</b> <a class="pull-right">{{ $jogador->resultados->count() }}</a>
-            </li>
-            <li class="list-group-item">
+
               @php
 
-                    $vitorias = $jogador->resultados->filter(function($resultado) {
-                        return $resultado->resultado_final >= 2;
-                    })->count();
+              $partidaslist=$partidaslistWeekEnd=[];
+
+              $semestreVigente = \App\Models\Semestre::where('inicio', '<=', now()->format('Y-m-d'))
+                ->where('fim', '>=', now()->format('Y-m-d'))
+                ->get();
+
+              $semestre = $semestreVigente->last();
+
+              if(!$semestre) {
+                notify()->flash('Classificação não carregada', 'error', [
+                    'text' => 'Informe um semestre que esteja em vigencia.',
+                ]);
+                return back();
+              }
+
+              $partidas = $jogador->partidas->filter(function($partida) use ($semestre) {
+                  return $partida->semestre_id == $semestre->id;
+              });
+
+              $partidas2 = $jogador->partidas2->filter(function($partida) use ($semestre) {
+                  return $partida->semestre_id == $semestre->id;
+              });
+
+              foreach ($partidas as $key => $partida) {
+                  $partidaslistWeekEnd[$partida->semana][] = $partida->jogador1_pontos+$partida->jogador1_bonus;
+              }
+
+              foreach ($partidas2 as $key => $partida) {
+                  $partidaslistWeekEnd[$partida->semana][] = $partida->jogador2_pontos+$partida->jogador2_bonus;
+              }
+
+              $semanasPontos = [];
+
+              foreach ($partidaslistWeekEnd as $key => $item) {
+                  $semanasPontos[] = array_sum($item) / count($item);
+              }
+
+              $pontos = array_sum(array_merge($semanasPontos, $partidaslist));
+
+              $pontos = round($pontos,2);
+
+              $vitorias = $jogador->partidas->filter(function($partida) use ($jogador) {
+
+                  if($partida->jogador1_id == $jogador->id) {
+                    return $partida->jogador1_resultado_final >= 2;
+                  } elseif ($partida->jogador2_id == $jogador->id) {
+                    return $partida->jogador2_resultado_final >= 2;
+                  }
+
+              })->count();
+
+              $vitorias2 = $jogador->partidas2->filter(function($partida) use ($jogador) {
+
+                  if($partida->jogador1_id == $jogador->id) {
+                    return $partida->jogador1_resultado_final >= 2;
+                  } elseif ($partida->jogador2_id == $jogador->id) {
+                    return $partida->jogador2_resultado_final >= 2;
+                  }
+
+              })->count();
+
+              $vitorias = $vitorias+$vitorias2;
+
+              $totalPartidas = $jogador->partidas->count() + $jogador->partidas2->count();
 
               @endphp
 
+              <b>Pontos</b> <a class="pull-right">{{ $pontos }}</a>
+            </li>
+            <li class="list-group-item">
+              <b>Partidas</b> <a class="pull-right">{{ $totalPartidas }}</a>
+            </li>
+            <li class="list-group-item">
               <b>Vitórias</b> <a class="pull-right">{{ $vitorias }}</a>
             </li>
           </ul>

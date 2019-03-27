@@ -108,14 +108,59 @@
                 <tbody>
 
                   @foreach($jogadores as $jogador)
+
+                    @php
+
+                      $partidaslist=$partidaslistWeekEnd=[];
+
+                      $semestreVigente = \App\Models\Semestre::where('inicio', '<=', now()->format('Y-m-d'))
+                        ->where('fim', '>=', now()->format('Y-m-d'))
+                        ->get();
+
+                      $semestre = $semestreVigente->last();
+
+                      if(!$semestre) {
+                        notify()->flash('Classificação não carregada', 'error', [
+                            'text' => 'Informe um semestre que esteja em vigencia.',
+                        ]);
+                        return back();
+                      }
+
+                      $partidas = $jogador->partidas->filter(function($partida) use ($semestre) {
+                          return $partida->semestre_id == $semestre->id;
+                      });
+
+                      $partidas2 = $jogador->partidas2->filter(function($partida) use ($semestre) {
+                          return $partida->semestre_id == $semestre->id;
+                      });
+
+                      foreach ($partidas as $key => $partida) {
+                          $partidaslistWeekEnd[$partida->semana][] = $partida->jogador1_pontos+$partida->jogador1_bonus;
+                      }
+
+                      foreach ($partidas2 as $key => $partida) {
+                          $partidaslistWeekEnd[$partida->semana][] = $partida->jogador2_pontos+$partida->jogador2_bonus;
+                      }
+
+                      $semanasPontos = [];
+
+                      foreach ($partidaslistWeekEnd as $key => $item) {
+                          $semanasPontos[] = array_sum($item) / count($item);
+                      }
+
+                      $pontos = array_sum(array_merge($semanasPontos, $partidaslist));
+
+                      $pontos = round($pontos,2);
+
+                    @endphp
+
                     <tr>
                       <td><input type="checkbox" class="selecao_jogadores" name="selecao_jogadores[]" value="{{ $jogador->id }}"/></td>
                       <td>{{ $jogador->id }}</td>
                       <td><a href="{{ route('player_profile', $jogador->uuid) }}">{{ $jogador->nome }}</a></td>
                       <td>{{ $jogador->categoria->nome ?? '' }}</td>
                       <td>{{ $jogador->email }}</td>
-                      <td>{{ $jogador->partidas->sum('jogador1_pontos') - $jogador->partidas->sum('jogador1_bonus') +
-                        $jogador->partidas2->sum('jogador2_pontos') - $jogador->partidas2->sum('jogador2_bonus') }}</td>
+                      <td>{{ $pontos }}</td>
                       <td>
                         @if($jogador->aluno)
                         <span class="badge bg-green">Sim</span>
