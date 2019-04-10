@@ -27,13 +27,20 @@
             </div>
           </div>
 
+          <div class="form-group">
+            <label for="nome" class="col-sm-2 control-label">Ativo</label>
+
+            <div class="col-sm-10">
+              <input type="checkbox" {{ $categoria->ativo ? 'checked' : '' }} value="{{ $categoria->ativo }}" name="ativo" id="ativo" placeholder="Ativo">
+            </div>
+          </div>
+
         </div>
-        <!-- /.box-body -->
         <div class="box-footer clearfix">
           <button type="submit" class="btn btn-sm btn-success">Salvar</button>
+          <a href="{{ route('categorias.index') }}" class="btn btn-sm btn-white">Cancelar</a>
         </div>
       </form>
-      <!-- /.box-footer -->
     </div>
   </div>
 </div>

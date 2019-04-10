@@ -104,14 +104,14 @@
                           <a style="color:#D5E904" href="{{route('jogador', $posicao['uuid'])}}">
                           <div class="col-md-4">
                               <div class="team-box">
-                                <div class="player-number">#{{ $k+1 }}</div>
+                                <div class="player-number">{{ !request()->filled('jogador') ? '#' . $loop->iteration : '' }}</div>
                                 <img width="128" height="128" src="{{ route('image', ['link'=>$posicao['avatar']]) }}" alt="" />
                                 <div class="player-info">
                                   <p style="float:right">{{ $posicao['categoria_nome'] }}</p>
                                   <p>
                                     <a style="color:#D5E904" href="{{route('jogador', $posicao['uuid'])}}">{{ substr($posicao['nome'], 0, 15) }}</a>
                                   </p>
-                                  <p style="float:right"> {{ $posicao['pontos'] }}</p>
+                                  <p style="float:right"> {{ $posicao['pontos'] }} ({{ $posicao['bonus'] }}) Bonus</p>
                                 </div>
                               </div>
                           </div></a>

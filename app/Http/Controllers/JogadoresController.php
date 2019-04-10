@@ -134,11 +134,15 @@ class JogadoresController extends Controller
             $partidaslistWeekEnd[$partida->semana][] = $partida->jogador2_pontos+$partida->jogador2_bonus;
         }
 
+        //dd($partidaslistWeekEnd);
+
         $semanasPontos = [];
 
         foreach ($partidaslistWeekEnd as $key => $item) {
             $semanasPontos[] = array_sum($item) / count($item);
         }
+
+        //dd($semanasPontos);
 
         $pontos = array_sum(array_merge($semanasPontos, $partidaslist));
 

@@ -70,7 +70,7 @@
                                                         <div class="data-label">
                                                             <div class="data-label-text">Rank</div>
                                                         </div>
-                                                        <div class="data-number">{{ $key+1 }}</div>
+                                                        <div class="data-number">{{ $loop->iteration }}</div>
                                                     </div>
                                                     <div class="player-ranking-move">
                                                         <div class="data-label">

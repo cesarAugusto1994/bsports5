@@ -7,7 +7,7 @@ use App\Models\Pessoa\Jogador;
 
 class Categoria extends Model
 {
-    protected $fillable = ['nome', 'tipo'];
+    protected $fillable = ['nome', 'tipo', 'ativo'];
 
     public function jogadores()
     {

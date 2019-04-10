@@ -37,13 +37,15 @@
             <thead>
             <tr>
               <th>Nome</th>
+              <th>Ativo</th>
               <th style="width:250px">Opções</th>
             </tr>
             </thead>
             <tbody>
               @foreach($categorias as $categoria)
-                <tr>
+                <tr class="{{ $categoria->ativo ? '' : 'danger' }}">
                   <td>{{ $categoria->nome }}</td>
+                  <td>{{ $categoria->ativo ? 'Ativo' : 'Inativo' }}</td>
                   <td>
 
                     <form style="display:inline-block" method="post" action="{{ route('categoria_to_menu', ['id' => $categoria->id]) }}">

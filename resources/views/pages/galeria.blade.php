@@ -2,7 +2,6 @@
 
 @section('css')
 
-
 <style>
 
 .page-wrapper {
@@ -10,6 +9,8 @@
 }
 
 </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.swipebox/1.4.4/css/swipebox.min.css"/>
 
 @stop
 
@@ -77,14 +78,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.7.0/js/jquery.justifiedGallery.min.js"></script>
 
 <script type="text/javascript">
-;( function( $ ) {
-
-	$( '.swipebox' ).swipebox();
-
-} )( jQuery );
-
-
-
+$(document).ready(function() {
+  $( '.swipebox' ).swipebox();
+});
 </script>
 
 @stop

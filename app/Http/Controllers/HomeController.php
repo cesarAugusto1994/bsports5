@@ -47,65 +47,89 @@ class HomeController extends Controller
             $categoriaAtual = Categoria::find($id);
         }
 
-        $sql = "
-
-          select
-           jg.id,
-           jg.nome,
-           count(p.id) as partidas,
-           jg.uuid,
-           jg.categoria_id categoria,
-           '' link,
-           '' url,
-            sum(p.jogador1_pontos/
-            (select count(p2.id) as i
-            from partidas p2
-            where p2.semana = p.semana AND (p2.jogador1_id = p.jogador1_id OR p2.jogador2_id = p.jogador2_id)) +
-
-            p.jogador2_pontos/
-            (
-            select count(p2.id) as i
-            from partidas p2
-            where p2.semana = p.semana AND (p2.jogador1_id = p.jogador1_id OR p2.jogador2_id = p.jogador2_id)
-
-            )) as pontos,
-            jg.avatar avatar
-
-          from jogadores jg
-          left join partidas p ON(jg.id = p.jogador1_id OR jg.id = p.jogador2_id)
-          where jg.ativo = 1
-          and jg.categoria_id = ?
-          group by jg.id, jg.nome, jg.uuid, jg.categoria_id, jg.avatar
-          #having pontos > 0
-          order by pontos desc
-          limit 5;
-
-        ";
-
-        $resultado = \DB::select($sql, [$id]);
-
         $ranking = [];
+        $items = new Collection();
 
-        foreach ($resultado as $key => $item) {
+        $jogadores = Jogador::where('ativo', true)->where('categoria_id', $id)->get();
 
-          $nomeArray = explode(" ", $item->nome);
+        foreach ($jogadores as $keyJ => $jogador) {
 
-          $primeiroNome = $nomeArray[0] ?? "";
-          $ultimoNome = $nomeArray[1] ?? "";
+            $nomeArray = explode(" ", $jogador->nome);
 
-          $ranking[] = [
-            "id" => $item->id,
-            "uuid" => $item->uuid,
-            "primeiro_nome" => $primeiroNome,
-            "ultimo_nome" => $ultimoNome,
-            "categoria" => $item->categoria,
-            "pontos" => floor($item->pontos),
-            "link" => $item->link,
-            "url" => $item->url,
-            "avatar" => $item->avatar
-          ];
+            $primeiroNome = $nomeArray[0] ?? "";
+            $ultimoNome = $nomeArray[1] ?? "";
+
+            $bonus = $jogador->partidas->sum('jogador1_bonus')
+                    + $jogador->partidas2->sum('jogador2_bonus');
+
+            $partidaslist=$partidaslistWeekEnd=[];
+
+            $pts=0;
+
+            $semestreVigente = Semestre::where('inicio', '<=', now()->format('Y-m-d'))
+              ->where('fim', '>=', now()->format('Y-m-d'))
+              ->get();
+
+            $semestre = $semestreVigente->last();
+
+            if(!$semestre) {
+              notify()->flash('Classificação não carregada', 'error', [
+                  'text' => 'Informe um semestre que esteja em vigencia.',
+              ]);
+              return back();
+            }
+
+            $partidas = $jogador->partidas->filter(function($partida) use ($semestre) {
+                return $partida->semestre_id == $semestre->id;
+            });
+
+            $partidas2 = $jogador->partidas2->filter(function($partida) use ($semestre) {
+                return $partida->semestre_id == $semestre->id;
+            });
+
+            foreach ($partidas as $key => $partida) {
+                $partidaslistWeekEnd[$partida->semana][] = $partida->jogador1_pontos+$partida->jogador1_bonus;
+            }
+
+            foreach ($partidas2 as $key => $partida) {
+                $partidaslistWeekEnd[$partida->semana][] = $partida->jogador2_pontos+$partida->jogador2_bonus;
+            }
+
+            $semanasPontos = [];
+
+            foreach ($partidaslistWeekEnd as $key => $item) {
+                $semanasPontos[] = array_sum($item) / count($item);
+            }
+
+            $pontos = array_sum(array_merge($semanasPontos, $partidaslist));
+
+            $ranking[$keyJ] = [
+              "id" => $jogador->id,
+              "uuid" => $jogador->uuid,
+              "nome" => $jogador->nome,
+              "primeiro_nome" => $primeiroNome,
+              "ultimo_nome" => $ultimoNome,
+              "categoria" => $jogador->categoria->id,
+              "categoria_nome" => $jogador->categoria->nome,
+              "pontos" => round($pontos, 2) ?: "-",
+              "pontuacao" => floatval($pontos)?:0,
+              "bonus" => $bonus,
+              "posicao" => $keyJ+1,
+              "link" => $jogador->link,
+              "url" => $jogador->url,
+              "avatar" => $jogador->avatar,
+            ];
+
+            $items->push($ranking[$keyJ]);
+
         }
 
+        $ranking = $items->sortByDesc('pontuacao');
+/*
+        usort($ranking, function($a, $b) {
+            return $a['pontuacao'] <=> $b['pontuacao'];
+        });
+*/
         $categorias = Categoria::where('habilitar_menu', true)->get();
         $partidasPorCategoria = [];
 
@@ -159,13 +183,6 @@ class HomeController extends Controller
         }
 
         $jogadores = $jogadores->get();
-
-        $jogadores = $jogadores->sortByDesc(function($jogador) {
-          return $jogador->partidas->sum('jogador1_pontos')
-                  + $jogador->partidas->sum('jogador1_bonus')
-                  + $jogador->partidas2->sum('jogador2_pontos')
-                  + $jogador->partidas2->sum('jogador2_bonus');
-        });
 
         $ranking = [];
         $items = new Collection();
@@ -232,7 +249,7 @@ class HomeController extends Controller
               "categoria" => $jogador->categoria->id,
               "categoria_nome" => $jogador->categoria->nome,
               "pontos" => round($pontos, 2) ?: "-",
-              "pontuacao" => $pontos?:0,
+              "pontuacao" => floatval($pontos)?:0,
               "bonus" => $bonus,
               "posicao" => $keyJ+1,
               "link" => $jogador->link,
@@ -243,11 +260,9 @@ class HomeController extends Controller
             $items->push($ranking[$keyJ]);
         }
 
-        uksort($ranking, function($a, $b) {
-            return $a['pontuacao'] <=> $b['pontuacao'];
-        });
+        $perPage = 100;
 
-        $perPage = 15;
+        $items = $items->sortByDesc('pontuacao');
 
         $ranking = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, ['path'  => $request->url(),'query' => $request->query(),]);
 

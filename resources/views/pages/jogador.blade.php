@@ -66,12 +66,14 @@
                             $vitorias = $vitorias+$vitorias2;
 
                             $totalPartidas = $jogador->partidas->count() + $jogador->partidas2->count();
+                            $bonus = $jogador->partidas->sum('jogador1_bonus') + $jogador->partidas2->sum('jogador2_bonus');
 
                           @endphp
 
                           <li class="role">Categoria {{ $jogador->categoria->nome }}</li>
                           <li class="role">{{ $totalPartidas }} jogos</li>
                           <li class="role">{{ $pontos }} pontos</li>
+                          <li class="role">{{ $bonus }} bonus</li>
                           <li class="role">{{ $vitorias }} vitória(s)</li>
                           <li class="role">{{ $totalPartidas - $vitorias }} derrota(s)</li>
                           <li><strong>Lateralidade:</strong> {{ $jogador->lateralidade }}</li>

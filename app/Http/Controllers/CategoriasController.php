@@ -101,6 +101,8 @@ class CategoriasController extends Controller
     {
         $data = $request->request->all();
 
+        $data['ativo'] = $request->has('ativo');
+
         $categoria = Categoria::findOrFail($id);
         $categoria->update($data);
 
